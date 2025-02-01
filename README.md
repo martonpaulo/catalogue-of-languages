@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌎 The Great Catalogue of Languages
 
-## Getting Started
+## 🔍 Overview
 
-First, run the development server:
+**The Great Catalogue of Languages** is an interactive table featuring all documented languages from the Wikitongues database. Built on Wikitongues' [_Every Language in the World_ Airtable dataset](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world), it provides an easy way to explore global linguistic diversity.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The purpose of this project is to make language exploration simple and accessible, emphasizing linguistic diversity and serving as a resource for researchers, linguists, students and enthusiasts.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Frontend Framework
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**React + Next.js + TypeScript**
 
-## Learn More
+- Combines SSG and SSR for fast loading and optimized SEO.
+- TypeScript enhances maintainability with static typing.
 
-To learn more about Next.js, take a look at the following resources:
+### Linting
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**ESLint**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Enforces clean, consistent code by identifying and fixing potential issues.
 
-## Deploy on Vercel
+## 🚀 Getting Started
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Prerequisites
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Node.js** (v16 or above)
+- **npm** (or other package)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/martonpaulo/catalogue-of-languages.git
+   cd catalogue-of-languages
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+4. Open the app in your browser at `http://localhost:3000`.
+
+## 📋 Available Scripts
+
+| Script          | Description                                        |
+| --------------- | -------------------------------------------------- |
+| `npm run dev`   | Starts the development server locally.             |
+| `npm run build` | Builds the app for production.                     |
+| `npm run start` | Starts the production server (after building).     |
+| `npm run lint`  | Runs ESLint to check for style and quality issues. |
+
+## 🗂️ Architecture
+
+### Naming Conventions
+
+- **camelCase**: For functions and variables.
+- **PascalCase**: For components.
+
+## 🔖 Commit Strategy
+
+Each commit follows a clear, consistent naming convention:
+
+| Type       | Description                               | Example                                 |
+| ---------- | ----------------------------------------- | --------------------------------------- |
+| `feat`     | Introduces new features.                  | `feat: add filtering functionality`     |
+| `fix`      | Fixes bugs.                               | `fix: resolve validation issue in form` |
+| `style`    | Updates formatting or styles.             | `style: fix indentation in Listings`    |
+| `docs`     | Updates documentation.                    | `docs: add setup instructions`          |
+| `refactor` | Refactors code without changing behavior. | `refactor: improve component structure` |
+| `test`     | Adds or updates tests.                    | `test: add unit tests for Filters`      |
+| `chore`    | Updates build process or tools.           | `chore: update dependencies`            |
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
