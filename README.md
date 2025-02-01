@@ -73,6 +73,34 @@ The purpose of this project is to make language exploration simple and accessibl
 | `npm run start` | Starts the production server (after building).     |
 | `npm run lint`  | Runs ESLint to check for style and quality issues. |
 
+Aqui está a versão revisada e organizada do seu texto para o README, seguindo o padrão do seu projeto:
+
+---
+
+## 🌐 API Overview
+
+This project uses data from the Wikitongues [_Every Language in the World_](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world) table, publicly available on Airtable. The API is based on a private copy of this dataset hosted in an Airtable workspace.
+
+### API Endpoint Structure
+
+Airtable API requests follow this structure:
+
+```
+https://api.airtable.com/v0/{baseId}/{tableId}?maxRecords={maxRecordsNumber}
+```
+
+- `{baseId}` starts with `"app"`, `{tableId}` starts with `"tbl"`, and `{viewId}` starts with `"viw"`.
+- Authentication is done via **Bearer Token**.
+
+### Example Request
+
+```http
+GET https://api.airtable.com/v0/{baseId}/{tableId}?maxRecords=10
+Authorization: Bearer YOUR_API_KEY
+```
+
+For more details, check the official [Airtable API documentation](https://airtable.com/developers/web/api/).
+
 ## 🗂️ Architecture
 
 ### Naming Conventions
