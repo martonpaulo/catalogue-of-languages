@@ -22,6 +22,12 @@ The purpose of this project is to make language exploration simple and accessibl
 - Pre-built, clean and responsive components with validation styles and lazy loading for better UX and performance.
 - Web Content Accessibility Guidelines (WCAG) compliant with ARIA attributes and accessible patterns.
 
+### Data Fetching
+
+**React Query**
+
+- Simplifies API integration with caching, refetching, and performance enhancements.
+
 ### Linting
 
 **ESLint**

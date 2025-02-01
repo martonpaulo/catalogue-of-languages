@@ -2,6 +2,7 @@ import { Container } from "@mui/material";
 import type { Metadata } from "next";
 
 import { AppThemeProvider } from "@/providers/AppThemeProvider";
+import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
 import { poppins } from "@/styles/fonts";
 
 export const metadata: Metadata = {
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.variable}>
         <AppThemeProvider>
-          <Container>{children}</Container>
+          <ReactQueryProvider>
+            <Container>{children}</Container>
+          </ReactQueryProvider>
         </AppThemeProvider>
       </body>
     </html>
