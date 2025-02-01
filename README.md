@@ -1,8 +1,8 @@
-# 🌎 The Great Catalogue of Languages
+# 🌎 Catalogue of Languages
 
 ## 🔍 Overview
 
-**The Great Catalogue of Languages** is an interactive table featuring all documented languages from the Wikitongues database. Built on Wikitongues' [_Every Language in the World_ Airtable dataset](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world), it provides an easy way to explore global linguistic diversity.
+The **Catalogue of Languages** is an interactive table featuring all documented languages from the Wikitongues database. Built on Wikitongues' [_Every Language in the World_ Airtable dataset](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world), it provides an easy way to explore global linguistic diversity.
 
 The purpose of this project is to make language exploration simple and accessible, emphasizing linguistic diversity and serving as a resource for researchers, linguists, students and enthusiasts.
 
@@ -13,7 +13,14 @@ The purpose of this project is to make language exploration simple and accessibl
 **React + Next.js + TypeScript**
 
 - Combines SSG and SSR for fast loading and optimized SEO.
-- TypeScript enhances maintainability with static typing.
+- TypeScript enhances maintainability with static and safe typing.
+
+### Styling
+
+**Material UI + Material Icons**
+
+- Pre-built, clean and responsive components with validation styles and lazy loading for better UX and performance.
+- Web Content Accessibility Guidelines (WCAG) compliant with ARIA attributes and accessible patterns.
 
 ### Linting
 

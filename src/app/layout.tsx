@@ -1,7 +1,11 @@
+import { Container } from "@mui/material";
 import type { Metadata } from "next";
 
+import { AppThemeProvider } from "@/providers/AppThemeProvider";
+import { poppins } from "@/styles/fonts";
+
 export const metadata: Metadata = {
-  title: "The Great Catalogue of Languages",
+  title: "Catalogue of Languages",
   description:
     "Interactive table featuring all documented languages from the Wikitongues database.",
 };
@@ -13,7 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={poppins.variable}>
+        <AppThemeProvider>
+          <Container>{children}</Container>
+        </AppThemeProvider>
+      </body>
     </html>
   );
 }
