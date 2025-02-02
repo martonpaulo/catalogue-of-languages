@@ -1,12 +1,12 @@
 # 🌎 Catalogue of Languages
 
-## 🔍 Overview
+**Catalogue of Languages** is an interactive table featuring all documented languages from the Wikitongues database. Built on the [_Every Language in the World_](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world) Airtable dataset, it provides an easy way to explore global linguistic diversity.
 
-The **Catalogue of Languages** is an interactive table featuring all documented languages from the Wikitongues database. Built on Wikitongues' [_Every Language in the World_ Airtable dataset](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world), it provides an easy way to explore global linguistic diversity.
+This project aims to make language research simple and accessible, serving as a resource for researchers, linguists, students, and enthusiasts.
 
-The purpose of this project is to make language exploration simple and accessible, emphasizing linguistic diversity and serving as a resource for researchers, linguists, students and enthusiasts.
+🔗 Live project: [catalogue-of-languages.vercel.app](https://catalogue-of-languages.vercel.app/)
 
-You can view the project live at [catalogue-of-languages.vercel.app](https://catalogue-of-languages.vercel.app/).
+It’s a React-based application with a dynamic and scalable table, featuring search and navigation capabilities. Designed with best practices in mind, it ensures easy integration of new features and adaptability for larger, production-ready systems.
 
 ## 🛠️ Tech Stack
 
@@ -80,10 +80,6 @@ You can view the project live at [catalogue-of-languages.vercel.app](https://cat
 | `npm run build` | Builds the app for production.                     |
 | `npm run start` | Starts the production server (after building).     |
 | `npm run lint`  | Runs ESLint to check for style and quality issues. |
-
-Aqui está a versão revisada e organizada do seu texto para o README, seguindo o padrão do seu projeto:
-
----
 
 ## 🌐 API Overview
 
