@@ -6,6 +6,8 @@ The **Catalogue of Languages** is an interactive table featuring all documented 
 
 The purpose of this project is to make language exploration simple and accessible, emphasizing linguistic diversity and serving as a resource for researchers, linguists, students and enthusiasts.
 
+You can view the project live at [catalogue-of-languages.vercel.app](https://catalogue-of-languages.vercel.app/).
+
 ## 🛠️ Tech Stack
 
 ### Frontend Framework
@@ -33,6 +35,12 @@ The purpose of this project is to make language exploration simple and accessibl
 **ESLint**
 
 - Enforces clean, consistent code by identifying and fixing potential issues.
+
+### Deployment
+
+**Vercel**
+
+- Enables fast and scalable deployment with automatic builds and previews.
 
 ## 🚀 Getting Started
 
