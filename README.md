@@ -6,7 +6,19 @@ This project aims to make language research simple and accessible, serving as a 
 
 🔗 Live project: [catalogue-of-languages.vercel.app](https://catalogue-of-languages.vercel.app/)
 
-It’s a React-based application with a dynamic and scalable table, featuring search and navigation capabilities. Designed with best practices in mind, it ensures easy integration of new features and adaptability for larger, production-ready systems.
+## 🔍 Overview
+
+### Scalability Considerations
+
+This React-based application is built with scalability in mind. It features a dynamic, modular table with search and navigation capabilities, designed to integrate easily with new features and adapt to larger, production-ready systems. Key points include:
+
+- Clean, reusable code and components to facilitate the addition of new features.
+- Best practices in state management and API handling to accommodate future changes or new endpoints.
+- A scalable folder structure that supports the growth of the codebase over time.
+
+### User Experience
+
+The project focuses on an intuitive and responsive UI design, ensuring smooth navigation across devices. Error handling is prioritized to gracefully manage API errors and loading states, guaranteeing a seamless experience for users.
 
 ## 🛠️ Tech Stack
 
