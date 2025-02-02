@@ -4,7 +4,7 @@ import { Alert, Typography } from "@mui/material";
 
 import { ContentContainer } from "@/components/ContentContainer";
 import { LanguagesTable } from "@/components/LanguagesTable";
-import { useLanguages } from "@/hooks/useAirtableData";
+import { useLanguages } from "@/hooks/useLanguages";
 
 export default function Home() {
   const { languages, isError, isLoading } = useLanguages();

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const fetchFromProxy = async <T>(endpoint: string): Promise<T> => {
+export const fetchProxyData = async <T>(endpoint: string): Promise<T> => {
   try {
     const response = await axios.get<T>(endpoint);
     return response.data;

@@ -3,7 +3,7 @@ export type LanguageType = {
   code: string; // 'ISO 639-3'
   name: string; // 'Official Name'
   status?: string; // 'Language Status'
-  spokenIn?: string[]; // 'Principal in + Territories'
+  spokenIn?: string[]; // 'Principal in'
   writingSystem?: string[]; // 'Writing System'
   nationOfOrigin?: string[]; // 'Nation of Origin'
 };
