@@ -1,41 +1,50 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { useNations } from "@/hooks/useNations";
 import { useWritingSystems } from "@/hooks/useWritingSystems";
-import { fetchLanguagesData } from "@/services/languageService";
-import { LanguageType } from "@/types/language";
-import { transformNationIdsToNames } from "@/utils/nationFinder";
-import { transformWritingSystemIdsToNames } from "@/utils/writingSystemFinder";
+import {
+  fetchPaginatedLanguagesData,
+  FetchPaginatedLanguagesDataParams,
+} from "@/services/languageService";
+import { enrichLanguageDataWithNames } from "@/utils/languageMapper";
 
-export const useLanguages = () => {
+export function useLanguages() {
   const { nations } = useNations();
   const { writingSystems } = useWritingSystems();
 
-  const { data, isError, isLoading } = useQuery<LanguageType[]>({
+  const {
+    data,
+    isError,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: ["languages"],
-    queryFn: fetchLanguagesData,
-    staleTime: Infinity,
-    gcTime: Infinity,
+    queryFn: ({ pageParam = undefined }: FetchPaginatedLanguagesDataParams) =>
+      fetchPaginatedLanguagesData({ pageParam: pageParam }),
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => {
+      const nextPage = lastPage?.nextOffset;
+      return nextPage !== null ? nextPage : undefined;
+    },
   });
 
-  const updatedData: LanguageType[] =
-    data && nations && writingSystems
-      ? data.map((language) => ({
-          ...language,
-          spokenIn: language.spokenIn
-            ? transformNationIdsToNames(language.spokenIn, nations)
-            : [],
-          writingSystem: language.writingSystem
-            ? transformWritingSystemIdsToNames(
-                language.writingSystem,
-                writingSystems
-              )
-            : [],
-          nationOfOrigin: language.nationOfOrigin
-            ? transformNationIdsToNames(language.nationOfOrigin, nations)
-            : [],
-        }))
-      : [];
+  const languages =
+    (data?.pages &&
+      nations &&
+      writingSystems &&
+      data?.pages.flatMap((page) =>
+        enrichLanguageDataWithNames(page.data, nations, writingSystems)
+      )) ??
+    [];
 
-  return { languages: updatedData, isError, isLoading };
-};
+  return {
+    languages,
+    isLoading,
+    isError,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  };
+}

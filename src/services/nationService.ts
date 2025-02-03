@@ -1,7 +1,13 @@
 import { fetchProxyData } from "@/services/proxyService";
 import { NationType } from "@/types/nation";
 
-export const fetchNationsData = async (): Promise<NationType[]> => {
-  const nationsData = await fetchProxyData<NationType[]>("/api/nations");
-  return nationsData;
-};
+interface FetchNationsDataResponse {
+  data: NationType[];
+}
+
+export async function fetchNationsData(): Promise<NationType[]> {
+  const nationsData = await fetchProxyData<FetchNationsDataResponse>(
+    "/api/nations"
+  );
+  return nationsData.data;
+}

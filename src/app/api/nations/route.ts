@@ -1,34 +1,31 @@
 import { NextResponse } from "next/server";
 
-import { fetchAirtableData } from "@/services/airtableService";
-import { NationType } from "@/types/nation";
-import { handleError } from "@/utils/errorHandler";
+import { getAirtableRecords } from "@/services/airtableService";
+import { mapRawDataToNationType } from "@/utils/nationMapper";
 
-const { NATIONS_TABLE_ID: TABLE_ID } = process.env;
+const NATIONS_TABLE_ID = process.env.NATIONS_TABLE_ID;
 
-if (!TABLE_ID) {
+if (!NATIONS_TABLE_ID) {
   throw new Error("Missing Airtable table ID for nations");
 }
 
 export async function GET() {
   try {
-    const rawData = await fetchAirtableData(TABLE_ID!);
+    const nationData = await getAirtableRecords({
+      tableId: NATIONS_TABLE_ID!,
+      fetchAll: true,
+    });
 
-    if (!rawData || rawData.length === 0) {
-      return NextResponse.json(
-        { error: "No nations data found" },
-        { status: 404 }
-      );
-    }
-
-    const formattedData: NationType[] = rawData.map(({ id, fields }) => ({
-      id: id as string,
-      name: fields["Polities"] as string,
-    }));
-
-    return NextResponse.json(formattedData, { status: 200 });
+    return NextResponse.json({
+      data: mapRawDataToNationType(nationData.records),
+    });
   } catch (error) {
-    console.error("Error in nations API:", error);
-    return NextResponse.json({ error: handleError(error) }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: "Failed to fetch nation data",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

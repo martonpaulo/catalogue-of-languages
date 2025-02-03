@@ -1,39 +1,43 @@
 import { NextResponse } from "next/server";
 
-import { fetchAirtableData } from "@/services/airtableService";
-import { LanguageType } from "@/types/language";
-import { handleError } from "@/utils/errorHandler";
+import { getAirtableRecords } from "@/services/airtableService";
+import { mapRawDataToLanguageType } from "@/utils/languageMapper";
 
-const { LANGUAGES_TABLE_ID: TABLE_ID } = process.env;
+const LANGUAGES_TABLE_ID = process.env.LANGUAGES_TABLE_ID;
 
-if (!TABLE_ID) {
+if (!LANGUAGES_TABLE_ID) {
   throw new Error("Missing Airtable table ID for languages");
 }
 
-export async function GET() {
+const PAGE_SIZE = 50;
+
+export async function GET(req: Request) {
   try {
-    const rawData = await fetchAirtableData(TABLE_ID!);
+    const { searchParams } = new URL(req.url);
+    const offset = searchParams.get("offset");
 
-    if (!rawData || rawData.length === 0) {
-      return NextResponse.json(
-        { error: "No languages data found" },
-        { status: 404 }
-      );
-    }
+    const queryParams: Record<string, string> = {
+      pageSize: PAGE_SIZE.toString(),
+    };
 
-    const formattedData: LanguageType[] = rawData.map(({ id, fields }) => ({
-      id: id as string,
-      code: fields["ISO 639-3"] as string,
-      name: fields["Official Name"] as string,
-      status: fields["Language Status"] as string,
-      spokenIn: fields["Principal in"] as string[],
-      writingSystem: fields["Writing System"] as string[],
-      nationOfOrigin: fields["Nation of Origin"] as string[],
-    }));
+    if (offset) queryParams.offset = offset;
 
-    return NextResponse.json(formattedData, { status: 200 });
+    const languageData = await getAirtableRecords({
+      tableId: LANGUAGES_TABLE_ID!,
+      queryParams,
+    });
+
+    return NextResponse.json({
+      data: mapRawDataToLanguageType(languageData.records),
+      nextOffset: languageData.offset || null,
+    });
   } catch (error) {
-    console.error("Error in languages API:", error);
-    return NextResponse.json({ error: handleError(error) }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: "Failed to fetch language data",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

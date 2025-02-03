@@ -2,12 +2,12 @@ import { create } from "zustand";
 
 import { WritingSystemType } from "@/types/writingSystem";
 
-interface WritingSystemsState {
+interface WritingSystemStore {
   writingSystems: WritingSystemType[];
   setWritingSystems: (writingSystems: WritingSystemType[]) => void;
 }
 
-export const useWritingSystemsStore = create<WritingSystemsState>((set) => ({
+export const useWritingSystemStore = create<WritingSystemStore>((set) => ({
   writingSystems: [],
   setWritingSystems: (writingSystems) => set({ writingSystems }),
 }));

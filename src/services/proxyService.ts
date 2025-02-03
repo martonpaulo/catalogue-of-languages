@@ -1,15 +1,20 @@
 import axios from "axios";
 
-export const fetchProxyData = async <T>(endpoint: string): Promise<T> => {
+export async function fetchProxyData<T>(url: string): Promise<T> {
   try {
-    const response = await axios.get<T>(endpoint);
-    return response.data;
+    const { data } = await axios.get<T>(url);
+    return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorMessage = `Failed to fetch from ${endpoint}: ${error.response?.status} - ${error.response?.statusText}`;
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred");
-    }
+    throw handleFetchError(error, url);
   }
-};
+}
+
+function handleFetchError(error: unknown, url: string): Error {
+  if (axios.isAxiosError(error)) {
+    const status = error.response?.status || "Unknown";
+    const statusText = error.response?.statusText || "No status text";
+    return new Error(`Failed to fetch from ${url}: ${status} - ${statusText}`);
+  }
+
+  return new Error(`Unexpected error occurred while fetching ${url}`);
+}

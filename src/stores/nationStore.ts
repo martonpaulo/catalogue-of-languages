@@ -2,12 +2,12 @@ import { create } from "zustand";
 
 import { NationType } from "@/types/nation";
 
-interface NationsState {
+interface NationStore {
   nations: NationType[];
   setNations: (nations: NationType[]) => void;
 }
 
-export const useNationsStore = create<NationsState>((set) => ({
+export const useNationStore = create<NationStore>((set) => ({
   nations: [],
   setNations: (nations) => set({ nations }),
 }));

@@ -1,30 +1,56 @@
-import Airtable from "airtable";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
-const { AIRTABLE_API_KEY, AIRTABLE_BASE_ID } = process.env;
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
 
 if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
-  throw new Error("Missing Airtable environment variables");
+  throw new Error("Missing Airtable API key or base ID");
 }
 
-const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(AIRTABLE_BASE_ID);
+const apiClient = axios.create({
+  baseURL: `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}`,
+  headers: {
+    Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+  },
+});
 
-export async function fetchAirtableData(tableId: string) {
+interface FetchAirtableParams {
+  tableId: string;
+  fetchAll?: boolean;
+  queryParams?: Record<string, string>;
+}
+
+export async function getAirtableRecords({
+  tableId,
+  fetchAll = false,
+  queryParams,
+}: FetchAirtableParams) {
   try {
-    const records = await base(tableId).select({ maxRecords: 1000 }).all();
-    return records.map(({ id, fields }) => ({ id, fields }));
-  } catch (error) {
-    console.error("Error fetching data from Airtable:", error);
-    handleAirtableError(error);
-  }
-}
+    const { data } = await apiClient.get(`/${tableId}`, {
+      params: queryParams ?? {},
+    });
 
-function handleAirtableError(error: unknown) {
-  if (axios.isAxiosError(error)) {
-    throw new Error(
-      error.response?.data?.error?.message || "Airtable API error"
-    );
-  }
+    if (fetchAll && data.offset) {
+      const records = data.records;
+      let offset = data.offset;
 
-  throw new Error("Unexpected error occurred while fetching Airtable data");
+      while (offset) {
+        const response = await apiClient.get(`/${tableId}`, {
+          params: { offset },
+        });
+
+        records.push(...response.data.records);
+        offset = response.data.offset;
+      }
+
+      return { records };
+    }
+
+    return data;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      throw new Error(`Airtable API error: ${error.message}`);
+    }
+    throw new Error("Unexpected error while fetching Airtable data");
+  }
 }

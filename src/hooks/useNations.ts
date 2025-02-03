@@ -2,21 +2,25 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 import { fetchNationsData } from "@/services/nationService";
-import { useNationsStore } from "@/stores/nationsStore";
-import { NationType } from "@/types/nation";
+import { useNationStore } from "@/stores/nationStore";
 
-export const useNations = () => {
-  const setNations = useNationsStore((state) => state.setNations);
-  const { data, isError, isLoading } = useQuery<NationType[]>({
+export function useNations() {
+  const setNations = useNationStore((state) => state.setNations);
+  const { data, isError, isLoading, isSuccess } = useQuery({
     queryKey: ["nations"],
     queryFn: fetchNationsData,
     staleTime: Infinity,
-    gcTime: Infinity,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
     if (data) setNations(data);
   }, [data, setNations]);
 
-  return { nations: data, isError, isLoading };
-};
+  return {
+    nations: data,
+    nationsIsError: isError,
+    nationsIsLoading: isLoading,
+    nationsIsSuccess: isSuccess,
+  };
+}

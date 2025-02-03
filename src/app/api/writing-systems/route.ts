@@ -1,36 +1,31 @@
 import { NextResponse } from "next/server";
 
-import { fetchAirtableData } from "@/services/airtableService";
-import { WritingSystemType } from "@/types/writingSystem";
-import { handleError } from "@/utils/errorHandler";
+import { getAirtableRecords } from "@/services/airtableService";
+import { mapRawDataToWritingSystemType } from "@/utils/writingSystemMapper";
 
-const { WRITING_SYSTEMS_TABLE_ID: TABLE_ID } = process.env;
+const WRITING_SYSTEMS_TABLE_ID = process.env.WRITING_SYSTEMS_TABLE_ID;
 
-if (!TABLE_ID) {
+if (!WRITING_SYSTEMS_TABLE_ID) {
   throw new Error("Missing Airtable table ID for writing systems");
 }
 
 export async function GET() {
   try {
-    const rawData = await fetchAirtableData(TABLE_ID!);
+    const writingSystemData = await getAirtableRecords({
+      tableId: WRITING_SYSTEMS_TABLE_ID!,
+      fetchAll: true,
+    });
 
-    if (!rawData || rawData.length === 0) {
-      return NextResponse.json(
-        { error: "No writing systems data found" },
-        { status: 404 }
-      );
-    }
-
-    const formattedData: WritingSystemType[] = rawData.map(
-      ({ id, fields }) => ({
-        id: id as string,
-        name: fields["Name"] as string,
-      })
-    );
-
-    return NextResponse.json(formattedData, { status: 200 });
+    return NextResponse.json({
+      data: mapRawDataToWritingSystemType(writingSystemData.records),
+    });
   } catch (error) {
-    console.error("Error in writing systems API:", error);
-    return NextResponse.json({ error: handleError(error) }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: "Failed to fetch writing system data",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

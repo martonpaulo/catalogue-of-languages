@@ -1,13 +1,30 @@
 "use client";
 
 import { Alert, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 import { ContentContainer } from "@/components/ContentContainer";
 import { LanguagesTable } from "@/components/LanguagesTable";
 import { useLanguages } from "@/hooks/useLanguages";
 
 export default function Home() {
-  const { languages, isError, isLoading } = useLanguages();
+  const { ref, inView } = useInView();
+
+  const {
+    languages,
+    isLoading,
+    isError,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useLanguages();
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage]);
 
   return (
     <ContentContainer title="Home">
@@ -16,7 +33,16 @@ export default function Home() {
       ) : isError ? (
         <Alert severity="error">An error occurred</Alert>
       ) : (
-        <LanguagesTable languages={languages} />
+        <>
+          <LanguagesTable languages={languages} />
+          {isFetchingNextPage && hasNextPage ? (
+            <p className="text-center">Loading more posts...</p>
+          ) : (
+            <p className="text-center">No more posts found</p>
+          )}
+
+          <div ref={ref} />
+        </>
       )}
     </ContentContainer>
   );

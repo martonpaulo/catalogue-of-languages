@@ -1,4 +1,14 @@
+import { AirtableRecordType } from "@/types/airtableRecord";
 import { NationType } from "@/types/nation";
+
+export function mapRawDataToNationType(
+  rawData: AirtableRecordType[]
+): NationType[] {
+  return rawData.map(({ id, fields }) => ({
+    id: id as string,
+    name: fields["Polities"] as string,
+  }));
+}
 
 function findNationNameById(
   id: string,
