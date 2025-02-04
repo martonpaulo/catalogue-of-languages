@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Box, CircularProgress, Typography } from "@mui/material";
+import { Alert, Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -10,13 +10,14 @@ import { LanguageTable } from "@/features/languages/components/LanguageTable";
 import { useLanguages } from "@/features/languages/hooks/useLanguages";
 import { DEFAULT_LANGUAGE_FILTERS } from "@/features/languages/utils/languageFiltersConstants";
 import { ContentContainer } from "@/shared/components/ContentContainer";
+import { ProjectAttribution } from "@/shared/components/ProjectAttribution";
 
 export default function Home() {
-  const { ref, inView } = useInView();
-
   const [filters, setFilters] = useState<LanguageFilterFormValues>(
     DEFAULT_LANGUAGE_FILTERS
   );
+
+  const { ref, inView } = useInView();
 
   const {
     languages,
@@ -43,7 +44,11 @@ export default function Home() {
   return (
     <ContentContainer>
       <Typography variant="h1">🌎 Catalogue of Languages</Typography>
-      <LanguageFilters onFiltersChange={handleFiltersChange} />
+
+      <Stack spacing={1}>
+        <LanguageFilters onFiltersChange={handleFiltersChange} />
+        <ProjectAttribution />
+      </Stack>
 
       {isLoading && (
         <Box
