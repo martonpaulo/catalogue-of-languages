@@ -30,8 +30,7 @@ export default function LanguageDetails({ language }: LanguageDetailsProps) {
   if (language.statusNotes) {
     details.push(
       <Typography key="statusNotes" variant="body1">
-        <strong>Status Notes:</strong>
-        {language.statusNotes}
+        <strong>Status Notes:</strong> {language.statusNotes}
       </Typography>
     );
   }

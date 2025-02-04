@@ -17,7 +17,7 @@ export default function LanguagePage() {
 
   if (!code || code.length !== 3) notFound();
 
-  const { data: language } = useLanguageDetails(code);
+  const { language } = useLanguageDetails(code);
   const titleSuffix = "Catalogue of Languages";
   const [loadingTimeoutPassed, setLoadingTimeoutPassed] = useState(false);
 

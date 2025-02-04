@@ -7,7 +7,7 @@ import {
   FetchPaginatedLanguagesDataParams,
 } from "@/features/languages/services/languageAPI";
 import { LanguageType } from "@/features/languages/types/language.type";
-import { enrichLanguageDataWithNames } from "@/features/languages/utils/languageEnrichers";
+import { enrichLanguagesDataSetListWithNames } from "@/features/languages/utils/languageEnrichers";
 import { useNations } from "@/features/nations/hooks/useNations";
 import { useWritingSystems } from "@/features/writingSystems/hooks/useWritingSystems";
 
@@ -48,7 +48,7 @@ export function useLanguages(languageFilterParams: LanguageFilterFormValues) {
     if (data.pages.length > processedPagesRef.current) {
       const newPages = data.pages.slice(processedPagesRef.current);
       const newEnriched = newPages.flatMap((page) =>
-        enrichLanguageDataWithNames(page.data, nations, writingSystems)
+        enrichLanguagesDataSetListWithNames(page.data, nations, writingSystems)
       );
       enrichedLanguagesRef.current = [
         ...enrichedLanguagesRef.current,

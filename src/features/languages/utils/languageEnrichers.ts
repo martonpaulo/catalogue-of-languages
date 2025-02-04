@@ -4,12 +4,12 @@ import { transformNationIdsToNames } from "@/features/nations/utils/nationMapper
 import { WritingSystemType } from "@/features/writingSystems/types/writingSystem.type";
 import { transformWritingSystemIdsToNames } from "@/features/writingSystems/utils/writingSystemMapper";
 
-export function enrichLanguageDataWithNames(
-  languages: LanguageType[],
+export function enrichLanguagesDataWithNames(
+  language: LanguageType,
   nations: NationType[],
   writingSystems: WritingSystemType[]
-): LanguageType[] {
-  return languages.map((language) => ({
+): LanguageType {
+  return {
     ...language,
     spokenIn: language.spokenInId
       ? transformNationIdsToNames(language.spokenInId, nations)
@@ -23,5 +23,15 @@ export function enrichLanguageDataWithNames(
     nationOfOrigin: language.nationOfOriginId
       ? transformNationIdsToNames(language.nationOfOriginId, nations)
       : [],
-  }));
+  };
+}
+
+export function enrichLanguagesDataSetListWithNames(
+  languages: LanguageType[],
+  nations: NationType[],
+  writingSystems: WritingSystemType[]
+): LanguageType[] {
+  return languages.map((language) =>
+    enrichLanguagesDataWithNames(language, nations, writingSystems)
+  );
 }
