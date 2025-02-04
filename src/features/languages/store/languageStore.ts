@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 import { LanguageType } from "@/features/languages/types/language.type";
+import { buildStorageKey } from "@/shared/utils/localStorageUtils";
 
 interface LanguageState {
   lastOffset?: string;
@@ -19,7 +20,7 @@ export const useLanguageStore = create<LanguageState>()(
       setLanguages: (languages) => set({ languages }),
     }),
     {
-      name: "language-store",
+      name: buildStorageKey("language-store"),
     }
   )
 );

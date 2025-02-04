@@ -1,10 +1,12 @@
+import { LanguageStatusEnum } from "@/features/languages/types/languageStatus.enum";
+
 export type LanguageType = {
   id: string;
   code: string; // 'ISO 639-3'
   name: string; // 'Official Name'
   alternateNames?: string; // 'Alternate Names'
   dialects?: string; // 'Dialects'
-  status?: string; // 'Language Status'
+  status?: LanguageStatusEnum; // 'Language Status'
   statusNotes?: string; // 'Language Status Notes'
   genealogy?: string; // 'Genealogy'
   demographics?: string; // 'Demographics'

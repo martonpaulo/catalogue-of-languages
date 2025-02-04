@@ -1,0 +1,17 @@
+export enum LanguageStatusEnum {
+  NATIONAL = "national",
+  PROVINCIAL = "provincial",
+  WIDER_COMMUNICATION = "wider communication",
+  EDUCATIONAL = "educational",
+  DEVELOPING = "developing",
+  VIGOROUS = "vigorous",
+  THREATENED = "threatened",
+  SHIFTING = "shifting",
+  MORIBUND = "moribund",
+  NEARLY_EXTINCT = "nearly extinct",
+  DORMANT = "dormant",
+  REAWAKENING = "reawakening",
+  SECOND_LANGUAGE_ONLY = "second language only",
+  EXTINCT = "extinct",
+  UNATTESTED = "unattested",
+}

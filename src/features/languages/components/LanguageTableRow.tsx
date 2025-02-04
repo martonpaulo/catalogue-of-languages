@@ -2,8 +2,8 @@ import LanguageIcon from "@mui/icons-material/Language";
 import { TableCell, TableRow } from "@mui/material";
 import Link from "next/link";
 
+import { LanguageStatusChip } from "@/features/languages/components/LanguageStatusChip";
 import { LanguageType } from "@/features/languages/types/language.type";
-import { StatusChip } from "@/shared/components/StatusChip";
 
 interface LanguageTableRowProps {
   language: LanguageType;
@@ -28,7 +28,7 @@ export function LanguageTableRow({ language }: LanguageTableRowProps) {
         </Link>
       </TableCell>
       <TableCell>
-        <StatusChip status={language.status} />
+        {language.status && <LanguageStatusChip status={language.status} />}
       </TableCell>
       <TableCell>{language.spokenIn?.join(", ")}</TableCell>
       <TableCell>{language.writingSystem?.join(", ")}</TableCell>

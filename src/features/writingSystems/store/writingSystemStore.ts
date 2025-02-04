@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 import { WritingSystemType } from "@/features/writingSystems/types/writingSystem.type";
+import { buildStorageKey } from "@/shared/utils/localStorageUtils";
 
 interface WritingSystemState {
   writingSystems: WritingSystemType[];
@@ -15,7 +16,7 @@ export const useWritingSystemStore = create<WritingSystemState>()(
       setWritingSystems: (writingSystems) => set({ writingSystems }),
     }),
     {
-      name: "writing-system-store",
+      name: buildStorageKey("writing-system-store"),
     }
   )
 );

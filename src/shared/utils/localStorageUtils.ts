@@ -1,9 +1,10 @@
-const STORAGE_PREFIX = process.env.STORAGE_PREFIX ?? "";
-const STORAGE_VERSION = process.env.STORAGE_VERSION ?? "unknown-version";
+const STORAGE_PREFIX = process.env.NEXT_PUBLIC_STORAGE_PREFIX ?? "";
+const STORAGE_VERSION =
+  process.env.NEXT_PUBLIC_STORAGE_VERSION ?? "unknown-version";
 
-function buildStorageKey(key: string): string {
+export function buildStorageKey(key: string): string {
   return STORAGE_PREFIX
-    ? `${STORAGE_PREFIX}:${key}:${STORAGE_VERSION}`
+    ? `@${STORAGE_PREFIX}:${key}:${STORAGE_VERSION}`
     : `${key}:${STORAGE_VERSION}`;
 }
 

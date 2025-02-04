@@ -1,4 +1,5 @@
 import { LanguageType } from "@/features/languages/types/language.type";
+import { LanguageStatusEnum } from "@/features/languages/types/languageStatus.enum";
 import { AirtableRecordType } from "@/shared/types/airtableRecord.type";
 
 export function mapAirtableRecordsToLanguages(
@@ -10,7 +11,7 @@ export function mapAirtableRecordsToLanguages(
       "Official Name": officialName,
       "Alternate Names": alternateNames,
       Dialects: dialects,
-      "Language Status": status,
+      "Language Status": languageStatusString,
       "Language Status Notes": statusNotes,
       Genealogy: genealogy,
       Demographics: demographics,
@@ -30,7 +31,7 @@ export function mapAirtableRecordsToLanguages(
       name: officialName as string,
       alternateNames: alternateNames as string,
       dialects: dialects as string,
-      status: status as string,
+      status: mapStringToStatusEnum(languageStatusString as string),
       statusNotes: statusNotes as string,
       genealogy: genealogy as string,
       demographics: demographics as string,
@@ -44,4 +45,25 @@ export function mapAirtableRecordsToLanguages(
       nationOfOriginId: nationOfOriginId as string[],
     };
   });
+}
+
+function mapStringToStatusEnum(status: string): LanguageStatusEnum {
+  const statusMap: Record<string, LanguageStatusEnum> = {
+    "1 - National": LanguageStatusEnum.NATIONAL,
+    "2 - Provincial": LanguageStatusEnum.PROVINCIAL,
+    "3 - Wider communication": LanguageStatusEnum.WIDER_COMMUNICATION,
+    "4 - Educational": LanguageStatusEnum.EDUCATIONAL,
+    "5 - Developing": LanguageStatusEnum.DEVELOPING,
+    "6a - Vigorous": LanguageStatusEnum.VIGOROUS,
+    "6b - Threatened": LanguageStatusEnum.THREATENED,
+    "7 - Shifting": LanguageStatusEnum.SHIFTING,
+    "8a - Moribund": LanguageStatusEnum.MORIBUND,
+    "8b - Nearly extinct": LanguageStatusEnum.NEARLY_EXTINCT,
+    "9 - Reawakening": LanguageStatusEnum.REAWAKENING,
+    "9 - Second language only": LanguageStatusEnum.SECOND_LANGUAGE_ONLY,
+    "10 - Extinct": LanguageStatusEnum.EXTINCT,
+    "Unattested.": LanguageStatusEnum.UNATTESTED,
+  };
+
+  return status ? statusMap[status.trim()] : LanguageStatusEnum.UNATTESTED;
 }

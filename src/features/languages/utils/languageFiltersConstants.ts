@@ -8,10 +8,3 @@ export const DEFAULT_LANGUAGE_FILTERS: LanguageFilterFormValues = {
   writingSystem: "",
   nationOfOrigin: "",
 };
-
-export const STATUS_OPTIONS: string[] = [
-  "Active",
-  "Extinct",
-  "Historical",
-  "Inactive",
-].sort();

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 import { NationType } from "@/features/nations/types/nation.type";
+import { buildStorageKey } from "@/shared/utils/localStorageUtils";
 
 interface NationState {
   nations: NationType[];
@@ -15,7 +16,7 @@ export const useNationStore = create<NationState>()(
       setNations: (nations) => set({ nations }),
     }),
     {
-      name: "nation-store",
+      name: buildStorageKey("nation-store"),
     }
   )
 );

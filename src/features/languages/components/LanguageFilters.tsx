@@ -15,13 +15,11 @@ import {
   LanguageFilterFormValues,
   languageFilterSchema,
 } from "@/features/languages/components/languageFilters.schema";
-import {
-  DEFAULT_LANGUAGE_FILTERS,
-  STATUS_OPTIONS,
-} from "@/features/languages/utils/languageFiltersConstants";
+import { LanguageStatusChip } from "@/features/languages/components/LanguageStatusChip";
+import { LanguageStatusEnum } from "@/features/languages/types/languageStatus.enum";
+import { DEFAULT_LANGUAGE_FILTERS } from "@/features/languages/utils/languageFiltersConstants";
 import { useNations } from "@/features/nations/hooks/useNations";
 import { useWritingSystems } from "@/features/writingSystems/hooks/useWritingSystems";
-import { StatusChip } from "@/shared/components/StatusChip";
 import {
   getStoredFilters,
   setStoredFilters,
@@ -62,7 +60,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
 
   const onSubmit = useCallback(
     (data: LanguageFilterFormValues) => {
-      setStoredFilters("languageFilters", data);
+      setStoredFilters("language-filters", data);
       onFiltersChange(data);
     },
     [onFiltersChange]
@@ -96,11 +94,13 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          {STATUS_OPTIONS.map((status) => (
-            <MenuItem key={status} value={status}>
-              <StatusChip status={status} />
-            </MenuItem>
-          ))}
+          {Object.values(LanguageStatusEnum).map(
+            (status: LanguageStatusEnum) => (
+              <MenuItem key={status} value={status}>
+                <LanguageStatusChip status={status} />
+              </MenuItem>
+            )
+          )}
         </Select>
       </FormControl>
 

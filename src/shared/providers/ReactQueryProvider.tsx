@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { persistQueryClient } from "@tanstack/react-query-persist-client";
 import { ReactNode, useEffect, useState } from "react";
 
+import { buildStorageKey } from "@/shared/utils/localStorageUtils";
+
 interface ReactQueryProviderProps {
   children: ReactNode;
 }
@@ -28,6 +30,7 @@ export function ReactQueryProvider({ children }: ReactQueryProviderProps) {
   useEffect(() => {
     const localStoragePersister = createSyncStoragePersister({
       storage: window.localStorage,
+      key: buildStorageKey("react-query-cache"),
     });
 
     persistQueryClient({
