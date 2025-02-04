@@ -9,8 +9,6 @@ export function useNations() {
   const { data, isError, isLoading, isSuccess } = useQuery({
     queryKey: ["nations"],
     queryFn: fetchNationsData,
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {

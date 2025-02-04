@@ -1,13 +1,21 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 import { NationType } from "@/types/nation";
 
-interface NationStore {
+interface NationState {
   nations: NationType[];
   setNations: (nations: NationType[]) => void;
 }
 
-export const useNationStore = create<NationStore>((set) => ({
-  nations: [],
-  setNations: (nations) => set({ nations }),
-}));
+export const useNationStore = create<NationState>()(
+  persist(
+    (set) => ({
+      nations: [],
+      setNations: (nations) => set({ nations }),
+    }),
+    {
+      name: "nation-store",
+    }
+  )
+);

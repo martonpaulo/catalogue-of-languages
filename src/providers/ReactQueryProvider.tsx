@@ -1,7 +1,9 @@
 "use client";
 
+import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode, useState } from "react";
+import { persistQueryClient } from "@tanstack/react-query-persist-client";
+import { ReactNode, useEffect, useState } from "react";
 
 interface ReactQueryProviderProps {
   children: ReactNode;
@@ -13,11 +15,31 @@ export function ReactQueryProvider({ children }: ReactQueryProviderProps) {
       new QueryClient({
         defaultOptions: {
           queries: {
+            staleTime: Infinity,
+            refetchOnMount: false,
             refetchOnWindowFocus: false,
           },
         },
       })
   );
+
+  const [isRestored, setIsRestored] = useState(false);
+
+  useEffect(() => {
+    const localStoragePersister = createSyncStoragePersister({
+      storage: window.localStorage,
+    });
+
+    persistQueryClient({
+      queryClient,
+      persister: localStoragePersister,
+      maxAge: 1000 * 60 * 60 * 24, // 1 day in milliseconds
+    });
+
+    setIsRestored(true);
+  }, [queryClient]);
+
+  if (!isRestored) return null;
 
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

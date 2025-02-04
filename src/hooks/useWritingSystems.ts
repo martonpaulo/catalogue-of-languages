@@ -13,8 +13,6 @@ export function useWritingSystems() {
     {
       queryKey: ["writingSystems"],
       queryFn: fetchWritingSystemsData,
-      staleTime: Infinity,
-      refetchOnWindowFocus: false,
     }
   );
 

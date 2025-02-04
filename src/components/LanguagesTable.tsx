@@ -1,4 +1,5 @@
 import {
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -6,7 +7,9 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import React from "react";
 
+import { LanguagesTableRow } from "@/components/LanguagesTableRow";
 import { LanguageType } from "@/types/language";
 
 interface LanguagesTableProps {
@@ -15,8 +18,8 @@ interface LanguagesTableProps {
 
 export function LanguagesTable({ languages }: LanguagesTableProps) {
   return (
-    <TableContainer>
-      <Table>
+    <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
+      <Table stickyHeader size="small">
         <TableHead>
           <TableRow>
             <TableCell>Code</TableCell>
@@ -29,14 +32,7 @@ export function LanguagesTable({ languages }: LanguagesTableProps) {
         </TableHead>
         <TableBody>
           {languages.map((language) => (
-            <TableRow key={language.id}>
-              <TableCell>{language.code}</TableCell>
-              <TableCell>{language.name}</TableCell>
-              <TableCell>{language.status}</TableCell>
-              <TableCell>{language.spokenIn?.join(", ")}</TableCell>
-              <TableCell>{language.writingSystem?.join(", ")}</TableCell>
-              <TableCell>{language.nationOfOrigin?.join(", ")}</TableCell>
-            </TableRow>
+            <LanguagesTableRow key={language.id} language={language} />
           ))}
         </TableBody>
       </Table>
