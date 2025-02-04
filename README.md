@@ -10,8 +10,6 @@ This project aims to make language research simple and accessible, serving as a 
 
 <img alt="Recording of live application" src="public/uploads/recording.gif" />
 
-<br />
-
 🔗 Live project: [catalogue-of-languages.vercel.app](https://catalogue-of-languages.vercel.app/)
 
 ## 🔍 Overview
