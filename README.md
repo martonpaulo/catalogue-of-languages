@@ -1,5 +1,7 @@
 # 🌎 Catalogue of Languages
 
+![License](https://img.shields.io/github/license/martonpaulo/catalogue-of-languages) ![Last Commit](https://img.shields.io/github/last-commit/martonpaulo/catalogue-of-languages) ![React Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/catalogue-of-languages/react) ![TypeScript Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/catalogue-of-languages/dev/typescript) ![Test and Deploy Status](https://github.com/martonpaulo/catalogue-of-languages/actions/workflows/ci.yml/badge.svg)
+
 **Catalogue of Languages** is an interactive table featuring all documented languages from the Wikitongues database. Built on the [_Every Language in the World_](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world) Airtable dataset, it provides an easy way to explore global linguistic diversity.
 
 This project aims to make language research simple and accessible, serving as a resource for researchers, linguists, students, and enthusiasts.
@@ -128,15 +130,15 @@ For more details, check the official [Airtable API documentation](https://airtab
 
 Each commit follows a clear, consistent naming convention:
 
-| Type       | Description                               | Example                                 |
-| ---------- | ----------------------------------------- | --------------------------------------- |
-| `feat`     | Introduces new features.                  | `feat: add filtering functionality`     |
-| `fix`      | Fixes bugs.                               | `fix: resolve validation issue in form` |
-| `style`    | Updates formatting or styles.             | `style: fix indentation in Listings`    |
-| `docs`     | Updates documentation.                    | `docs: add setup instructions`          |
-| `refactor` | Refactors code without changing behavior. | `refactor: improve component structure` |
-| `test`     | Adds or updates tests.                    | `test: add unit tests for Filters`      |
-| `chore`    | Updates build process or tools.           | `chore: update dependencies`            |
+| Type       | Description                               | Example                                   |
+| ---------- | ----------------------------------------- | ----------------------------------------- |
+| `feat`     | Introduces new features.                  | `feat: add filtering functionality`       |
+| `fix`      | Fixes bugs.                               | `fix: resolve validation issue in form`   |
+| `style`    | Updates formatting or styles.             | `style: fix indentation in LanguageTable` |
+| `docs`     | Updates documentation.                    | `docs: add setup instructions`            |
+| `refactor` | Refactors code without changing behavior. | `refactor: improve component structure`   |
+| `test`     | Adds or updates tests.                    | `test: add unit tests for Filters`        |
+| `chore`    | Updates build process or tools.           | `chore: update dependencies`              |
 
 ## 📄 License
 
