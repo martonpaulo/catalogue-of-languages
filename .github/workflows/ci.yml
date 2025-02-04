@@ -11,7 +11,7 @@ on:
   pull_request:
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,4 +30,20 @@ jobs:
         run: npm run lint
 
       - name: Build
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          LANGUAGES_TABLE_ID: ${{ secrets.LANGUAGES_TABLE_ID }}
+          WRITING_SYSTEMS_TABLE_ID: ${{ secrets.WRITING_SYSTEMS_TABLE_ID }}
+          NATIONS_TABLE_ID: ${{ secrets.NATIONS_TABLE_ID }}
+          NEXT_PUBLIC_API_STRICT_ORIGIN: ${{ secrets.NEXT_PUBLIC_API_STRICT_ORIGIN }}
+          NEXT_PUBLIC_API_ALLOWED_ORIGINS: ${{ secrets.NEXT_PUBLIC_API_ALLOWED_ORIGINS }}
+          NEXT_PUBLIC_STORAGE_PREFIX: ${{ secrets.NEXT_PUBLIC_STORAGE_PREFIX }}
+          NEXT_PUBLIC_STORAGE_VERSION: ${{ secrets.NEXT_PUBLIC_STORAGE_VERSION }}
         run: npm run build
+
+      - name: Deploy to Vercel
+        run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
