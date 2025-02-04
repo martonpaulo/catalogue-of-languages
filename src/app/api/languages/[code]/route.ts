@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { mapAirtableRecordsToLanguages } from "@/features/languages/utils/languageMappers";
 import { getAirtableRecords } from "@/shared/services/airtableAPI";
@@ -9,12 +9,16 @@ if (!LANGUAGES_TABLE_ID) {
   throw new Error("Missing Airtable table ID for languages");
 }
 
-export async function GET(
-  request: Request,
-  { params }: { params: { code: string } }
-) {
+type Props = {
+  params: Promise<{
+    code: string;
+  }>;
+};
+
+export async function GET(request: NextRequest, props: Props) {
   try {
-    const { code } = await params;
+    const params = await props.params;
+    const { code } = params;
 
     const queryParams = {
       filterByFormula: `LOWER("${code}")=LOWER({ISO 639-3})`,
