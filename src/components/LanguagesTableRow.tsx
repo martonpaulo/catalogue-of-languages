@@ -15,7 +15,7 @@ export function LanguagesTableRow({ language }: LanguagesTableRowProps) {
       <TableCell>{language.code}</TableCell>
       <TableCell>
         <Link
-          href={`/languages/${language.code}`}
+          href={`/${language.code}`}
           style={{
             textDecoration: "none",
             color: "inherit",
