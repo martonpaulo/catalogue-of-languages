@@ -2,6 +2,7 @@
 
 import LanguageIcon from "@mui/icons-material/Language";
 import { Stack, Typography } from "@mui/material";
+import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
 
 import LanguageDetails from "@/features/languages/components/LanguageDetails";
@@ -15,7 +16,7 @@ export default function LanguagePage() {
   const titleSuffix = "Catalogue of Languages";
 
   if (!language || !language.name) {
-    return <p>Language not found.</p>;
+    notFound();
   }
 
   const pageTitle = `${language.name} | ${titleSuffix}`;

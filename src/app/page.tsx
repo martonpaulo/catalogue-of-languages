@@ -46,7 +46,7 @@ export default function Home() {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          height="200px"
+          height="20rem"
         >
           <CircularProgress />
         </Box>
@@ -71,7 +71,7 @@ export default function Home() {
       <LanguageFilters onFiltersChange={handleFiltersChange} />
       <LanguageTable languages={languages} filters={filters} />
       <Box mt={2} display="flex" justifyContent="center">
-        {isFetchingNextPage && hasNextPage ? (
+        {hasNextPage ? (
           <Box display="flex" alignItems="center" gap={1}>
             <CircularProgress size={24} />
             <Typography variant="body2">Loading more languages...</Typography>
