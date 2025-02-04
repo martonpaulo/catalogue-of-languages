@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { mapRawDataToWritingSystemType } from "@/features/writingSystems/utils/writingSystemMapper";
+import { mapAirtableRecordsToWritingSystems } from "@/features/writingSystems/utils/writingSystemMapper";
 import { getAirtableRecords } from "@/shared/services/airtableAPI";
 
 const WRITING_SYSTEMS_TABLE_ID = process.env.WRITING_SYSTEMS_TABLE_ID;
@@ -17,7 +17,7 @@ export async function GET() {
     });
 
     return NextResponse.json({
-      data: mapRawDataToWritingSystemType(writingSystemData.records),
+      data: mapAirtableRecordsToWritingSystems(writingSystemData.records),
     });
   } catch (error) {
     return NextResponse.json(

@@ -1,7 +1,7 @@
 import { WritingSystemType } from "@/features/writingSystems/types/writingSystem.type";
 import { AirtableRecordType } from "@/shared/types/airtableRecord.type";
 
-export function mapRawDataToWritingSystemType(
+export function mapAirtableRecordsToWritingSystems(
   rawData: AirtableRecordType[]
 ): WritingSystemType[] {
   return rawData.map(({ id, fields }) => ({

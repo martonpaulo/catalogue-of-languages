@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { mapRawDataToLanguageType } from "@/features/languages/utils/languageMapper";
+import { mapAirtableRecordsToLanguages } from "@/features/languages/utils/languageMappers";
 import { getAirtableRecords } from "@/shared/services/airtableAPI";
 
 const LANGUAGES_TABLE_ID = process.env.LANGUAGES_TABLE_ID;
@@ -28,7 +28,7 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json({
-      data: mapRawDataToLanguageType(languageData.records),
+      data: mapAirtableRecordsToLanguages(languageData.records),
       nextOffset: languageData.offset || null,
     });
   } catch (error) {

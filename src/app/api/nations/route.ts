@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { mapRawDataToNationType } from "@/features/nations/utils/nationMapper";
+import { mapAirtableRecordsToNations } from "@/features/nations/utils/nationMappers";
 import { getAirtableRecords } from "@/shared/services/airtableAPI";
 
 const NATIONS_TABLE_ID = process.env.NATIONS_TABLE_ID;
@@ -17,7 +17,7 @@ export async function GET() {
     });
 
     return NextResponse.json({
-      data: mapRawDataToNationType(nationData.records),
+      data: mapAirtableRecordsToNations(nationData.records),
     });
   } catch (error) {
     return NextResponse.json(

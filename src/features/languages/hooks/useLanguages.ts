@@ -6,7 +6,7 @@ import {
   FetchPaginatedLanguagesDataParams,
 } from "@/features/languages/services/languageAPI";
 import { useLanguageStore } from "@/features/languages/store/languageStore";
-import { enrichLanguageDataWithNames } from "@/features/languages/utils/languageMapper";
+import { enrichLanguageDataWithNames } from "@/features/languages/utils/languageEnrichers";
 import { useNations } from "@/features/nations/hooks/useNations";
 import { useWritingSystems } from "@/features/writingSystems/hooks/useWritingSystems";
 
