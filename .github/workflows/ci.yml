@@ -46,8 +46,4 @@ jobs:
         run: npm install -g vercel
 
       - name: Deploy to Vercel
-        uses: UnlyEd/github-action-deploy-on-vercel@latest
-        with:
-          command: vercel --yes --debug --token ${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel . --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
