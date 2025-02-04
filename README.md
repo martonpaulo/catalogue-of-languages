@@ -155,107 +155,33 @@ For more details, see the [Airtable API documentation](https://airtable.com/deve
 
 Below is a simplified representation of the folder structure that follows a modular approach. Each major domain (languages, nations, writing systems) has its own directory under `src/features`.
 
+```plaintext
+src/
+├── app/                       # Next.js App Router structure
+│   ├── api/                   # API route handlers (server-side)
+│   │   ├── languages/         # Proxy endpoints for languages data
+│   │   │   ├── [code]/        # Endpoint for specific language details
+│   │   │   └── route.ts       # Endpoint for listing all languages
+│   │   ├── nations/           # Endpoint for nations data
+│   │   └── writing-systems/   # Endpoint for writing systems data
+│   ├── icon.svg               # SVG icon rendered automatically by Next.js
+│   ├── layout.tsx             # Layout wrapper for the entire app
+│   ├── not-found.tsx          # Custom 404 page
+│   ├── page.tsx               # Home page (main listing view)
+│   └── [code]/                # Dynamic route for language details (e.g., /:code)
+├── features/                  # Domain-driven feature directories
+│   ├── languages/
+│   │   ├── components/        # UI components specific to languages
+│   │   ├── hooks/             # Language-related React hooks
+│   │   ├── services/          # API service calls for languages
+│   │   ├── store/             # Zustand store for languages state
+│   │   ├── types/             # TypeScript definitions for languages
+│   │   └── utils/             # Utility functions for data mapping, filtering
+│   ├── nations/               # Similar structure for nations
+│   └── writingSystems/        # Similar structure for writing systems
+├── middleware/                # Custom middleware for origin checks and security
+└── shared/                    # Shared utilities and components
 ```
-.
-├── DRAFT.md
-├── LICENSE
-├── README.md
-├── eslint.config.mjs
-├── next-env.d.ts
-├── next.config.ts
-├── package-lock.json
-├── package.json
-├── src
-│   ├── app
-│   │   ├── [code]
-│   │   │   └── page.tsx
-│   │   ├── api
-│   │   │   ├── languages
-│   │   │   │   ├── [code]
-│   │   │   │   │   └── route.ts
-│   │   │   │   └── route.ts
-│   │   │   ├── nations
-│   │   │   │   └── route.ts
-│   │   │   └── writing-systems
-│   │   │       └── route.ts
-│   │   ├── icon.svg
-│   │   ├── layout.tsx
-│   │   ├── not-found.tsx
-│   │   └── page.tsx
-│   ├── features
-│   │   ├── languages
-│   │   │   ├── components
-│   │   │   │   ├── LanguageDetails.tsx
-│   │   │   │   ├── LanguageFilters.tsx
-│   │   │   │   ├── LanguageStatusChip.tsx
-│   │   │   │   ├── LanguageTable.tsx
-│   │   │   │   ├── LanguageTableRow.tsx
-│   │   │   │   └── languageFilters.schema.ts
-│   │   │   ├── hooks
-│   │   │   │   ├── useLanguageDetails.ts
-│   │   │   │   └── useLanguages.ts
-│   │   │   ├── services
-│   │   │   │   ├── languageAPI.ts
-│   │   │   │   └── languageDetailsAPI.ts
-│   │   │   ├── store
-│   │   │   │   └── languageStore.ts
-│   │   │   ├── types
-│   │   │   │   ├── language.type.ts
-│   │   │   │   ├── languageFilterParams.type.ts
-│   │   │   │   └── languageStatus.enum.ts
-│   │   │   └── utils
-│   │   │       ├── languageEnrichers.ts
-│   │   │       ├── languageFilters.ts
-│   │   │       ├── languageFiltersConstants.ts
-│   │   │       ├── languageMappers.ts
-│   │   │       └── languageSelectors.ts
-│   │   ├── nations
-│   │   │   ├── hooks
-│   │   │   │   └── useNations.ts
-│   │   │   ├── services
-│   │   │   │   └── nationAPI.ts
-│   │   │   ├── store
-│   │   │   │   └── nationStore.ts
-│   │   │   ├── types
-│   │   │   │   └── nation.type.ts
-│   │   │   └── utils
-│   │   │       └── nationMappers.ts
-│   │   └── writingSystems
-│   │       ├── hooks
-│   │       │   └── useWritingSystems.ts
-│   │       ├── services
-│   │       │   └── writingSystemAPI.ts
-│   │       ├── store
-│   │       │   └── writingSystemStore.ts
-│   │       ├── types
-│   │       │   └── writingSystem.type.ts
-│   │       └── utils
-│   │           └── writingSystemMapper.ts
-│   ├── middleware
-│   │   └── index.ts
-│   └── shared
-│       ├── components
-│       │   ├── ContentContainer.tsx
-│       │   └── ControlledSelect.tsx
-│       ├── providers
-│       │   ├── AppThemeProvider.tsx
-│       │   └── ReactQueryProvider.tsx
-│       ├── services
-│       │   ├── airtableAPI.ts
-│       │   └── proxyAPI.ts
-│       ├── styles
-│       │   ├── fonts.ts
-│       │   └── theme.ts
-│       ├── types
-│       │   └── airtableRecord.type.ts
-│       └── utils
-│           └── localStorageUtils.ts
-└── tsconfig.json
-```
-
-- **`app/api`**: Next.js API routes acting as a proxy to Airtable.
-- **`features/*`**: Domain-driven directories for each major feature (languages, nations, writing systems).
-- **`shared/*`**: Reusable components, utilities, providers, and services.
 
 ## 🔒 Handling CORS Issues
 
