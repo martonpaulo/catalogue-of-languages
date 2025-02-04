@@ -33,11 +33,8 @@ function buildQueryParams(
   const queryParams: Record<string, string> = {
     pageSize: PAGE_SIZE.toString(),
   };
-  const filters = buildFilters(searchParams);
 
-  if (filters.length > 0) {
-    queryParams.filterByFormula = `AND(${filters.join("), ")})`;
-  }
+  queryParams.filterByFormula = buildFilters(searchParams);
 
   const offset = searchParams.get("offset");
   if (offset) queryParams.offset = offset;
@@ -45,7 +42,7 @@ function buildQueryParams(
   return queryParams;
 }
 
-function buildFilters(searchParams: URLSearchParams): string[] {
+function buildFilters(searchParams: URLSearchParams): string {
   const filters: string[] = [];
   const filterFields = [
     { param: "code", field: "ISO 639-3" },
@@ -53,17 +50,15 @@ function buildFilters(searchParams: URLSearchParams): string[] {
     { param: "status", field: "Language Status" },
     { param: "nationOfOrigin", field: "Nation of Origin" },
     { param: "writingSystem", field: "Writing System" },
-    { param: "spokenIn", field: "Spoken In" },
+    { param: "spokenIn", field: "Principal in" },
   ];
 
   filterFields.forEach(({ param, field }) => {
-    const value = searchParams.get(param);
-    if (value) {
-      filters.push(`SEARCH(LOWER("${value}"), LOWER({${field}})) > 0`);
-    }
+    const value = searchParams.get(param) || "";
+    filters.push(`(SEARCH(LOWER("${value}"), LOWER({${field}})) > 0)`);
   });
 
-  return filters;
+  return `AND(${filters[0]}, ${filters[1]}, ${filters[2]}, ${filters[3]}, ${filters[4]}, ${filters[5]})`;
 }
 
 function handleError(error: unknown) {

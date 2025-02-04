@@ -30,7 +30,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
     ...(persistedFilters || {}),
   };
 
-  const { register, handleSubmit, reset, control, watch } =
+  const { register, handleSubmit, reset, control, formState } =
     useForm<LanguageFilterFormValues>({
       resolver: zodResolver(languageFilterSchema),
       defaultValues: initialFilterValues,
@@ -93,21 +93,6 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
     [sortedWritingSystems]
   );
 
-  const code = watch("code");
-  const name = watch("name");
-  const status = watch("status");
-  const spokenIn = watch("spokenIn");
-  const writingSystem = watch("writingSystem");
-  const nationOfOrigin = watch("nationOfOrigin");
-
-  const userHasEnteredFilters =
-    code !== "" ||
-    name !== "" ||
-    status !== "" ||
-    spokenIn !== "" ||
-    writingSystem !== "" ||
-    nationOfOrigin !== "";
-
   return (
     <Paper variant="outlined" sx={{ padding: 2 }}>
       <Stack
@@ -121,8 +106,9 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
         <Stack spacing={2} direction={{ mobile: "column", tablet: "row" }}>
           <TextField
             label="Language Code"
-            helperText="Example: ENG"
             size="small"
+            error={!!formState.errors.code}
+            helperText={formState.errors?.code?.message}
             {...register("code")}
           />
 
@@ -151,10 +137,10 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
           />
 
           <ControlledSelect
-            name="spokenIn"
-            label="Country Where Spoken"
+            name="nationOfOrigin"
+            label="Nation of Origin"
             control={control}
-            defaultValue={initialFilterValues.spokenIn}
+            defaultValue={initialFilterValues.nationOfOrigin}
             options={nationOptions}
           />
 
@@ -167,10 +153,10 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
           />
 
           <ControlledSelect
-            name="nationOfOrigin"
-            label="Country of Origin"
+            name="spokenIn"
+            label="Spoken In"
             control={control}
-            defaultValue={initialFilterValues.nationOfOrigin}
+            defaultValue={initialFilterValues.spokenIn}
             options={nationOptions}
           />
         </Stack>
@@ -180,7 +166,6 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             type="button"
             variant="outlined"
             color="secondary"
-            disabled={!userHasEnteredFilters}
             onClick={handleFormReset}
             sx={{
               width: { mobile: "100%", tablet: "auto" },
@@ -193,7 +178,6 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             type="submit"
             variant="contained"
             color="primary"
-            disabled={!userHasEnteredFilters}
             sx={{
               width: { mobile: "100%", tablet: "auto" },
             }}
