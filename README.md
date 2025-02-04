@@ -6,6 +6,12 @@
 
 This project aims to make language research simple and accessible, serving as a resource for researchers, linguists, students, and enthusiasts.
 
+<br />
+
+<img alt="Recording of live application" src="public/uploads/recording.gif" />
+
+<br />
+
 🔗 Live project: [catalogue-of-languages.vercel.app](https://catalogue-of-languages.vercel.app/)
 
 ## 🔍 Overview
