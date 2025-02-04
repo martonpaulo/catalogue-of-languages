@@ -8,13 +8,13 @@ import { LanguageFilters } from "@/features/languages/components/LanguageFilters
 import { LanguageFilterFormValues } from "@/features/languages/components/languageFilters.schema";
 import { LanguageTable } from "@/features/languages/components/LanguageTable";
 import { useLanguages } from "@/features/languages/hooks/useLanguages";
-import { DEFAULT_LANGUAGE_FILTERS } from "@/features/languages/utils/languageFiltersConstants";
+import { filtersAfterRefresh } from "@/features/languages/utils/languageFilters";
 import { ContentContainer } from "@/shared/components/ContentContainer";
 import { ProjectAttribution } from "@/shared/components/ProjectAttribution";
 
 export default function Home() {
   const [filters, setFilters] = useState<LanguageFilterFormValues>(
-    DEFAULT_LANGUAGE_FILTERS
+    filtersAfterRefresh()
   );
 
   const { ref, inView } = useInView();

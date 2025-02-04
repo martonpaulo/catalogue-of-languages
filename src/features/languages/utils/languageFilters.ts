@@ -1,5 +1,6 @@
 import { LanguageFilterFormValues } from "@/features/languages/components/languageFilters.schema";
 import { LanguageType } from "@/features/languages/types/language.type";
+import { getStoredFilters } from "@/shared/utils/localStorageUtils";
 
 export function filterLanguages(
   languages: LanguageType[],
@@ -38,3 +39,20 @@ export function filterLanguages(
     );
   });
 }
+
+export const DEFAULT_LANGUAGE_FILTERS: LanguageFilterFormValues = {
+  code: "",
+  name: "",
+  status: "",
+  spokenIn: "",
+  writingSystem: "",
+  nationOfOrigin: "",
+};
+
+export const filtersAfterRefresh = (): LanguageFilterFormValues => {
+  const persistedFilters = getStoredFilters("language-filters");
+  return {
+    ...DEFAULT_LANGUAGE_FILTERS,
+    ...(persistedFilters || {}),
+  };
+};

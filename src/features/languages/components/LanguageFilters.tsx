@@ -9,31 +9,24 @@ import {
 } from "@/features/languages/components/languageFilters.schema";
 import { LanguageStatusChip } from "@/features/languages/components/LanguageStatusChip";
 import { LanguageStatusEnum } from "@/features/languages/types/languageStatus.enum";
-import { DEFAULT_LANGUAGE_FILTERS } from "@/features/languages/utils/languageFiltersConstants";
+import {
+  DEFAULT_LANGUAGE_FILTERS,
+  filtersAfterRefresh,
+} from "@/features/languages/utils/languageFilters";
 import { useNations } from "@/features/nations/hooks/useNations";
 import { useWritingSystems } from "@/features/writingSystems/hooks/useWritingSystems";
 import { ControlledSelect } from "@/shared/components/ControlledSelect";
-import {
-  getStoredFilters,
-  setStoredFilters,
-} from "@/shared/utils/localStorageUtils";
+import { setStoredFilters } from "@/shared/utils/localStorageUtils";
 
 interface LanguageFiltersProps {
   onFiltersChange: (filters: LanguageFilterFormValues) => void;
 }
 
 export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
-  // Merge default filters with any persisted filters
-  const persistedFilters = getStoredFilters("language-filters");
-  const initialFilterValues: LanguageFilterFormValues = {
-    ...DEFAULT_LANGUAGE_FILTERS,
-    ...(persistedFilters || {}),
-  };
-
   const { register, handleSubmit, reset, control, formState } =
     useForm<LanguageFilterFormValues>({
       resolver: zodResolver(languageFilterSchema),
-      defaultValues: initialFilterValues,
+      defaultValues: filtersAfterRefresh(),
     });
 
   const { nations } = useNations();
@@ -129,7 +122,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             name="status"
             label="Status"
             control={control}
-            defaultValue={initialFilterValues.status}
+            defaultValue={filtersAfterRefresh().status}
             options={statusOptions}
             renderOption={(option) => (
               <LanguageStatusChip status={option.value} />
@@ -140,7 +133,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             name="nationOfOrigin"
             label="Nation of Origin"
             control={control}
-            defaultValue={initialFilterValues.nationOfOrigin}
+            defaultValue={filtersAfterRefresh().nationOfOrigin}
             options={nationOptions}
           />
 
@@ -148,7 +141,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             name="writingSystem"
             label="Writing System"
             control={control}
-            defaultValue={initialFilterValues.writingSystem}
+            defaultValue={filtersAfterRefresh().writingSystem}
             options={writingSystemOptions}
           />
 
@@ -156,7 +149,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             name="spokenIn"
             label="Spoken In"
             control={control}
-            defaultValue={initialFilterValues.spokenIn}
+            defaultValue={filtersAfterRefresh().spokenIn}
             options={nationOptions}
           />
         </Stack>
