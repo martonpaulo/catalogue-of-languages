@@ -58,7 +58,7 @@ The project focuses on an intuitive and responsive UI design, ensuring smooth na
 
 ### Prerequisites
 
-- **Node.js** (v16 or above)
+- **Node.js** (v18 or above)
 - **npm** (or other package)
 
 ### Installation
