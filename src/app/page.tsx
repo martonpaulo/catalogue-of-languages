@@ -28,7 +28,6 @@ export default function Home() {
     (newFilters: LanguageFilterFormValues) => {
       console.warn("Filters changed:", newFilters);
       setFilters(newFilters);
-      setFilters({});
     },
     []
   );
@@ -39,13 +38,10 @@ export default function Home() {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  return (
-    <ContentContainer>
-      <Typography variant="h1">🌎 Catalogue of Languages</Typography>
-
-      <LanguageFilters onFiltersChange={handleFiltersChange} />
-
-      {isLoading ? (
+  if (isLoading) {
+    return (
+      <ContentContainer>
+        <Typography variant="h1">🌎 Catalogue of Languages</Typography>
         <Box
           display="flex"
           justifyContent="center"
@@ -54,32 +50,39 @@ export default function Home() {
         >
           <CircularProgress />
         </Box>
-      ) : isError ? (
+      </ContentContainer>
+    );
+  }
+
+  if (isError) {
+    return (
+      <ContentContainer>
+        <Typography variant="h1">🌎 Catalogue of Languages</Typography>
         <Alert severity="error">
           An error occurred while loading languages.
         </Alert>
-      ) : (
-        <>
-          <LanguageTable languages={languages} filters={filters} />
+      </ContentContainer>
+    );
+  }
 
-          <Box mt={2} display="flex" justifyContent="center">
-            {isFetchingNextPage && hasNextPage ? (
-              <Box display="flex" alignItems="center" gap={1}>
-                <CircularProgress size={24} />
-                <Typography variant="body2">
-                  Loading more languages...
-                </Typography>
-              </Box>
-            ) : (
-              <Typography variant="body2" align="center">
-                No more languages found.
-              </Typography>
-            )}
+  return (
+    <ContentContainer>
+      <Typography variant="h1">🌎 Catalogue of Languages</Typography>
+      <LanguageFilters onFiltersChange={handleFiltersChange} />
+      <LanguageTable languages={languages} filters={filters} />
+      <Box mt={2} display="flex" justifyContent="center">
+        {isFetchingNextPage && hasNextPage ? (
+          <Box display="flex" alignItems="center" gap={1}>
+            <CircularProgress size={24} />
+            <Typography variant="body2">Loading more languages...</Typography>
           </Box>
-
-          <div ref={ref} />
-        </>
-      )}
+        ) : (
+          <Typography variant="body2" align="center">
+            No more languages found.
+          </Typography>
+        )}
+      </Box>
+      <div ref={ref} />
     </ContentContainer>
   );
 }
