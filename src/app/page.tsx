@@ -27,6 +27,7 @@ export default function Home() {
   const handleFiltersChange = useCallback(
     (newFilters: LanguageFilterFormValues) => {
       console.warn("Filters changed:", newFilters);
+      setFilters(newFilters);
       setFilters({});
     },
     []

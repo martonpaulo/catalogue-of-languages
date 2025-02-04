@@ -1,13 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import React, { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
@@ -20,6 +12,7 @@ import { LanguageStatusEnum } from "@/features/languages/types/languageStatus.en
 import { DEFAULT_LANGUAGE_FILTERS } from "@/features/languages/utils/languageFiltersConstants";
 import { useNations } from "@/features/nations/hooks/useNations";
 import { useWritingSystems } from "@/features/writingSystems/hooks/useWritingSystems";
+import { ControlledSelect } from "@/shared/components/ControlledSelect";
 import {
   getStoredFilters,
   setStoredFilters,
@@ -30,17 +23,19 @@ interface LanguageFiltersProps {
 }
 
 export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
-  // Load stored filters or fall back to defaults
-  const storedFilters = getStoredFilters("languageFilters");
-  const initialFilters: LanguageFilterFormValues =
-    storedFilters || DEFAULT_LANGUAGE_FILTERS;
+  // Merge default filters with any persisted filters
+  const persistedFilters = getStoredFilters("language-filters");
+  const initialFilterValues: LanguageFilterFormValues = {
+    ...DEFAULT_LANGUAGE_FILTERS,
+    ...(persistedFilters || {}),
+  };
 
-  const { register, handleSubmit, reset } = useForm<LanguageFilterFormValues>({
-    resolver: zodResolver(languageFilterSchema),
-    defaultValues: initialFilters,
-  });
+  const { register, handleSubmit, reset, control } =
+    useForm<LanguageFilterFormValues>({
+      resolver: zodResolver(languageFilterSchema),
+      defaultValues: initialFilterValues,
+    });
 
-  // Fetch nations and writing systems
   const { nations } = useNations();
   const { writingSystems } = useWritingSystems();
 
@@ -58,7 +53,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
     [writingSystems]
   );
 
-  const onSubmit = useCallback(
+  const handleFormSubmit = useCallback(
     (data: LanguageFilterFormValues) => {
       setStoredFilters("language-filters", data);
       onFiltersChange(data);
@@ -66,16 +61,42 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
     [onFiltersChange]
   );
 
-  const handleReset = useCallback(() => {
+  const handleFormReset = useCallback(() => {
     reset(DEFAULT_LANGUAGE_FILTERS);
-    setStoredFilters("languageFilters", DEFAULT_LANGUAGE_FILTERS);
+    setStoredFilters("language-filters", DEFAULT_LANGUAGE_FILTERS);
     onFiltersChange(DEFAULT_LANGUAGE_FILTERS);
   }, [onFiltersChange, reset]);
+
+  const statusOptions = useMemo(
+    () =>
+      Object.values(LanguageStatusEnum).map((status) => ({
+        value: status,
+      })),
+    []
+  );
+
+  const nationOptions = useMemo(
+    () =>
+      sortedNations.map((nation) => ({
+        value: nation.name,
+        label: nation.name,
+      })),
+    [sortedNations]
+  );
+
+  const writingSystemOptions = useMemo(
+    () =>
+      sortedWritingSystems.map((ws) => ({
+        value: ws.name,
+        label: ws.name,
+      })),
+    [sortedWritingSystems]
+  );
 
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleFormSubmit)}
       noValidate
       autoComplete="off"
       sx={{ display: "flex", flexWrap: "wrap", gap: 2, mb: 2 }}
@@ -85,78 +106,40 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
         helperText="Example: ENG"
         {...register("code")}
       />
-
       <TextField label="Language Name" {...register("name")} />
 
-      <FormControl sx={{ minWidth: 200 }}>
-        <InputLabel id="status-label">Status</InputLabel>
-        <Select labelId="status-label" label="Status" {...register("status")}>
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {Object.values(LanguageStatusEnum).map(
-            (status: LanguageStatusEnum) => (
-              <MenuItem key={status} value={status}>
-                <LanguageStatusChip status={status} />
-              </MenuItem>
-            )
-          )}
-        </Select>
-      </FormControl>
+      <ControlledSelect
+        name="status"
+        label="Status"
+        control={control}
+        defaultValue={initialFilterValues.status}
+        options={statusOptions}
+        renderOption={(option) => <LanguageStatusChip status={option.value} />}
+      />
 
-      <FormControl sx={{ minWidth: 200 }}>
-        <InputLabel id="spokenIn-label">Country Where Spoken</InputLabel>
-        <Select
-          labelId="spokenIn-label"
-          label="Country Where Spoken"
-          {...register("spokenIn")}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {sortedNations.map((nation) => (
-            <MenuItem key={nation.id} value={nation.name}>
-              {nation.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <ControlledSelect
+        name="spokenIn"
+        label="Country Where Spoken"
+        control={control}
+        defaultValue={initialFilterValues.spokenIn}
+        options={nationOptions}
+      />
 
-      <FormControl sx={{ minWidth: 200 }}>
-        <InputLabel id="writingSystem-label">Writing System</InputLabel>
-        <Select
-          labelId="writingSystem-label"
-          label="Writing System"
-          {...register("writingSystem")}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {sortedWritingSystems.map((ws) => (
-            <MenuItem key={ws.id} value={ws.name}>
-              {ws.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <ControlledSelect
+        name="writingSystem"
+        label="Writing System"
+        control={control}
+        defaultValue={initialFilterValues.writingSystem}
+        options={writingSystemOptions}
+      />
 
-      <FormControl sx={{ minWidth: 200 }}>
-        <InputLabel id="nationOfOrigin-label">Country of Origin</InputLabel>
-        <Select
-          labelId="nationOfOrigin-label"
-          label="Country of Origin"
-          {...register("nationOfOrigin")}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {sortedNations.map((nation) => (
-            <MenuItem key={nation.id} value={nation.name}>
-              {nation.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <ControlledSelect
+        name="nationOfOrigin"
+        label="Country of Origin"
+        control={control}
+        defaultValue={initialFilterValues.nationOfOrigin}
+        options={nationOptions}
+      />
 
       <Box
         sx={{ display: "flex", alignItems: "center", width: "100%", gap: 2 }}
@@ -168,7 +151,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
           type="button"
           variant="outlined"
           color="secondary"
-          onClick={handleReset}
+          onClick={handleFormReset}
         >
           Reset Filters
         </Button>
