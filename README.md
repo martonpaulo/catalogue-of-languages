@@ -67,6 +67,7 @@ This project aims to make language research simple and accessible, serving as a 
 - **Axios** for HTTP requests.
 - **ESLint** for consistent code styling and error detection.
 - **Vercel** for deployment with automated builds and previews.
+- **GitHub Actions** for Continuous Integration.
 
 ## 🔧 Features
 
