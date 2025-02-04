@@ -8,10 +8,15 @@ import { LanguageFilters } from "@/features/languages/components/LanguageFilters
 import { LanguageFilterFormValues } from "@/features/languages/components/languageFilters.schema";
 import { LanguageTable } from "@/features/languages/components/LanguageTable";
 import { useLanguages } from "@/features/languages/hooks/useLanguages";
+import { DEFAULT_LANGUAGE_FILTERS } from "@/features/languages/utils/languageFiltersConstants";
 import { ContentContainer } from "@/shared/components/ContentContainer";
 
 export default function Home() {
   const { ref, inView } = useInView();
+
+  const [filters, setFilters] = useState<LanguageFilterFormValues>(
+    DEFAULT_LANGUAGE_FILTERS
+  );
 
   const {
     languages,
@@ -20,13 +25,10 @@ export default function Home() {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useLanguages();
-
-  const [filters, setFilters] = useState<LanguageFilterFormValues>({});
+  } = useLanguages(filters);
 
   const handleFiltersChange = useCallback(
     (newFilters: LanguageFilterFormValues) => {
-      console.warn("Filters changed:", newFilters);
       setFilters(newFilters);
     },
     []
@@ -38,10 +40,12 @@ export default function Home() {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  if (isLoading) {
-    return (
-      <ContentContainer>
-        <Typography variant="h1">🌎 Catalogue of Languages</Typography>
+  return (
+    <ContentContainer>
+      <Typography variant="h1">🌎 Catalogue of Languages</Typography>
+      <LanguageFilters onFiltersChange={handleFiltersChange} />
+
+      {isLoading && (
         <Box
           display="flex"
           justifyContent="center"
@@ -50,39 +54,30 @@ export default function Home() {
         >
           <CircularProgress />
         </Box>
-      </ContentContainer>
-    );
-  }
+      )}
 
-  if (isError) {
-    return (
-      <ContentContainer>
-        <Typography variant="h1">🌎 Catalogue of Languages</Typography>
+      {isError && (
         <Alert severity="error">
           An error occurred while loading languages.
         </Alert>
-      </ContentContainer>
-    );
-  }
+      )}
 
-  return (
-    <ContentContainer>
-      <Typography variant="h1">🌎 Catalogue of Languages</Typography>
-      <LanguageFilters onFiltersChange={handleFiltersChange} />
-      <LanguageTable languages={languages} filters={filters} />
-      <Box mt={2} display="flex" justifyContent="center">
-        {hasNextPage ? (
-          <Box display="flex" alignItems="center" gap={1}>
-            <CircularProgress size={24} />
-            <Typography variant="body2">Loading more languages...</Typography>
+      {!isLoading && !isError && (
+        <>
+          <LanguageTable languages={languages} />
+          <Box mt={2} display="flex" justifyContent="center">
+            {hasNextPage && (
+              <Box display="flex" alignItems="center" gap={1}>
+                <CircularProgress size={24} />
+                <Typography variant="body2">
+                  Loading more languages...
+                </Typography>
+              </Box>
+            )}
           </Box>
-        ) : (
-          <Typography variant="body2" align="center">
-            No more languages found.
-          </Typography>
-        )}
-      </Box>
-      <div ref={ref} />
+          <div ref={ref} />
+        </>
+      )}
     </ContentContainer>
   );
 }

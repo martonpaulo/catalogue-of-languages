@@ -65,5 +65,5 @@ function mapStringToStatusEnum(status: string): LanguageStatusEnum {
     "Unattested.": LanguageStatusEnum.UNATTESTED,
   };
 
-  return status ? statusMap[status.trim()] : LanguageStatusEnum.UNATTESTED;
+  return statusMap[status] || LanguageStatusEnum.UNATTESTED;
 }

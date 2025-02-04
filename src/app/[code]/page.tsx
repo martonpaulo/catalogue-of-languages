@@ -1,9 +1,11 @@
 "use client";
 
 import LanguageIcon from "@mui/icons-material/Language";
+import { Box, CircularProgress } from "@mui/material";
 import { Stack, Typography } from "@mui/material";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import LanguageDetails from "@/features/languages/components/LanguageDetails";
 import { LanguageStatusChip } from "@/features/languages/components/LanguageStatusChip";
@@ -12,11 +14,40 @@ import { ContentContainer } from "@/shared/components/ContentContainer";
 
 export default function LanguagePage() {
   const { code } = useParams<{ code: string }>();
-  const language = useLanguageDetails(code);
-  const titleSuffix = "Catalogue of Languages";
 
-  if (!language || !language.name) {
-    notFound();
+  if (!code || code.length !== 3) notFound();
+
+  const { data: language } = useLanguageDetails(code);
+  const titleSuffix = "Catalogue of Languages";
+  const [loadingTimeoutPassed, setLoadingTimeoutPassed] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoadingTimeoutPassed(true), 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // While language is not loaded, show spinner until timeout
+  if (!language) {
+    if (loadingTimeoutPassed) {
+      notFound();
+    }
+
+    return (
+      <ContentContainer>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          minHeight="50vh"
+        >
+          <CircularProgress />
+          <Typography variant="body1" mt={2}>
+            Loading language details...
+          </Typography>
+        </Box>
+      </ContentContainer>
+    );
   }
 
   const pageTitle = `${language.name} | ${titleSuffix}`;
@@ -37,7 +68,7 @@ export default function LanguagePage() {
             direction={{ mobile: "column", tablet: "row" }}
           >
             <Typography variant="h1">{language.name}</Typography>
-            <Typography variant="h2" fontFamily={"Monospace"}>
+            <Typography variant="h2" fontFamily="Monospace">
               {code.toUpperCase()}
             </Typography>
           </Stack>

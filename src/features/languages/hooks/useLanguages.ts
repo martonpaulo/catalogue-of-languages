@@ -1,19 +1,19 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
+import { LanguageFilterFormValues } from "@/features/languages/components/languageFilters.schema";
 import {
   fetchPaginatedLanguagesData,
   FetchPaginatedLanguagesDataParams,
 } from "@/features/languages/services/languageAPI";
-import { useLanguageStore } from "@/features/languages/store/languageStore";
+import { LanguageType } from "@/features/languages/types/language.type";
 import { enrichLanguageDataWithNames } from "@/features/languages/utils/languageEnrichers";
 import { useNations } from "@/features/nations/hooks/useNations";
 import { useWritingSystems } from "@/features/writingSystems/hooks/useWritingSystems";
 
-export function useLanguages() {
+export function useLanguages(languageFilterParams: LanguageFilterFormValues) {
   const { nations } = useNations();
   const { writingSystems } = useWritingSystems();
-  const { languages, setLanguages } = useLanguageStore((state) => state);
 
   const {
     data,
@@ -23,9 +23,9 @@ export function useLanguages() {
     hasNextPage,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: ["languages"],
+    queryKey: ["languages", languageFilterParams],
     queryFn: ({ pageParam = undefined }: FetchPaginatedLanguagesDataParams) =>
-      fetchPaginatedLanguagesData({ pageParam: pageParam }),
+      fetchPaginatedLanguagesData({ pageParam, languageFilterParams }),
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => {
       const nextPage = lastPage?.nextOffset;
@@ -33,17 +33,33 @@ export function useLanguages() {
     },
   });
 
+  const enrichedLanguagesRef = useRef<LanguageType[]>([]);
+  const processedPagesRef = useRef(0);
+
+  // Reset refs when the filters (query key) change
   useEffect(() => {
-    if (data?.pages && nations && writingSystems) {
-      const enrichedLanguages = data.pages.flatMap((page) =>
+    enrichedLanguagesRef.current = [];
+    processedPagesRef.current = 0;
+  }, [languageFilterParams]);
+
+  useEffect(() => {
+    if (!data?.pages || !nations || !writingSystems) return;
+
+    if (data.pages.length > processedPagesRef.current) {
+      const newPages = data.pages.slice(processedPagesRef.current);
+      const newEnriched = newPages.flatMap((page) =>
         enrichLanguageDataWithNames(page.data, nations, writingSystems)
       );
-      setLanguages(enrichedLanguages);
+      enrichedLanguagesRef.current = [
+        ...enrichedLanguagesRef.current,
+        ...newEnriched,
+      ];
+      processedPagesRef.current = data.pages.length;
     }
-  }, [data, nations, writingSystems, setLanguages]);
+  }, [data?.pages, nations, writingSystems]);
 
   return {
-    languages,
+    languages: enrichedLanguagesRef.current,
     isLoading,
     isError,
     isFetchingNextPage,
