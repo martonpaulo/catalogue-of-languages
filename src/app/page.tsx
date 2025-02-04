@@ -4,11 +4,11 @@ import { Alert, Box, CircularProgress, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
-import { ContentContainer } from "@/components/ContentContainer";
-import { LanguageFilters } from "@/components/LanguageFilters/LanguageFilters";
-import { LanguageFilterFormValues } from "@/components/LanguageFilters/languageFilterSchema";
-import { LanguagesTable } from "@/components/LanguagesTable";
-import { useLanguages } from "@/hooks/useLanguages";
+import { LanguageFilters } from "@/features/languages/components/LanguageFilters";
+import { LanguageFilterFormValues } from "@/features/languages/components/languageFilters.schema";
+import { LanguageTable } from "@/features/languages/components/LanguageTable";
+import { useLanguages } from "@/features/languages/hooks/useLanguages";
+import { ContentContainer } from "@/shared/components/ContentContainer";
 
 export default function Home() {
   const { ref, inView } = useInView();
@@ -56,7 +56,7 @@ export default function Home() {
         </Alert>
       ) : (
         <>
-          <LanguagesTable languages={languages} filters={filters} />
+          <LanguageTable languages={languages} filters={filters} />
 
           <Box mt={2} display="flex" justifyContent="center">
             {isFetchingNextPage && hasNextPage ? (

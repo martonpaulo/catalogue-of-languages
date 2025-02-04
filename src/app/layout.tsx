@@ -1,9 +1,9 @@
 import { Container } from "@mui/material";
 import type { Metadata } from "next";
 
-import { AppThemeProvider } from "@/providers/AppThemeProvider";
-import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
-import { poppins } from "@/styles/fonts";
+import { AppThemeProvider } from "@/shared/providers/AppThemeProvider";
+import { ReactQueryProvider } from "@/shared/providers/ReactQueryProvider";
+import { poppins } from "@/shared/styles/fonts";
 
 export const metadata: Metadata = {
   title: "Catalogue of Languages",

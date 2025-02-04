@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { getAirtableRecords } from "@/services/airtableService";
-import { mapRawDataToLanguageType } from "@/utils/languageMapper";
+import { mapRawDataToLanguageType } from "@/features/languages/utils/languageMapper";
+import { getAirtableRecords } from "@/shared/services/airtableAPI";
 
 const LANGUAGES_TABLE_ID = process.env.LANGUAGES_TABLE_ID;
 

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { getAirtableRecords } from "@/services/airtableService";
-import { mapRawDataToNationType } from "@/utils/nationMapper";
+import { mapRawDataToNationType } from "@/features/nations/utils/nationMapper";
+import { getAirtableRecords } from "@/shared/services/airtableAPI";
 
 const NATIONS_TABLE_ID = process.env.NATIONS_TABLE_ID;
 

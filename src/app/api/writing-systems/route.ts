@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { getAirtableRecords } from "@/services/airtableService";
-import { mapRawDataToWritingSystemType } from "@/utils/writingSystemMapper";
+import { mapRawDataToWritingSystemType } from "@/features/writingSystems/utils/writingSystemMapper";
+import { getAirtableRecords } from "@/shared/services/airtableAPI";
 
 const WRITING_SYSTEMS_TABLE_ID = process.env.WRITING_SYSTEMS_TABLE_ID;
 
