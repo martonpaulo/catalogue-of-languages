@@ -8,7 +8,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React from "react";
 
 import { LanguageFilterFormValues } from "@/features/languages/components/languageFilters.schema";
 import { LanguageTableRow } from "@/features/languages/components/LanguageTableRow";
@@ -60,16 +59,24 @@ export function LanguageTable({ languages, filters }: LanguageTableProps) {
   });
 
   return (
-    <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
-      <Table stickyHeader size="small">
+    <TableContainer
+      component={Paper}
+      sx={{ overflowX: "auto" }}
+      variant="outlined"
+    >
+      <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Code</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Spoken In</TableCell>
-            <TableCell>Writing System</TableCell>
-            <TableCell>Nation of Origin</TableCell>
+            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>Code</TableCell>
+            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>Name</TableCell>
+            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>Status</TableCell>
+            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>
+              Nation of Origin
+            </TableCell>
+            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>
+              Writing System
+            </TableCell>
+            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>Spoken In</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

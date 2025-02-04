@@ -3,7 +3,7 @@ import { Chip, ChipProps } from "@mui/material";
 import { LanguageStatusEnum } from "@/features/languages/types/languageStatus.enum";
 
 interface LanguageStatusChipProps extends Omit<ChipProps, "label" | "icon"> {
-  status: string;
+  status?: string;
 }
 
 const MAP_STATUS_TO_COLOR: Record<string, ChipProps["color"]> = {
@@ -30,7 +30,7 @@ const MAP_STATUS_TO_COLOR: Record<string, ChipProps["color"]> = {
 };
 
 export function LanguageStatusChip({
-  status,
+  status = LanguageStatusEnum.UNATTESTED,
   ...props
 }: LanguageStatusChipProps) {
   return (

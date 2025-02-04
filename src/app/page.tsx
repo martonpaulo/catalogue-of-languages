@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, Box, CircularProgress, Typography } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 import { LanguageFilters } from "@/features/languages/components/LanguageFilters";
@@ -40,7 +40,9 @@ export default function Home() {
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
-    <ContentContainer title="Home">
+    <ContentContainer>
+      <Typography variant="h1">🌎 Catalogue of Languages</Typography>
+
       <LanguageFilters onFiltersChange={handleFiltersChange} />
 
       {isLoading ? (

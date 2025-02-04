@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, TextField } from "@mui/material";
-import React, { useCallback, useMemo } from "react";
+import { Button, Paper, Stack, TextField } from "@mui/material";
+import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -30,7 +30,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
     ...(persistedFilters || {}),
   };
 
-  const { register, handleSubmit, reset, control } =
+  const { register, handleSubmit, reset, control, watch } =
     useForm<LanguageFilterFormValues>({
       resolver: zodResolver(languageFilterSchema),
       defaultValues: initialFilterValues,
@@ -93,69 +93,115 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
     [sortedWritingSystems]
   );
 
+  const code = watch("code");
+  const name = watch("name");
+  const status = watch("status");
+  const spokenIn = watch("spokenIn");
+  const writingSystem = watch("writingSystem");
+  const nationOfOrigin = watch("nationOfOrigin");
+
+  const userHasEnteredFilters =
+    code !== "" ||
+    name !== "" ||
+    status !== "" ||
+    spokenIn !== "" ||
+    writingSystem !== "" ||
+    nationOfOrigin !== "";
+
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit(handleFormSubmit)}
-      noValidate
-      autoComplete="off"
-      sx={{ display: "flex", flexWrap: "wrap", gap: 2, mb: 2 }}
-    >
-      <TextField
-        label="Language Code"
-        helperText="Example: ENG"
-        {...register("code")}
-      />
-      <TextField label="Language Name" {...register("name")} />
-
-      <ControlledSelect
-        name="status"
-        label="Status"
-        control={control}
-        defaultValue={initialFilterValues.status}
-        options={statusOptions}
-        renderOption={(option) => <LanguageStatusChip status={option.value} />}
-      />
-
-      <ControlledSelect
-        name="spokenIn"
-        label="Country Where Spoken"
-        control={control}
-        defaultValue={initialFilterValues.spokenIn}
-        options={nationOptions}
-      />
-
-      <ControlledSelect
-        name="writingSystem"
-        label="Writing System"
-        control={control}
-        defaultValue={initialFilterValues.writingSystem}
-        options={writingSystemOptions}
-      />
-
-      <ControlledSelect
-        name="nationOfOrigin"
-        label="Country of Origin"
-        control={control}
-        defaultValue={initialFilterValues.nationOfOrigin}
-        options={nationOptions}
-      />
-
-      <Box
-        sx={{ display: "flex", alignItems: "center", width: "100%", gap: 2 }}
+    <Paper variant="outlined" sx={{ padding: 2 }}>
+      <Stack
+        component="form"
+        onSubmit={handleSubmit(handleFormSubmit)}
+        noValidate
+        autoComplete="off"
+        direction="column"
+        spacing={2}
       >
-        <Button type="submit" variant="contained" color="primary">
-          Apply Filters
-        </Button>
-        <Button
-          type="button"
-          variant="outlined"
-          color="secondary"
-          onClick={handleFormReset}
+        <Stack spacing={2} direction={{ mobile: "column", tablet: "row" }}>
+          <TextField
+            label="Language Code"
+            helperText="Example: ENG"
+            size="small"
+            {...register("code")}
+          />
+
+          <TextField
+            label="Language Name"
+            fullWidth
+            size="small"
+            {...register("name")}
+          />
+        </Stack>
+
+        <Stack
+          spacing={2}
+          direction={{ mobile: "column", tablet: "row" }}
+          justifyContent="space-between"
         >
-          Reset Filters
-        </Button>
-      </Box>
-    </Box>
+          <ControlledSelect
+            name="status"
+            label="Status"
+            control={control}
+            defaultValue={initialFilterValues.status}
+            options={statusOptions}
+            renderOption={(option) => (
+              <LanguageStatusChip status={option.value} />
+            )}
+          />
+
+          <ControlledSelect
+            name="spokenIn"
+            label="Country Where Spoken"
+            control={control}
+            defaultValue={initialFilterValues.spokenIn}
+            options={nationOptions}
+          />
+
+          <ControlledSelect
+            name="writingSystem"
+            label="Writing System"
+            control={control}
+            defaultValue={initialFilterValues.writingSystem}
+            options={writingSystemOptions}
+          />
+
+          <ControlledSelect
+            name="nationOfOrigin"
+            label="Country of Origin"
+            control={control}
+            defaultValue={initialFilterValues.nationOfOrigin}
+            options={nationOptions}
+          />
+        </Stack>
+
+        <Stack spacing={2} direction="row" justifyContent="flex-end" pt={2}>
+          <Button
+            type="button"
+            variant="outlined"
+            color="secondary"
+            disabled={!userHasEnteredFilters}
+            onClick={handleFormReset}
+            sx={{
+              width: { mobile: "100%", tablet: "auto" },
+            }}
+          >
+            Reset Filters
+          </Button>
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={!userHasEnteredFilters}
+            sx={{
+              width: { mobile: "100%", tablet: "auto" },
+            }}
+          >
+            Apply Filters
+          </Button>
+        </Stack>
+      </Stack>
+    </Paper>
   );
 }

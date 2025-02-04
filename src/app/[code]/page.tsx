@@ -1,27 +1,48 @@
 "use client";
 
+import LanguageIcon from "@mui/icons-material/Language";
+import { Stack, Typography } from "@mui/material";
 import { useParams } from "next/navigation";
 
 import LanguageDetails from "@/features/languages/components/LanguageDetails";
+import { LanguageStatusChip } from "@/features/languages/components/LanguageStatusChip";
 import { useLanguageDetails } from "@/features/languages/hooks/useLanguageDetails";
 import { ContentContainer } from "@/shared/components/ContentContainer";
 
 export default function LanguagePage() {
-  const params = useParams<{ code: string }>();
-  const language = useLanguageDetails(params.code);
-
+  const { code } = useParams<{ code: string }>();
+  const language = useLanguageDetails(code);
   const titleSuffix = "Catalogue of Languages";
-  const languageName = language?.name || undefined;
-  const title = languageName ? `${languageName} | ${titleSuffix}` : titleSuffix;
 
-  if (!language || !languageName) {
+  if (!language || !language.name) {
     return <p>Language not found.</p>;
   }
 
-  return (
-    <ContentContainer title={languageName}>
-      <title>{title}</title>
+  const pageTitle = `${language.name} | ${titleSuffix}`;
 
+  return (
+    <ContentContainer>
+      <title>{pageTitle}</title>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="flex-start"
+      >
+        <Stack spacing={1} direction="row">
+          <LanguageIcon sx={{ fontSize: "2.25rem" }} />
+          <Stack
+            spacing={1}
+            alignItems="baseline"
+            direction={{ mobile: "column", tablet: "row" }}
+          >
+            <Typography variant="h1">{language.name}</Typography>
+            <Typography variant="h2" fontFamily={"Monospace"}>
+              {code.toUpperCase()}
+            </Typography>
+          </Stack>
+        </Stack>
+        <LanguageStatusChip status={language.status} size="medium" />
+      </Stack>
       <LanguageDetails language={language} />
     </ContentContainer>
   );

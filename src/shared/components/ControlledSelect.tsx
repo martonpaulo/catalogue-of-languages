@@ -34,8 +34,10 @@ export function ControlledSelect({
   sx,
 }: ControlledSelectProps) {
   return (
-    <FormControl sx={{ minWidth: 200, ...sx }}>
-      <InputLabel id={`${name}-label`}>{label}</InputLabel>
+    <FormControl size="small" sx={{ width: "100%", ...sx }}>
+      <InputLabel id={`${name}-label`} size="small">
+        {label}
+      </InputLabel>
       <Controller
         name={name}
         control={control}
