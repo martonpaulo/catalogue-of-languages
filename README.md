@@ -4,13 +4,33 @@
 
 **Catalogue of Languages** is an interactive table featuring all documented languages from the Wikitongues database. Built on the [_Every Language in the World_](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world) Airtable dataset, it provides an easy way to explore global linguistic diversity.
 
-This project aims to make language research simple and accessible, serving as a resource for researchers, linguists, students, and enthusiasts.
+Featuring more than ~8,000 records, this project aims to make language research simple and accessible, serving as a resource for researchers, linguists, students, and enthusiasts.
 
 <br />
 
 <img alt="Recording of live application" src="public/uploads/recording.gif" />
 
 🔗 Live project: [catalogue-of-languages.vercel.app](https://catalogue-of-languages.vercel.app/)
+
+## 🔧 Features
+
+1. **Table Display and Infinite Scroll**
+
+   - Fetches and displays data from the Airtable public dataset.
+   - Provides columns for language code, name, and additional metadata based on available fields.
+   - Allows infinite scrolling for smoother data navigation.
+   - Ensures a seamless loading experience when fetching more data.
+
+2. **Search and Filtering Functionalities**
+
+   - Adds a search input to filter table data (e.g., by language name or code).
+   - Offers filter chips for quick data filtering.
+   - Supports multiple criteria for more refined searches.
+
+3. **Language Details Page**
+
+   - Displays detailed information for each language.
+   - Includes additional metadata like writing system, region, and status.
 
 ## 🔍 Overview
 
@@ -72,26 +92,6 @@ This project aims to make language research simple and accessible, serving as a 
 - **ESLint** for consistent code styling and error detection.
 - **Vercel** for deployment with automated builds and previews.
 - **GitHub Actions** for Continuous Integration.
-
-## 🔧 Features
-
-1. **Table Display and Infinite Scroll**
-
-   - Fetches and displays data from the Airtable public dataset.
-   - Provides columns for language code, name, and additional metadata based on available fields.
-   - Allows infinite scrolling for smoother data navigation.
-   - Ensures a seamless loading experience when fetching more data.
-
-2. **Search and Filtering Functionalities**
-
-   - Adds a search input to filter table data (e.g., by language name or code).
-   - Offers filter chips for quick data filtering.
-   - Supports multiple criteria for more refined searches.
-
-3. **Language Details Page**
-
-   - Displays detailed information for each language.
-   - Includes additional metadata like writing system, region, and status.
 
 ## 🚀 Getting Started
 
