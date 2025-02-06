@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -10,6 +10,8 @@ import { LanguageTable } from "@/features/languages/components/LanguageTable";
 import { useLanguages } from "@/features/languages/hooks/useLanguages";
 import { filtersAfterRefresh } from "@/features/languages/utils/languageFilters";
 import { ContentContainer } from "@/shared/components/ContentContainer";
+import { ErrorMessage } from "@/shared/components/ErrorMessage";
+import { LoadingIndicator } from "@/shared/components/LoadingIndicator";
 import { ProjectAttribution } from "@/shared/components/ProjectAttribution";
 
 export default function Home() {
@@ -50,38 +52,20 @@ export default function Home() {
         <ProjectAttribution />
       </Stack>
 
-      {isLoading && (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="20rem"
-        >
-          <CircularProgress />
-        </Box>
-      )}
-
-      {isError && (
-        <Alert severity="error">
-          An error occurred while loading languages.
-        </Alert>
-      )}
-
-      {!isLoading && !isError && (
-        <>
+      {isLoading ? (
+        <LoadingIndicator size="large" message="Loading languages..." />
+      ) : isError ? (
+        <ErrorMessage message="An error occurred while loading languages." />
+      ) : (
+        <Stack>
           <LanguageTable languages={languages} />
-          <Box mt={2} display="flex" justifyContent="center">
-            {hasNextPage && (
-              <Box display="flex" alignItems="center" gap={1}>
-                <CircularProgress size={24} />
-                <Typography variant="body2">
-                  Loading more languages...
-                </Typography>
-              </Box>
-            )}
-          </Box>
-          <div ref={ref} />
-        </>
+          {hasNextPage && (
+            <Stack>
+              <div ref={ref} />
+              <LoadingIndicator message="Loading more languages..." />
+            </Stack>
+          )}
+        </Stack>
       )}
     </ContentContainer>
   );

@@ -1,16 +1,14 @@
 "use client";
 
-import LanguageIcon from "@mui/icons-material/Language";
-import { Box, CircularProgress } from "@mui/material";
-import { Stack, Typography } from "@mui/material";
-import { notFound } from "next/navigation";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import LanguageDetails from "@/features/languages/components/LanguageDetails";
-import { LanguageStatusChip } from "@/features/languages/components/LanguageStatusChip";
+import { LanguageHeader } from "@/features/languages/components/LanguageHeader";
 import { useLanguageDetails } from "@/features/languages/hooks/useLanguageDetails";
+import { CenteredPageLayout } from "@/shared/components/CenteredPageLayout";
 import { ContentContainer } from "@/shared/components/ContentContainer";
+import { LoadingIndicator } from "@/shared/components/LoadingIndicator";
 
 export default function LanguagePage() {
   const { code } = useParams<{ code: string }>();
@@ -18,7 +16,6 @@ export default function LanguagePage() {
   if (!code || code.length !== 3) notFound();
 
   const { language } = useLanguageDetails(code);
-  const titleSuffix = "Catalogue of Languages";
   const [loadingTimeoutPassed, setLoadingTimeoutPassed] = useState(false);
 
   useEffect(() => {
@@ -26,55 +23,25 @@ export default function LanguagePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // While language is not loaded, show spinner until timeout
   if (!language) {
-    if (loadingTimeoutPassed) {
-      notFound();
-    }
-
+    if (loadingTimeoutPassed) notFound();
     return (
-      <ContentContainer>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          minHeight="50vh"
-        >
-          <CircularProgress />
-          <Typography variant="body1" mt={2}>
-            Loading language details...
-          </Typography>
-        </Box>
-      </ContentContainer>
+      <CenteredPageLayout>
+        <LoadingIndicator size="large" message="Loading language details..." />
+      </CenteredPageLayout>
     );
   }
 
-  const pageTitle = `${language.name} | ${titleSuffix}`;
-
   return (
     <ContentContainer>
-      <title>{pageTitle}</title>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="flex-start"
-      >
-        <Stack spacing={1} direction="row">
-          <LanguageIcon sx={{ fontSize: "2.25rem" }} />
-          <Stack
-            spacing={1}
-            alignItems="baseline"
-            direction={{ mobile: "column", tablet: "row" }}
-          >
-            <Typography variant="h1">{language.name}</Typography>
-            <Typography variant="h2" fontFamily="Monospace">
-              {code.toUpperCase()}
-            </Typography>
-          </Stack>
-        </Stack>
-        <LanguageStatusChip status={language.status} size="medium" />
-      </Stack>
+      {language.name && (
+        <title>{`${language.name} | Catalogue of Languages`}</title>
+      )}
+      <LanguageHeader
+        name={language.name}
+        code={code}
+        status={language.status}
+      />
       <LanguageDetails language={language} />
     </ContentContainer>
   );

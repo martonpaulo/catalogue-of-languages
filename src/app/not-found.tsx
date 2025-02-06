@@ -1,21 +1,11 @@
-"use client";
-
-import { Box, Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import Link from "next/link";
+
+import { CenteredPageLayout } from "@/shared/components/CenteredPageLayout";
 
 export default function NotFoundPage() {
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        p: 2,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-      }}
-    >
+    <CenteredPageLayout>
       <Typography variant="h1" gutterBottom>
         404
       </Typography>
@@ -29,6 +19,6 @@ export default function NotFoundPage() {
       <Button variant="contained" component={Link} href="/" color="primary">
         Go Home
       </Button>
-    </Box>
+    </CenteredPageLayout>
   );
 }

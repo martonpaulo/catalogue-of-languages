@@ -6,6 +6,8 @@
 
 Featuring more than ~8,000 records, this project aims to make language research simple and accessible, serving as a resource for researchers, linguists, students, and enthusiasts.
 
+This project follows a Feature-Based Architecture, where functionalities are organized into dedicated modules such as `languages`, `nations`, and `writingSystems`. This approach enhances scalability, maintainability, and code clarity, making it easier to expand and improve the project over time.
+
 <br />
 
 <img alt="Recording of live application" src="public/uploads/recording.gif" />
@@ -172,7 +174,8 @@ src/
 │   ├── icon.svg               # SVG icon rendered automatically by Next.js
 │   ├── layout.tsx             # Layout wrapper for the entire app
 │   ├── not-found.tsx          # Custom 404 page
-│   ├── page.tsx               # Home page (main listing view)
+│   ├── (homepage)
+│   │   └── page.tsx           # Homepage component
 │   └── [code]/                # Dynamic route for language details (e.g., /:code)
 ├── features/                  # Domain-driven feature directories
 │   ├── languages/
