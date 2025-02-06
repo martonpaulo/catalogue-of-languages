@@ -56,3 +56,22 @@ export const filtersAfterRefresh = (): LanguageFilterFormValues => {
     ...(persistedFilters || {}),
   };
 };
+
+export function buildAirtableApiFilters(searchParams: URLSearchParams): string {
+  const filters: string[] = [];
+  const filterFields = [
+    { param: "code", field: "ISO 639-3" },
+    { param: "name", field: "Official Name" },
+    { param: "status", field: "Language Status" },
+    { param: "nationOfOrigin", field: "Nation of Origin" },
+    { param: "writingSystem", field: "Writing System" },
+    { param: "spokenIn", field: "Principal in" },
+  ];
+
+  filterFields.forEach(({ param, field }) => {
+    const value = searchParams.get(param) || "";
+    filters.push(`(SEARCH(LOWER("${value}"), LOWER({${field}})) > 0)`);
+  });
+
+  return `AND(${filters[0]}, ${filters[1]}, ${filters[2]}, ${filters[3]}, ${filters[4]}, ${filters[5]})`;
+}

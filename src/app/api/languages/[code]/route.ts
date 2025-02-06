@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { mapAirtableRecordsToLanguages } from "@/features/languages/utils/languageMappers";
+import { transformAirtableRecordsToDetailedLanguages } from "@/features/languages/utils/languageMappers";
 import { getAirtableRecords } from "@/shared/services/airtableAPI";
+import { handleError } from "@/shared/utils/fetchErrorHandler";
 
 const LANGUAGES_TABLE_ID = process.env.LANGUAGES_TABLE_ID;
 
@@ -29,21 +30,13 @@ export async function GET(request: NextRequest, props: Props) {
       queryParams,
     });
 
-    const mappedLanguages = mapAirtableRecordsToLanguages(languageData.records);
+    const mappedLanguages = transformAirtableRecordsToDetailedLanguages(
+      languageData.records
+    );
     return NextResponse.json({
       data: mappedLanguages.length > 0 ? mappedLanguages[0] : null,
     });
   } catch (error) {
-    return handleError(error);
+    return handleError({ message: "Failed to fetch language data", error });
   }
-}
-
-function handleError(error: unknown) {
-  return NextResponse.json(
-    {
-      message: "Failed to fetch language data",
-      error: error instanceof Error ? error.message : "Unknown error",
-    },
-    { status: 500 }
-  );
 }

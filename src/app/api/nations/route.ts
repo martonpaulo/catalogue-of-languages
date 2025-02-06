@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { mapAirtableRecordsToNations } from "@/features/nations/utils/nationMappers";
 import { getAirtableRecords } from "@/shared/services/airtableAPI";
+import { handleError } from "@/shared/utils/fetchErrorHandler";
 
 const NATIONS_TABLE_ID = process.env.NATIONS_TABLE_ID;
 
@@ -20,12 +21,6 @@ export async function GET() {
       data: mapAirtableRecordsToNations(nationData.records),
     });
   } catch (error) {
-    return NextResponse.json(
-      {
-        message: "Failed to fetch nation data",
-        error: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
-    );
+    return handleError({ message: "Failed to fetch nations data", error });
   }
 }

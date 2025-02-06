@@ -2,36 +2,63 @@ import { LanguageType } from "@/features/languages/types/language.type";
 import { LanguageStatusEnum } from "@/features/languages/types/languageStatus.enum";
 import { AirtableRecordType } from "@/shared/types/airtableRecord.type";
 
-export function mapAirtableRecordsToLanguages(
+export function transformAirtableRecordsToDetailedLanguages(
   records: AirtableRecordType[]
 ): LanguageType[] {
   return records.map(({ id, fields }) => {
-    const {
-      "ISO 639-3": isoCode,
-      "Official Name": officialName,
-      "Alternate Names": alternateNames,
-      Dialects: dialects,
-      "Language Status": languageStatusString,
-      "Language Status Notes": statusNotes,
-      Genealogy: genealogy,
-      Demographics: demographics,
-      "Language Use": languageUse,
-      "Language Development": development,
-      Typology: typology,
-      "Other Comments": comments,
-      Description: description,
-      "Principal in": spokenInId,
-      "Writing System": writingSystemId,
-      "Nation of Origin": nationOfOriginId,
-    } = fields;
+    return mapFieldsToLanguage({ id, fields, includeDetails: true });
+  });
+}
 
-    return {
-      id: id as string,
-      code: isoCode as string,
-      name: officialName as string,
+export function transformAirtableRecordsToBasicLanguages(
+  records: AirtableRecordType[]
+): LanguageType[] {
+  return records.map(({ id, fields }) => {
+    return mapFieldsToLanguage({ id, fields });
+  });
+}
+
+interface FieldsToLanguagesParams {
+  id: string;
+  fields: AirtableRecordType["fields"];
+  includeDetails?: boolean;
+}
+
+function mapFieldsToLanguage({
+  id,
+  fields,
+  includeDetails = false,
+}: FieldsToLanguagesParams): LanguageType {
+  const {
+    "ISO 639-3": isoCode,
+    "Official Name": officialName,
+    "Alternate Names": alternateNames,
+    Dialects: dialects,
+    "Language Status": languageStatusString,
+    "Language Status Notes": statusNotes,
+    Genealogy: genealogy,
+    Demographics: demographics,
+    "Language Use": languageUse,
+    "Language Development": development,
+    Typology: typology,
+    "Other Comments": comments,
+    Description: description,
+    "Principal in": spokenInId,
+    "Writing System": writingSystemId,
+    "Nation of Origin": nationOfOriginId,
+  } = fields;
+
+  return {
+    id: id as string,
+    code: isoCode as string,
+    name: officialName as string,
+    status: mapStringToStatusEnum(languageStatusString as string),
+    spokenInId: spokenInId as string[],
+    writingSystemId: writingSystemId as string[],
+    nationOfOriginId: nationOfOriginId as string[],
+    ...(includeDetails && {
       alternateNames: alternateNames as string,
       dialects: dialects as string,
-      status: mapStringToStatusEnum(languageStatusString as string),
       statusNotes: statusNotes as string,
       genealogy: genealogy as string,
       demographics: demographics as string,
@@ -40,11 +67,8 @@ export function mapAirtableRecordsToLanguages(
       typology: typology as string,
       comments: comments as string,
       description: description as string,
-      spokenInId: spokenInId as string[],
-      writingSystemId: writingSystemId as string[],
-      nationOfOriginId: nationOfOriginId as string[],
-    };
-  });
+    }),
+  };
 }
 
 function mapStringToStatusEnum(status: string): LanguageStatusEnum {

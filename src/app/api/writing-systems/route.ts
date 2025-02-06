@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { mapAirtableRecordsToWritingSystems } from "@/features/writingSystems/utils/writingSystemMapper";
 import { getAirtableRecords } from "@/shared/services/airtableAPI";
+import { handleError } from "@/shared/utils/fetchErrorHandler";
 
 const WRITING_SYSTEMS_TABLE_ID = process.env.WRITING_SYSTEMS_TABLE_ID;
 
@@ -20,12 +21,9 @@ export async function GET() {
       data: mapAirtableRecordsToWritingSystems(writingSystemData.records),
     });
   } catch (error) {
-    return NextResponse.json(
-      {
-        message: "Failed to fetch writing system data",
-        error: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
-    );
+    return handleError({
+      message: "Failed to fetch writing systems data",
+      error,
+    });
   }
 }
