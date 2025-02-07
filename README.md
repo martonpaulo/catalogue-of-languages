@@ -14,6 +14,10 @@ This project follows a Feature-Based Architecture, where functionalities are org
 
 🔗 Live project: [catalogue-of-languages.vercel.app](https://catalogue-of-languages.vercel.app/)
 
+## Introduction
+
+The **Catalogue of Languages** project was born out of a personal interest in languages and linguistics. As someone who enjoys learning about different writing systems, language structures, and cultural diversity, this project was a natural fit. Beyond being a technical challenge, it was also an opportunity to explore a topic I genuinely enjoy while applying my development skills.
+
 ## 🔧 Features
 
 1. **Table Display and Infinite Scroll**
@@ -94,6 +98,14 @@ This project follows a Feature-Based Architecture, where functionalities are org
 - **ESLint** for consistent code styling and error detection.
 - **Vercel** for deployment with automated builds and previews.
 - **GitHub Actions** for Continuous Integration.
+
+### **Tech Stack Considerations**  
+
+Initially, **Next.js**, **React Hook Form**, and **Zod** were chosen with scalability in mind. The idea was to build a solid foundation that could support future growth, such as API routes, server-side rendering (SSR), or more complex forms with dynamic validation.  
+
+However, looking at the current state of the project, this choice might have been overkill. The application consists of only two client-side pages, and the only form could have been handled more simply using **Material UI's built-in form controls** and error handling. A lighter setup with **React + Vite** might have been a more efficient approach.  
+
+That said, going through this process was valuable. It helped refine my decision-making when selecting tools for a project. It reinforced the importance of assessing immediate needs versus long-term goals and finding the right balance between **familiarity, maintainability, and complexity**.
 
 ## 🚀 Getting Started
 
