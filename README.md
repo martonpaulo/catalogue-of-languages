@@ -244,34 +244,31 @@ Each commit follows a clear, consistent naming convention:
 
 ## 🧗 Challenges Faced
 
-1. **Airtable SDK Documentation**
-   The Airtable SDK documentation was incomplete or confusing, leading to reliance on community forums. Eventually, **Axios** was chosen for more straightforward control over HTTP requests.
+1. **Airtable SDK Documentation**: The Airtable SDK documentation was incomplete or confusing, leading to reliance on community forums. Eventually, **Axios** was chosen for more straightforward control over HTTP requests.
 
-2. **Pagination Limitations**
-   Airtable’s pagination does not provide a total record count, necessitating an **infinite scroll** approach rather than a traditional paged solution.
+2. **Pagination Limitations**: Airtable’s pagination does not provide a total record count, necessitating an **infinite scroll** approach rather than a traditional paged solution.
 
-3. **Infinite Scroll Implementation**
-   Balancing performance and preventing excessive API calls required careful logic to detect when to load more data.
+3. **Infinite Scroll Implementation**: Balancing performance and preventing excessive API calls required careful logic to detect when to load more data.
 
-4. **LocalStorage Data Limit**
-   Storing all ~8,000 records locally exceeded `localStorage` limits, so persisting the full dataset became impractical.
+4. **LocalStorage Data Limit**: Storing all ~8,000 records locally exceeded `localStorage` limits, so persisting the full dataset became impractical.
 
-5. **Large Data Volume**
-   Handling thousands of records caused initial navigation to be slow, highlighting the need for efficient data fetching and rendering.
+5. **Large Data Volume**: Handling thousands of records caused initial navigation to be slow, highlighting the need for efficient data fetching and rendering.
 
-6. **Inconsistent Language Data**
-   The Airtable table itself contains incomplete or inconsistent fields, requiring careful data checking and fallback UI states.
+6. **Inconsistent Language Data**: The Airtable table itself contains incomplete or inconsistent fields, requiring careful data checking and fallback UI states.
 
 ## 📈 Future Improvements to Consider
 
-- **GraphQL + BaseQL**: Replace Airtable API with a GraphQL-based approach and integrate Apollo Client for more efficient queries and caching.
-- **Expanded Routing**: Create dedicated routes for each country or region.
-- **Advanced Filtering**: Use multiple filter chips for more dynamic, multi-criteria search.
-- **Additional Data Points**: Enrich the table with more fields for each language, providing a deeper data exploration experience.
+1. **GraphQL + BaseQL**: Replace Airtable API with a GraphQL-based approach and integrate Apollo Client for more efficient queries and caching.
+
+2. **Expanded Routing**: Create dedicated routes for each country or region.
+
+3. **Advanced Filtering**: Use multiple filter chips for more dynamic, multi-criteria search.
+
+4. **Additional Data Points**: Enrich the table with more fields for each language, providing a deeper data exploration experience.
 
 ## 🏁 Final Thoughts
 
-This project has been a rewarding challenge—applying modern frontend tech, focusing on code clarity, and creating an application that can grow in complexity. Building it from scratch provided an excellent opportunity to solidify design principles, maintain high code quality, and ensure a clean, maintainable structure.
+This project has been a rewarding challenge, applying modern frontend tech, focusing on code clarity, and creating an application that can grow in complexity. Building it from scratch provided an excellent opportunity to solidify design principles, maintain high code quality, and ensure a clean, maintainable structure.
 
 ## 📄 License
 
