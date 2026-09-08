@@ -14,6 +14,14 @@ This project follows a Feature-Based Architecture, where functionalities are org
 
 🔗 Live project: [catalogue-of-languages.vercel.app](https://catalogue-of-languages.vercel.app/)
 
+## Current state and approved direction
+
+The current runnable application uses Next.js API routes and is configured for Vercel. The owner approved a migration to **GitHub Pages at `https://martonpaulo.com/catalogue-of-languages/`**, with a static copy of the public Airtable fields refreshed on each deployment. That destination is **not deployed yet**. The personal site and DNS are outside the migration scope.
+
+Only filter preferences will be application-persisted; data will use in-memory query state and normal browser caching. Existing query-cache and reference-store persistence is still present until the corresponding issues are implemented. No public releases, automatic version bumps, full offline mode or agent automation is selected. Browser acceptance covers Chromium, Gecko and WebKit.
+
+Read [the product definition](docs/product.md) for scope and non-goals, [AGENTS.md](AGENTS.md) for the automatic commit/push policy on `main`, and [the backlog](https://github.com/martonpaulo/catalogue-of-languages/issues) for implementation status. The vulnerable locked runtime must be updated through [issue #1](https://github.com/martonpaulo/catalogue-of-languages/issues/1); this documentation setup does not patch or deploy it.
+
 ## Introduction
 
 The **Catalogue of Languages** project was born out of a personal interest in languages and linguistics. As someone who enjoys learning about different writing systems, language structures, and cultural diversity, this project was a natural fit. Beyond being a technical challenge, it was also an opportunity to explore a topic I genuinely enjoy while applying my development skills.
@@ -49,7 +57,7 @@ The **Catalogue of Languages** project was born out of a personal interest in la
 ### User Experience
 
 - **Responsive design** for smooth navigation across different devices.
-- **Robust error handling** to gracefully manage API errors and loading states.
+- Error and loading UI exists; known state/recovery defects are tracked in the backlog and must not be described as complete coverage.
 - **Intuitive interactions** for an effortless browsing and searching experience.
 
 ## 🛠️ Tech Stack
@@ -58,7 +66,7 @@ The **Catalogue of Languages** project was born out of a personal interest in la
 
 **React + Next.js (TypeScript)**
 
-- Combines SSG and SSR for optimized performance and SEO.
+- Uses server layout/metadata and API routes, with catalogue data loaded by client queries after browser cache initialization. The catalogue content is not currently server-rendered.
 - Dynamic routing supports detailed pages like `/:code` for each language.
 
 ### State Management
@@ -70,7 +78,7 @@ The **Catalogue of Languages** project was born out of a personal interest in la
 **Zustand**
 
 - Lightweight and efficient global state management.
-- Persists user preferences (e.g., filters) in `localStorage`.
+- Currently holds redundant persisted reference-data copies; their removal is tracked in [issue #14](https://github.com/martonpaulo/catalogue-of-languages/issues/14). Filter preferences are stored directly through the shared localStorage utilities.
 
 ### Form Handling & Validation
 
@@ -84,7 +92,7 @@ The **Catalogue of Languages** project was born out of a personal interest in la
 **Material UI + Material Icons**
 
 - Pre-built components for responsive design and clean visuals.
-- WCAG-compliant with accessible patterns.
+- Uses MUI accessibility primitives. Complete WCAG compliance has not been verified; keyboard result navigation is tracked in [issue #7](https://github.com/martonpaulo/catalogue-of-languages/issues/7).
 
 ### Data Fetching
 
@@ -111,7 +119,7 @@ That said, going through this process was valuable. It helped refine my decision
 
 ### Prerequisites
 
-- **Node.js** (v18 or above)
+- **Node.js** compatible with the locked Next.js release (currently at least 18.18.0; use a supported Node.js release).
 - **npm** (or another package manager)
 
 ### Installation
@@ -126,16 +134,24 @@ That said, going through this process was valuable. It helped refine my decision
 2. **Install dependencies**:
 
    ```bash
-   npm install
+   npm ci
    ```
 
-3. **Start the development server**:
+3. **Configure local Airtable access**:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   Edit `.env.local` locally. Set `AIRTABLE_API_KEY`, `AIRTABLE_BASE_ID`, `LANGUAGES_TABLE_ID`, `WRITING_SYSTEMS_TABLE_ID`, and `NATIONS_TABLE_ID` for the private copy of the source dataset. The API key needs read access to those tables. Keep credential values out of Git and messages. Placeholder values can exercise configuration/build paths but do not prove that the live catalogue works.
+
+4. **Start the development server**:
 
    ```bash
    npm run dev
    ```
 
-4. **Open the app** at `http://localhost:3000`.
+5. **Open the app** at `http://localhost:3000`.
 
 ## 📋 Available Scripts
 
@@ -145,6 +161,16 @@ That said, going through this process was valuable. It helped refine my decision
 | `npm run build` | Builds the app for production.                     |
 | `npm run start` | Starts the production server (after building).     |
 | `npm run lint`  | Runs ESLint to check for style and quality issues. |
+
+## Validation
+
+```bash
+npm run lint
+npx tsc --noEmit --incremental false
+npm run build
+```
+
+These are the current static/build checks. No automated test script is committed yet. Builds require the configuration above, and fonts are fetched by Next.js during build. A successful build does not verify private Airtable access, browser behavior or accessibility. Validate implementation changes with synthetic data in the three selected browser families and record any human screen-reader gap.
 
 ## 🌐 API Overview
 
@@ -207,7 +233,8 @@ src/
 
 To bypass CORS restrictions, **Next.js API routes** serve as a proxy. This allows client-side requests to interact with Airtable without browser-based CORS errors.
 
-- A **middleware** enforces strict origin checks based on environment variables. If `NEXT_PUBLIC_API_STRICT_ORIGIN` is set to `true`, only requests from the allowed origins (`NEXT_PUBLIC_API_ALLOWED_ORIGINS`) can access these proxy routes.
+- The current `src/middleware/index.ts` is not a registered Next.js middleware entry point; the strict-origin variables do not currently enforce the advertised policy. The approved Pages migration will remove the runtime proxy/middleware boundary instead of repairing it. Origin checking is not authentication.
+- The current API credentials are server-side configuration. After migration they are build-only; browsers must never receive them or contact Airtable directly.
 
 ## 🌐 Environment Variables
 
@@ -220,8 +247,8 @@ Below is a list of the main environment variables used in this project:
 | `LANGUAGES_TABLE_ID`              | The table ID containing the languages data.                                                        |
 | `WRITING_SYSTEMS_TABLE_ID`        | The table ID containing the writing systems data.                                                  |
 | `NATIONS_TABLE_ID`                | The table ID containing nation-related data.                                                       |
-| `NEXT_PUBLIC_API_STRICT_ORIGIN`   | Boolean to enable or disable strict origin checks on the API proxy.                                |
-| `NEXT_PUBLIC_API_ALLOWED_ORIGINS` | Comma-separated list of allowed origins, e.g., `https://catalogue-of-languages.vercel.app/`.       |
+| `NEXT_PUBLIC_API_STRICT_ORIGIN`   | Legacy strict-origin flag; the current middleware entry is inactive.                                |
+| `NEXT_PUBLIC_API_ALLOWED_ORIGINS` | Legacy comma-separated allowed-origin list; currently inactive with the unregistered middleware.       |
 | `NEXT_PUBLIC_STORAGE_PREFIX`      | A prefix for all keys saved in localStorage                                                        |
 | `NEXT_PUBLIC_STORAGE_VERSION`     | Used for versioning localStorage data, ensuring older data can be handled when the schema changes. |
 
