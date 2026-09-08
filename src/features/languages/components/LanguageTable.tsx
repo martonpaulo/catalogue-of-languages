@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import { LanguageTableRow } from "@/features/languages/components/LanguageTableRow";
+import { languageTableHeadSx } from "@/features/languages/styles/languageStyles";
 import { LanguageType } from "@/features/languages/types/language.type";
 
 interface LanguageTableProps {
@@ -24,18 +25,14 @@ export function LanguageTable({ languages }: LanguageTableProps) {
       variant="outlined"
     >
       <Table>
-        <TableHead>
+        <TableHead sx={languageTableHeadSx}>
           <TableRow>
-            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>Code</TableCell>
-            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>Name</TableCell>
-            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>Status</TableCell>
-            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>
-              Nation of Origin
-            </TableCell>
-            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>
-              Writing System
-            </TableCell>
-            <TableCell sx={{ backgroundColor: "#E3F2FD" }}>Spoken In</TableCell>
+            <TableCell>Code</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Nation of Origin</TableCell>
+            <TableCell>Writing System</TableCell>
+            <TableCell>Spoken In</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

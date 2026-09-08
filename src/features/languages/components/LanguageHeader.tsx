@@ -1,6 +1,8 @@
 import LanguageIcon from "@mui/icons-material/Language";
 import { Stack, Typography } from "@mui/material";
 
+import { languageCodeSx } from "@/features/languages/styles/languageStyles";
+
 import { LanguageStatusChip } from "./LanguageStatusChip";
 
 interface LanguageHeaderProps {
@@ -24,7 +26,7 @@ export function LanguageHeader({ name, code, status }: LanguageHeaderProps) {
           direction={{ mobile: "column", tablet: "row" }}
         >
           <Typography variant="h1">{name}</Typography>
-          <Typography variant="h2" fontFamily="Monospace">
+          <Typography variant="h2" sx={languageCodeSx}>
             {code.toUpperCase()}
           </Typography>
         </Stack>

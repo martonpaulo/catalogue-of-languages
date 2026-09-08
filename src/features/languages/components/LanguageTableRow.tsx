@@ -3,6 +3,7 @@ import { Box, Stack, TableCell, TableRow, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 import { LanguageStatusChip } from "@/features/languages/components/LanguageStatusChip";
+import { languageCodeSx } from "@/features/languages/styles/languageStyles";
 import { LanguageType } from "@/features/languages/types/language.type";
 
 interface LanguageTableRowProps {
@@ -30,7 +31,7 @@ export function LanguageTableRow({ language }: LanguageTableRowProps) {
 
   return (
     <TableRow hover onClick={handleRowClick} sx={{ cursor: "pointer" }}>
-      <TableCell sx={{ fontFamily: "Monospace", width: 80 }}>
+      <TableCell sx={{ ...languageCodeSx, width: 80 }}>
         {language.code.toUpperCase()}
       </TableCell>
 
