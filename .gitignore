@@ -44,3 +44,8 @@ next-env.d.ts
 
 # personal
 DRAFT.md
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
