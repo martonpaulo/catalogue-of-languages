@@ -4,7 +4,10 @@ import path from "node:path";
 import { expect, test } from "@playwright/test";
 
 import { BASE_PATH } from "../playwright.config";
-import { NAMED_LANGUAGE } from "./support/syntheticCatalogue";
+import {
+  applyNameFilter,
+  NAMED_LANGUAGE,
+} from "./support/syntheticCatalogue";
 
 const OUT_DIRECTORY = path.join(process.cwd(), "out");
 
@@ -21,9 +24,7 @@ test.describe("static export delivery", () => {
     });
 
     await page.goto("");
-    await expect(page.getByRole("row").nth(1)).toBeVisible();
-    await page.getByLabel("Language Name").fill("Lusophone");
-    await page.getByRole("button", { name: "Apply Filters" }).click();
+    await applyNameFilter(page, "Lusophone");
     await expect(page.getByRole("row")).toHaveCount(2);
     await page.goto(`${NAMED_LANGUAGE.code}/`);
     await expect(

@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 
 import { BASE_PATH } from "../playwright.config";
 import {
+  applyNameFilter,
   EXTINCT_LANGUAGE,
   NAMED_LANGUAGE,
   NEARLY_EXTINCT_LANGUAGE,
@@ -55,8 +56,7 @@ test.describe("language detail outcomes", () => {
     page,
   }) => {
     await page.goto("");
-    await page.getByLabel("Language Name").fill("Lusophone");
-    await page.getByRole("button", { name: "Apply Filters" }).click();
+    await applyNameFilter(page, "Lusophone");
     await expect(page.getByRole("row")).toHaveCount(2);
 
     await page.getByRole("row").nth(1).click();

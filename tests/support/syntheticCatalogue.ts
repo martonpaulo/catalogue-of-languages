@@ -1,4 +1,4 @@
-import type { Page, Route } from "@playwright/test";
+import { expect, type Page, type Route } from "@playwright/test";
 
 /**
  * The specs run against the synthetic fixture snapshot produced by
@@ -66,4 +66,23 @@ export async function failSnapshotAssets(
   for (const asset of options.fail ?? []) {
     await page.route(ASSET_PATTERNS[asset], handle);
   }
+}
+
+/**
+ * Waits until the catalogue is hydrated and showing its first reveal step. The filter form
+ * is only usable after that: an unhydrated submit is a native form submission that reloads
+ * the page instead of filtering.
+ */
+export async function waitForCatalogue(page: Page): Promise<void> {
+  await expect(page.getByRole("row")).toHaveCount(REVEAL_STEP + 1);
+}
+
+/** Types a name filter into the hydrated form and applies it. */
+export async function applyNameFilter(
+  page: Page,
+  name: string
+): Promise<void> {
+  await waitForCatalogue(page);
+  await page.getByLabel("Language Name").fill(name);
+  await page.getByRole("button", { name: "Apply Filters" }).click();
 }

@@ -1,9 +1,15 @@
 import { expect, test } from "@playwright/test";
 
+import {
+  applyNameFilter,
+  waitForCatalogue,
+} from "./support/syntheticCatalogue";
+
 async function selectStatus(
   page: import("@playwright/test").Page,
   status: string
 ) {
+  await waitForCatalogue(page);
   await page.getByLabel("Status").click();
   await page.getByRole("option", { name: status, exact: true }).click();
   await page.getByRole("button", { name: "Apply Filters" }).click();
@@ -46,8 +52,7 @@ test.describe("language status filtering", () => {
     page,
   }) => {
     await page.goto("");
-    await page.getByLabel("Language Name").fill("Unknown Status Sample");
-    await page.getByRole("button", { name: "Apply Filters" }).click();
+    await applyNameFilter(page, "Unknown Status Sample");
 
     const row = page.getByRole("row").nth(1);
     await expect(row).toContainText("Unknown Status Sample");
@@ -64,6 +69,7 @@ test.describe("language status filtering", () => {
     page,
   }) => {
     await page.goto("");
+    await waitForCatalogue(page);
     await page.getByLabel("Status").click();
 
     const options = await page.getByRole("option").allInnerTexts();

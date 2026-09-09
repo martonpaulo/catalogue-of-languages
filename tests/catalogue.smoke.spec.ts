@@ -1,9 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 import {
+  applyNameFilter,
   FIXTURE_LANGUAGE_COUNT,
   NAMED_LANGUAGE,
   REVEAL_STEP,
+  waitForCatalogue,
 } from "./support/syntheticCatalogue";
 
 test.describe("catalogue smoke journey", () => {
@@ -18,10 +20,7 @@ test.describe("catalogue smoke journey", () => {
 
   test("applies and resets a name filter", async ({ page }) => {
     await page.goto("");
-    await expect(page.getByRole("row")).toHaveCount(REVEAL_STEP + 1);
-
-    await page.getByLabel("Language Name").fill("Lusophone");
-    await page.getByRole("button", { name: "Apply Filters" }).click();
+    await applyNameFilter(page, "Lusophone");
 
     await expect(page.getByRole("row")).toHaveCount(2);
     await expect(page.getByRole("row").nth(1)).toContainText(
@@ -36,7 +35,7 @@ test.describe("catalogue smoke journey", () => {
     page,
   }) => {
     await page.goto("");
-    await expect(page.getByRole("row")).toHaveCount(REVEAL_STEP + 1);
+    await waitForCatalogue(page);
 
     await page
       .getByText("Loading more languages...")

@@ -16,3 +16,18 @@ export const languageTableHeadSx: SxProps<Theme> = {
 export const languageCodeSx: SxProps<Theme> = {
   fontFamily: "Monospace",
 };
+
+/**
+ * The result link. It keeps a visible keyboard focus indication of its own so the row does
+ * not have to rely on a browser default that varies between engines.
+ */
+export const languageLinkSx: SxProps<Theme> = {
+  color: "inherit",
+  textDecorationColor: "inherit",
+  "&:focus-visible": {
+    outline: "2px solid",
+    outlineColor: "primary.main",
+    outlineOffset: 2,
+    borderRadius: 1,
+  },
+};

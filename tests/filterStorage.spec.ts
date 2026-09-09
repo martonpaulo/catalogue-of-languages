@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { applyNameFilter } from "./support/syntheticCatalogue";
+
 const FILTER_KEY = "@catalogue-of-languages:language-filters:test";
 const LEGACY_QUERY_CACHE_KEY = "@catalogue-of-languages:react-query-cache:test";
 const UNRELATED_KEY = "unrelated-origin-key";
@@ -8,10 +10,7 @@ test("writes only the filter preference to application storage", async ({
   page,
 }) => {
   await page.goto("");
-  await page.getByRole("row").nth(1).waitFor();
-
-  await page.getByLabel("Language Name").fill("Portuguese");
-  await page.getByRole("button", { name: "Apply Filters" }).click();
+  await applyNameFilter(page, "Portuguese");
   await expect(page.getByRole("row")).toHaveCount(2);
 
   await page.goto("por/");
