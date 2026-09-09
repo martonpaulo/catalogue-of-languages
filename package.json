@@ -27,7 +27,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "playwright test",
     "test:chromium": "playwright test --project=chromium",
     "snapshot": "tsx --env-file-if-exists=.env.local scripts/generate-snapshot.ts",
@@ -35,7 +35,8 @@
     "build:export": "NEXT_PUBLIC_BASE_PATH=/catalogue-of-languages next build",
     "serve:export": "tsx scripts/serve-export.ts",
     "snapshot:scaled": "tsx scripts/generate-snapshot.ts --scale=8000",
-    "measure:derivation": "tsx scripts/measure-derivation.ts"
+    "measure:derivation": "tsx scripts/measure-derivation.ts",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",

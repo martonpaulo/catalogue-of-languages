@@ -12,6 +12,19 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   {
+    // Generated output and installed packages are not sources.
+    ignores: [
+      ".next/**",
+      "next-env.d.ts",
+      "out/**",
+      "public/**",
+      ".snapshot/**",
+      "node_modules/**",
+      "playwright-report/**",
+      "test-results/**",
+    ],
+  },
+  {
     plugins: {
       "simple-import-sort": simpleImportSort,
     },
