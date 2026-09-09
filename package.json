@@ -34,7 +34,8 @@
     "snapshot:fixture": "tsx scripts/generate-snapshot.ts --fixture",
     "build:export": "NEXT_PUBLIC_BASE_PATH=/catalogue-of-languages next build",
     "serve:export": "tsx scripts/serve-export.ts",
-    "snapshot:scaled": "tsx scripts/generate-snapshot.ts --scale=8000"
+    "snapshot:scaled": "tsx scripts/generate-snapshot.ts --scale=8000",
+    "measure:derivation": "tsx scripts/measure-derivation.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
