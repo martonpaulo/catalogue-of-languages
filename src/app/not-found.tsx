@@ -9,7 +9,7 @@ export default function NotFoundPage() {
       <Typography variant="h1" gutterBottom>
         404
       </Typography>
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" component="h2" gutterBottom>
         Page not found
       </Typography>
       <Typography variant="body1" sx={{ mb: 2 }}>

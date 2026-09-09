@@ -36,7 +36,8 @@
     "serve:export": "tsx scripts/serve-export.ts",
     "snapshot:scaled": "tsx scripts/generate-snapshot.ts --scale=8000",
     "measure:derivation": "tsx scripts/measure-derivation.ts",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "social-card": "tsx scripts/generate-social-card.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
