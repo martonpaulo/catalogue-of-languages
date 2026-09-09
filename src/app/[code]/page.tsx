@@ -66,7 +66,7 @@ function describe(
 ): string {
   return (
     description ??
-    `${name} (${code.toUpperCase()}) in the ${SITE_NAME}: status, genealogy, writing systems and where it is spoken.`
+    `${name} (${code.toUpperCase()}) on ${SITE_NAME}: status, genealogy, writing systems and where it is spoken.`
   );
 }
 

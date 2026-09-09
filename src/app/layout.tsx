@@ -7,6 +7,7 @@ import {
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_ORIGIN,
+  SITE_TAGLINE,
   SOCIAL_IMAGE,
 } from "@/shared/config/deployment";
 import { AppThemeProvider } from "@/shared/providers/AppThemeProvider";
@@ -17,7 +18,10 @@ export const metadata: Metadata = {
   // The origin only: the framework adds the base path to every relative metadata asset.
   metadataBase: new URL(SITE_ORIGIN),
   title: {
-    default: SITE_NAME,
+    // The home page carries the tagline, because "Linguae" alone tells a search
+    // engine nothing. Every other page leads with its own subject and the
+    // template trails the brand.
+    default: `${SITE_NAME}: ${SITE_TAGLINE}`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -26,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: SITE_NAME,
+    title: `${SITE_NAME}: ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
     url: canonicalUrl(),
     locale: "en_US",
@@ -34,7 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: SITE_NAME,
+    title: `${SITE_NAME}: ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
     images: [SOCIAL_IMAGE],
   },

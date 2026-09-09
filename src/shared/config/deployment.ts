@@ -21,6 +21,12 @@ export const SITE_ORIGIN =
 
 export const SITE_NAME = "Linguae";
 
+/**
+ * What the site is, in the words someone would search for. It follows the name in the home
+ * page's title, where the bare brand said nothing a search engine could match.
+ */
+export const SITE_TAGLINE = "every documented language in one searchable table";
+
 export const SITE_DESCRIPTION =
   "Interactive table featuring all documented languages from the Wikitongues database, " +
   "providing an easy way to explore global linguistic diversity.";
