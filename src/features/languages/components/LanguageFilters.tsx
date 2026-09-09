@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Paper, Stack, TextField } from "@mui/material";
-import { useCallback, useMemo } from "react";
+import { Alert, Button, Paper, Stack, TextField } from "@mui/material";
+import { useCallback, useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 import {
@@ -11,23 +11,30 @@ import { LanguageStatusChip } from "@/features/languages/components/LanguageStat
 import { useLanguageStatuses } from "@/features/languages/hooks/useLanguageStatuses";
 import {
   DEFAULT_LANGUAGE_FILTERS,
-  filtersAfterRefresh,
+  saveFilters,
 } from "@/features/languages/utils/languageFilters";
 import { useNations } from "@/features/nations/hooks/useNations";
 import { useWritingSystems } from "@/features/writingSystems/hooks/useWritingSystems";
 import { ControlledSelect } from "@/shared/components/ControlledSelect";
-import { setStoredFilters } from "@/shared/utils/localStorageUtils";
 
 interface LanguageFiltersProps {
+  /** The settled starting filters, restored once by the page that owns them. */
+  initialFilters: LanguageFilterFormValues;
   onFiltersChange: (filters: LanguageFilterFormValues) => void;
 }
 
-export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
+export function LanguageFilters({
+  initialFilters,
+  onFiltersChange,
+}: LanguageFiltersProps) {
   const { register, handleSubmit, reset, control, formState } =
     useForm<LanguageFilterFormValues>({
       resolver: zodResolver(languageFilterSchema),
-      defaultValues: filtersAfterRefresh(),
+      defaultValues: initialFilters,
     });
+
+  // Saving is best effort. Filters still apply; this only says they will not be remembered.
+  const [saveFailed, setSaveFailed] = useState(false);
 
   const { nations, nationsIsLoading, nationsIsError } = useNations();
   const { writingSystems, writingSystemsIsLoading, writingSystemsIsError } =
@@ -56,16 +63,16 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
 
   const handleFormSubmit = useCallback(
     (data: LanguageFilterFormValues) => {
-      setStoredFilters("language-filters", data);
       onFiltersChange(data);
+      setSaveFailed(!saveFilters(data));
     },
     [onFiltersChange]
   );
 
   const handleFormReset = useCallback(() => {
     reset(DEFAULT_LANGUAGE_FILTERS);
-    setStoredFilters("language-filters", DEFAULT_LANGUAGE_FILTERS);
     onFiltersChange(DEFAULT_LANGUAGE_FILTERS);
+    setSaveFailed(!saveFilters(DEFAULT_LANGUAGE_FILTERS));
   }, [onFiltersChange, reset]);
 
   const publishedStatuses = useLanguageStatuses();
@@ -140,7 +147,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             name="status"
             label="Status"
             control={control}
-            defaultValue={filtersAfterRefresh().status}
+            defaultValue={initialFilters.status}
             options={statusOptions}
             errorMessage={
               unsupportedStatus
@@ -156,7 +163,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             name="nationOfOrigin"
             label="Nation of Origin"
             control={control}
-            defaultValue={filtersAfterRefresh().nationOfOrigin}
+            defaultValue={initialFilters.nationOfOrigin}
             options={nationOptions}
             isLoading={nationsIsLoading}
             isDisabled={nationsIsError}
@@ -167,7 +174,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             name="writingSystem"
             label="Writing System"
             control={control}
-            defaultValue={filtersAfterRefresh().writingSystem}
+            defaultValue={initialFilters.writingSystem}
             options={writingSystemOptions}
             isLoading={writingSystemsIsLoading}
             isDisabled={writingSystemsIsError}
@@ -178,13 +185,19 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             name="spokenIn"
             label="Spoken In"
             control={control}
-            defaultValue={filtersAfterRefresh().spokenIn}
+            defaultValue={initialFilters.spokenIn}
             options={nationOptions}
             isLoading={nationsIsLoading}
             isDisabled={nationsIsError}
             errorMessage={nationsErrorMessage}
           />
         </Stack>
+
+        {saveFailed && (
+          <Alert severity="info">
+            Filters are applied. They cannot be remembered on this device.
+          </Alert>
+        )}
 
         <Stack spacing={2} direction="row" justifyContent="flex-end" pt={2}>
           <Button

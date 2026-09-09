@@ -8,15 +8,39 @@ export function buildStorageKey(key: string): string {
     : `${key}:${STORAGE_VERSION}`;
 }
 
-export function getStoredFilters<T = unknown>(key: string): T | null {
-  if (typeof window === "undefined") return null;
-
-  const data = localStorage.getItem(buildStorageKey(key));
-  return data ? (JSON.parse(data) as T) : null;
+/**
+ * Browser storage is best effort. It can be absent during server rendering, throw on access
+ * in a locked-down context, refuse a read, or refuse a write when the origin is full. Every
+ * operation below reports an outcome instead of throwing, so a caller can keep working
+ * without persistence.
+ */
+function storage(): Storage | null {
+  try {
+    if (typeof window === "undefined") return null;
+    return window.localStorage;
+  } catch {
+    return null;
+  }
 }
 
-export function setStoredFilters(key: string, value: unknown): void {
-  if (typeof window === "undefined") return;
+/** The raw stored text, or null when there is nothing usable to read. */
+export function readStoredText(key: string): string | null {
+  try {
+    return storage()?.getItem(buildStorageKey(key)) ?? null;
+  } catch {
+    return null;
+  }
+}
 
-  localStorage.setItem(buildStorageKey(key), JSON.stringify(value));
+/** True when the value was actually persisted. */
+export function writeStoredText(key: string, value: string): boolean {
+  try {
+    const target = storage();
+    if (!target) return false;
+
+    target.setItem(buildStorageKey(key), value);
+    return true;
+  } catch {
+    return false;
+  }
 }

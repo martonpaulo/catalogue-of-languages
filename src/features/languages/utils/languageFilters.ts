@@ -1,6 +1,14 @@
-import { LanguageFilterFormValues } from "@/features/languages/components/languageFilters.schema";
+import {
+  LanguageFilterFormValues,
+  languageFilterSchema,
+} from "@/features/languages/components/languageFilters.schema";
 import { LanguageType } from "@/features/languages/types/language.type";
-import { getStoredFilters } from "@/shared/utils/localStorageUtils";
+import {
+  readStoredText,
+  writeStoredText,
+} from "@/shared/utils/localStorageUtils";
+
+const FILTER_STORAGE_KEY = "language-filters";
 
 export function filterLanguages(
   languages: LanguageType[],
@@ -49,13 +57,32 @@ export const DEFAULT_LANGUAGE_FILTERS: LanguageFilterFormValues = {
   nationOfOrigin: "",
 };
 
-export const filtersAfterRefresh = (): LanguageFilterFormValues => {
-  const persistedFilters = getStoredFilters("language-filters");
-  return {
-    ...DEFAULT_LANGUAGE_FILTERS,
-    ...(persistedFilters || {}),
-  };
-};
+/**
+ * The filters to start from. Anything that is not a valid filter set — absent, unreadable,
+ * malformed, or carrying a field of the wrong type or an over-long code — restores the
+ * defaults rather than failing the render.
+ */
+export function restoreFilters(): LanguageFilterFormValues {
+  const stored = readStoredText(FILTER_STORAGE_KEY);
+  if (!stored) return DEFAULT_LANGUAGE_FILTERS;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(stored);
+  } catch {
+    return DEFAULT_LANGUAGE_FILTERS;
+  }
+
+  const validated = languageFilterSchema.safeParse(parsed);
+  if (!validated.success) return DEFAULT_LANGUAGE_FILTERS;
+
+  return { ...DEFAULT_LANGUAGE_FILTERS, ...validated.data };
+}
+
+/** Saves the filters. False means they apply now but will not survive a reload. */
+export function saveFilters(filters: LanguageFilterFormValues): boolean {
+  return writeStoredText(FILTER_STORAGE_KEY, JSON.stringify(filters));
+}
 
 export function buildAirtableApiFilters(searchParams: URLSearchParams): string {
   const filters: string[] = [];
