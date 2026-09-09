@@ -45,9 +45,9 @@ export function canonicalUrl(path = ""): string {
  * because a nested route that sets its own Open Graph metadata does not inherit it.
  */
 export const SOCIAL_IMAGE = {
-  url: `${SITE_ORIGIN}${BASE_PATH}/opengraph-image.png`,
+  url: `${SITE_ORIGIN}${BASE_PATH}/opengraph-image.jpg`,
   width: 1200,
   height: 630,
-  type: "image/png",
+  type: "image/jpeg",
   alt: `${SITE_NAME}: every documented language from the Wikitongues database, in one searchable table.`,
 };

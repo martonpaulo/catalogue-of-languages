@@ -6,7 +6,7 @@ import { chromium } from "@playwright/test";
 import { SITE_NAME } from "@/shared/config/deployment";
 
 /**
- * Renders the 1200x630 social card into `src/app/opengraph-image.png`.
+ * Renders the 1200x630 social card into `public/opengraph-image.jpg`.
  *
  * The card is a committed asset in `public/` rather than a generated route or a file-based
  * metadata convention. A static host serves an extensionless route file with the wrong
@@ -16,7 +16,15 @@ import { SITE_NAME } from "@/shared/config/deployment";
  */
 const WIDTH = 1200;
 const HEIGHT = 630;
-const OUTPUT = path.join(process.cwd(), "public", "opengraph-image.png");
+const OUTPUT = path.join(process.cwd(), "public", "opengraph-image.jpg");
+
+/**
+ * JPEG, not PNG. The card is a linear gradient behind two lines of text, and a lossless screenshot
+ * of it weighed 223 kB: almost every byte described a gradient that JPEG stores in a fraction of
+ * the space. At this quality the gradient stays smooth and the text stays sharp, and the file is
+ * about 50 kB. Open Graph accepts JPEG, and no other consumer of this file cares.
+ */
+const QUALITY = 88;
 
 const TEMPLATE = `<!doctype html>
 <html><head><meta charset="utf-8"><style>
@@ -48,7 +56,7 @@ async function main(): Promise<void> {
 
   await page.setContent(TEMPLATE, { waitUntil: "load" });
   await mkdir(path.dirname(OUTPUT), { recursive: true });
-  await page.screenshot({ path: OUTPUT });
+  await page.screenshot({ path: OUTPUT, type: "jpeg", quality: QUALITY });
   await browser.close();
 
   console.warn(`Wrote ${path.relative(process.cwd(), OUTPUT)} (${WIDTH}x${HEIGHT})`);

@@ -5,7 +5,7 @@ import { NAMED_LANGUAGE } from "./support/syntheticCatalogue";
 
 const ORIGIN = "https://linguae.martonpaulo.com";
 const SITE = `${ORIGIN}${BASE_PATH}/`;
-const SOCIAL_IMAGE = `${ORIGIN}${BASE_PATH}/opengraph-image.png`;
+const SOCIAL_IMAGE = `${ORIGIN}${BASE_PATH}/opengraph-image.jpg`;
 
 async function meta(
   page: import("@playwright/test").Page,
@@ -42,7 +42,9 @@ test.describe("published metadata", () => {
     expect(await meta(page, 'meta[property="og:image"]')).toBe(SOCIAL_IMAGE);
     expect(await meta(page, 'meta[property="og:image:width"]')).toBe("1200");
     expect(await meta(page, 'meta[property="og:image:height"]')).toBe("630");
-    expect(await meta(page, 'meta[property="og:image:type"]')).toBe("image/png");
+    expect(await meta(page, 'meta[property="og:image:type"]')).toBe(
+      "image/jpeg"
+    );
     expect(await meta(page, 'meta[name="twitter:card"]')).toBe(
       "summary_large_image"
     );
@@ -79,10 +81,10 @@ test.describe("published metadata", () => {
   test("serves the social card at its declared size and type", async ({
     request,
   }) => {
-    const response = await request.get(`${BASE_PATH}/opengraph-image.png`);
+    const response = await request.get(`${BASE_PATH}/opengraph-image.jpg`);
 
     expect(response.status()).toBe(200);
-    expect(response.headers()["content-type"]).toContain("image/png");
+    expect(response.headers()["content-type"]).toContain("image/jpeg");
   });
 
   test("publishes a sitemap covering the catalogue and every language", async ({
