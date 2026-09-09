@@ -22,7 +22,7 @@ Researchers, linguistics students and interested readers use it to find a langua
 
 ## Delivery and constraints
 
-The owner approved GitHub Pages at `https://martonpaulo.com/catalogue-of-languages/`. The personal site at `/` is separately owned and must remain untouched. The migration is planned; the existing application is still configured for Vercel and runtime Airtable APIs.
+The site is published to GitHub Pages at `https://martonpaulo.com/catalogue-of-languages/`. The personal site at `/` is separately owned and must remain untouched. The migration shipped on 2026-09-09: Airtable is read at build time only, the runtime API routes and origin middleware are gone, and the browser reads a static snapshot.
 
 The static snapshot updates on each successful publication, with manual refresh available and no periodic schedule selected. Publish only fields already intentionally public in the catalogue; Airtable credentials remain build-only secrets. A failed or partial refresh must not replace the last valid deployment. Preserve Wikitongues attribution and the existing MIT code license without implying that the code license grants new data rights.
 

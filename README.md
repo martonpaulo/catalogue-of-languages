@@ -1,26 +1,34 @@
 # 🌎 Catalogue of Languages
 
-![License](https://img.shields.io/github/license/martonpaulo/catalogue-of-languages) ![Last Commit](https://img.shields.io/github/last-commit/martonpaulo/catalogue-of-languages) ![React Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/catalogue-of-languages/react) ![TypeScript Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/catalogue-of-languages/dev/typescript) ![Test and Deploy Status](https://github.com/martonpaulo/catalogue-of-languages/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/github/license/martonpaulo/catalogue-of-languages) ![Last Commit](https://img.shields.io/github/last-commit/martonpaulo/catalogue-of-languages) ![React Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/catalogue-of-languages/react) ![TypeScript Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/catalogue-of-languages/dev/typescript) ![CI Status](https://github.com/martonpaulo/catalogue-of-languages/actions/workflows/ci.yml/badge.svg)
 
 **Catalogue of Languages** is an interactive table featuring all documented languages from the Wikitongues database. Built on the [_Every Language in the World_](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world) Airtable dataset, it provides an easy way to explore global linguistic diversity.
 
-Featuring more than ~8,000 records, this project aims to make language research simple and accessible, serving as a resource for researchers, linguists, students, and enthusiasts.
+The published catalogue currently holds **7,554 languages**, **217 nations** and **126 writing systems**, and it is a purely static site: there is no backend, no runtime API and no credential in the browser.
 
-This project follows a Feature-Based Architecture, where functionalities are organized into dedicated modules such as `languages`, `nations`, and `writingSystems`. This approach enhances scalability, maintainability, and code clarity, making it easier to expand and improve the project over time.
+🔗 **[martonpaulo.com/catalogue-of-languages](https://martonpaulo.com/catalogue-of-languages/)**
 
-<br />
+<img alt="The catalogue: a filter panel above a table of languages with their code, name, status, nation of origin, writing system and where they are spoken" src="public/uploads/catalogue.webp" width="900" />
 
-<img alt="Recording of live application" src="public/uploads/recording.gif" />
+<img alt="A language page for Portuguese, showing alternate names, dialects, genealogy, demographics, language use and development, typology, and where it is spoken" src="public/uploads/language-detail.webp" width="900" />
 
-🔗 Live project: [catalogue-of-languages.vercel.app](https://catalogue-of-languages.vercel.app/)
+## How it works
 
-## Current state and approved direction
+Airtable is read **at build time only**. A generator projects the records onto an explicit list of public fields, validates them, and writes one versioned snapshot. The site is then exported as static HTML and published to GitHub Pages.
 
-The current runnable application uses Next.js API routes and is configured for Vercel. The owner approved a migration to **GitHub Pages at `https://martonpaulo.com/catalogue-of-languages/`**, with a static copy of the public Airtable fields refreshed on each deployment. That destination is **not deployed yet**. The personal site and DNS are outside the migration scope.
+```text
+Airtable  ──(build, with secrets)──►  snapshot  ──(next build)──►  static export  ──►  GitHub Pages
+```
 
-Only filter preferences will be application-persisted; data will use in-memory query state and normal browser caching. Existing query-cache and reference-store persistence is still present until the corresponding issues are implemented. No public releases, automatic version bumps, full offline mode or agent automation is selected. Browser acceptance covers Chromium, Gecko and WebKit.
+That has three consequences worth knowing before reading the code:
 
-Read [the product definition](docs/product.md) for scope and non-goals, [AGENTS.md](AGENTS.md) for the automatic commit/push policy on `main`, and [the backlog](https://github.com/martonpaulo/catalogue-of-languages/issues) for implementation status. The vulnerable locked runtime must be updated through [issue #1](https://github.com/martonpaulo/catalogue-of-languages/issues/1); this documentation setup does not patch or deploy it.
+- **The browser never talks to Airtable**, and no API key exists in the deployed artifact. The build verifies this before uploading.
+- **Each language page is generated with its record already in it.** Opening a language costs no request, and a code the snapshot does not publish has no page, so the host's own 404 answers it.
+- **The catalogue list loads one snapshot index** and filters, sorts and reveals rows locally. Filtering does not issue a request.
+
+Data refreshes on each deployment, and a manual refresh is available. A failed or partial generation never replaces the published site.
+
+Read [the product definition](docs/product.md) for scope and non-goals, [AGENTS.md](AGENTS.md) for the working agreements, and [the backlog](https://github.com/martonpaulo/catalogue-of-languages/issues) for what is planned.
 
 ## Introduction
 
@@ -28,275 +36,244 @@ The **Catalogue of Languages** project was born out of a personal interest in la
 
 ## 🔧 Features
 
-1. **Table Display and Infinite Scroll**
+1. **Table display and incremental loading**
 
-   - Fetches and displays data from the Airtable public dataset.
-   - Provides columns for language code, name, and additional metadata based on available fields.
-   - Allows infinite scrolling for smoother data navigation.
-   - Ensures a seamless loading experience when fetching more data.
+   - Presents every language the snapshot publishes, with code, name, status, nation of origin, writing system and where it is spoken.
+   - Reveals rows in steps of 50 as you scroll, over data that is already loaded.
 
-2. **Search and Filtering Functionalities**
+2. **Search and filtering**
 
-   - Adds a search input to filter table data (e.g., by language name or code).
-   - Offers filter chips for quick data filtering.
-   - Supports multiple criteria for more refined searches.
+   - Free-text matching on language code and name, and exact category matching on status, nation of origin, writing system and where a language is spoken.
+   - Filters apply on **Apply**, not on every keystroke, and are remembered between visits.
+   - Only status categories the snapshot actually publishes are offered.
 
-3. **Language Details Page**
+3. **Language pages**
 
-   - Displays detailed information for each language.
-   - Includes additional metadata like writing system, region, and status.
+   - A page per language with alternate names, dialects, status notes, genealogy, demographics, use, development, typology, description, writing systems and nations.
+   - Reachable by a real link, so it can be opened with the keyboard, in a new tab, or copied.
 
-## 🔍 Overview
+## 🛠️ Tech stack
 
-### Scalability Considerations
+| Concern | Choice | Notes |
+| --- | --- | --- |
+| Framework | **Next.js 15 (App Router), TypeScript** | Static export (`output: "export"`), published under a base path |
+| UI | **MUI + Material Icons** | Theme and shared styles in `src/shared/styles` |
+| Data loading | **TanStack Query** | Owns request state and in-memory caching for the snapshot assets |
+| Forms | **React Hook Form + Zod** | Zod validates the filter form *and* the filters restored from storage |
+| Build tooling | **tsx** | Runs the TypeScript build scripts, which reuse the app's own mappers |
+| Tests | **Playwright** | The one test runner; drives Chromium, Gecko and WebKit |
 
-- **Clean, reusable code and components** to facilitate the addition of new features.
-- **Best practices** in state management and API handling to accommodate future changes or new endpoints.
-- **Scalable folder structure** that supports future codebase growth and modular expansion.
+The catalogue list is client-rendered from a snapshot asset, so it needs JavaScript. Language pages do not: their content is in the exported HTML.
 
-### User Experience
+### What this project deliberately does not use
 
-- **Responsive design** for smooth navigation across different devices.
-- Error and loading UI exists; known state/recovery defects are tracked in the backlog and must not be described as complete coverage.
-- **Intuitive interactions** for an effortless browsing and searching experience.
+There is no HTTP client dependency — the build-time reader and the browser both use `fetch`. There is no client state-management library: TanStack Query owns fetched data and React owns the rest. Nothing but the filter preferences is written to browser storage.
 
-## 🛠️ Tech Stack
-
-### Frontend Framework
-
-**React + Next.js (TypeScript)**
-
-- Uses server layout/metadata and API routes, with catalogue data loaded by client queries after browser cache initialization. The catalogue content is not currently server-rendered.
-- Dynamic routing supports detailed pages like `/:code` for each language.
-
-### State Management
-
-**React Hooks**
-
-- Utilized for functional components, side effects, and local state handling.
-
-**Zustand**
-
-- Lightweight and efficient global state management.
-- Currently holds redundant persisted reference-data copies; their removal is tracked in [issue #14](https://github.com/martonpaulo/catalogue-of-languages/issues/14). Filter preferences are stored directly through the shared localStorage utilities.
-
-### Form Handling & Validation
-
-**React Hook Form + Zod**
-
-- React Hook Form for building flexible and performant forms.
-- Zod for schema-based validation.
-
-### Styling
-
-**Material UI + Material Icons**
-
-- Pre-built components for responsive design and clean visuals.
-- Uses MUI accessibility primitives. Complete WCAG compliance has not been verified; keyboard result navigation is tracked in [issue #7](https://github.com/martonpaulo/catalogue-of-languages/issues/7).
-
-### Data Fetching
-
-**React Query**
-
-- Efficient caching and refetching for robust API interaction.
-
-### Additional Tools
-
-- **Axios** for HTTP requests.
-- **ESLint** for consistent code styling and error detection.
-- **Vercel** for deployment with automated builds and previews.
-- **GitHub Actions** for Continuous Integration.
-
-### **Tech Stack Considerations**  
-
-Initially, **Next.js**, **React Hook Form**, and **Zod** were chosen with scalability in mind. The idea was to build a solid foundation that could support future growth, such as API routes, server-side rendering (SSR), or more complex forms with dynamic validation.  
-
-However, looking at the current state of the project, this choice might have been overkill. The application consists of only two client-side pages, and the only form could have been handled more simply using **Material UI's built-in form controls** and error handling. A lighter setup with **React + Vite** might have been a more efficient approach.  
-
-That said, going through this process was valuable. It helped refine my decision-making when selecting tools for a project. It reinforced the importance of assessing immediate needs versus long-term goals and finding the right balance between **familiarity, maintainability, and complexity**.
-
-## 🚀 Getting Started
+## 🚀 Getting started
 
 ### Prerequisites
 
-- **Node.js** compatible with the locked Next.js release (currently at least 18.18.0; use a supported Node.js release).
-- **npm** (or another package manager)
+- **Node.js 22 or newer** (CI runs 22)
+- **npm**
 
-### Installation
+Airtable credentials are **not** required to run the project. They are only needed to generate a snapshot from the real dataset.
 
-1. **Clone the repository**:
+### Run it
 
-   ```bash
-   git clone https://github.com/martonpaulo/catalogue-of-languages.git
-   cd catalogue-of-languages
-   ```
+```bash
+git clone https://github.com/martonpaulo/catalogue-of-languages.git
+cd catalogue-of-languages
+npm ci
+npm run snapshot:fixture
+npm run dev
+```
 
-2. **Install dependencies**:
+Then open `http://localhost:3000`. `npm run snapshot:fixture` writes a small synthetic catalogue; without a snapshot the build has nothing to generate pages from and fails with a message saying so.
 
-   ```bash
-   npm ci
-   ```
+### Run it against the real dataset
 
-3. **Configure local Airtable access**:
+```bash
+cp .env.example .env.local   # then fill in the Airtable values locally
+npm run snapshot
+npm run dev
+```
 
-   ```bash
-   cp .env.example .env.local
-   ```
+`npm run snapshot` reads `.env.local` if it exists. Keep credential values out of Git, out of commit messages and out of issues.
 
-   Edit `.env.local` locally. Set `AIRTABLE_API_KEY`, `AIRTABLE_BASE_ID`, `LANGUAGES_TABLE_ID`, `WRITING_SYSTEMS_TABLE_ID`, and `NATIONS_TABLE_ID` for the private copy of the source dataset. The API key needs read access to those tables. Keep credential values out of Git and messages. Placeholder values can exercise configuration/build paths but do not prove that the live catalogue works.
+## 📋 Scripts
 
-4. **Start the development server**:
+| Script | Description |
+| --- | --- |
+| `npm run dev` | Development server. Needs a snapshot to exist. |
+| `npm run snapshot` | Generates the public snapshot from Airtable. Requires the build-only credentials. |
+| `npm run snapshot:fixture` | Generates a synthetic snapshot. No credentials needed. |
+| `npm run build:export` | Builds the static export into `out/`, under the published base path. |
+| `npm run serve:export` | Serves `out/` the way GitHub Pages does, for checking the real artifact. |
+| `npm run lint` / `npm run lint:fix` | ESLint over the whole repository. |
+| `npm test` | The acceptance suite, in Chromium, Gecko and WebKit. |
+| `npm run test:chromium` | The same suite in one engine, for faster iteration. |
+| `npm run measure:derivation` | Benchmarks enrichment, filtering and revealing at 50 to 8,000 languages. |
+| `npm run snapshot:scaled` | Generates an 8,000-language synthetic snapshot, for feasibility measurement. |
+| `npm run social-card` | Regenerates `public/opengraph-image.png`. |
 
-   ```bash
-   npm run dev
-   ```
-
-5. **Open the app** at `http://localhost:3000`.
-
-## 📋 Available Scripts
-
-| Script          | Description                                        |
-| --------------- | -------------------------------------------------- |
-| `npm run dev`   | Starts the development server locally.             |
-| `npm run build` | Builds the app for production.                     |
-| `npm run start` | Starts the production server (after building).     |
-| `npm run lint`  | Runs ESLint to check for style and quality issues. |
-
-## Validation
+## ✅ Validation
 
 ```bash
 npm run lint
 npx tsc --noEmit --incremental false
-npm run build
+npm run build:export
+npm test
 ```
 
-These are the current static/build checks. No automated test script is committed yet. Builds require the configuration above, and fonts are fetched by Next.js during build. A successful build does not verify private Airtable access, browser behavior or accessibility. Validate implementation changes with synthetic data in the three selected browser families and record any human screen-reader gap.
+`npm test` builds the real static export from the synthetic fixture snapshot and drives it through the three accepted browser engines. It deliberately does not use the development server: the development server answers an unknown route differently from the deployed artifact, so it cannot prove the 404 contract.
 
-## 🌐 API Overview
+A successful run does not verify private Airtable access, screen-reader behavior, or the deployed site. To check a published deployment:
 
-This project uses data from the Wikitongues [_Every Language in the World_](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world) table, publicly available on Airtable. The API is based on a private copy of this dataset hosted in an Airtable workspace.
-
-### API Endpoint Structure
-
-Airtable API requests generally follow this structure:
-
+```bash
+LIVE_URL=https://martonpaulo.com/catalogue-of-languages/ npx playwright test liveDeployment
 ```
-https://api.airtable.com/v0/{baseId}/{tableId}?maxRecords={maxRecordsNumber}
-```
-
-- `{baseId}` starts with `"app"`, `{tableId}` starts with `"tbl"`.
-- Authentication via **Bearer Token**.
-
-### Example Request
-
-```http
-GET https://api.airtable.com/v0/{baseId}/{tableId}?maxRecords=10
-Authorization: Bearer YOUR_API_KEY
-```
-
-For more details, see the [Airtable API documentation](https://airtable.com/developers/web/api/).
 
 ## 🗂️ Architecture
 
-Below is a simplified representation of the folder structure that follows a modular approach. Each major domain (languages, nations, writing systems) has its own directory under `src/features`.
+Each domain owns its types, services, hooks, mapping utilities and UI. Shared code lives in `src/shared` only when its responsibility is genuinely shared.
 
 ```plaintext
 src/
-├── app/                       # Next.js App Router structure
-│   ├── api/                   # API route handlers (server-side)
-│   │   ├── languages/         # Proxy endpoints for languages data
-│   │   │   ├── [code]/        # Endpoint for specific language details
-│   │   │   └── route.ts       # Endpoint for listing all languages
-│   │   ├── nations/           # Endpoint for nations data
-│   │   └── writing-systems/   # Endpoint for writing systems data
-│   ├── icon.svg               # SVG icon rendered automatically by Next.js
-│   ├── layout.tsx             # Layout wrapper for the entire app
-│   ├── not-found.tsx          # Custom 404 page
-│   ├── (homepage)
-│   │   └── page.tsx           # Homepage component
-│   └── [code]/                # Dynamic route for language details (e.g., /:code)
-├── features/                  # Domain-driven feature directories
+├── app/                       # Next.js App Router
+│   ├── (homepage)/page.tsx    # The catalogue
+│   ├── [code]/page.tsx        # One generated page per published language code
+│   ├── layout.tsx             # Providers, site metadata, structured data
+│   ├── not-found.tsx          # The exported 404
+│   ├── sitemap.ts             # Every generated page, under the deployed prefix
+│   └── icon.svg
+├── features/
 │   ├── languages/
-│   │   ├── components/        # UI components specific to languages
-│   │   ├── hooks/             # Language-related React hooks
-│   │   ├── services/          # API service calls for languages
-│   │   ├── store/             # Zustand store for languages state
-│   │   ├── types/             # TypeScript definitions for languages
-│   │   └── utils/             # Utility functions for data mapping, filtering
-│   ├── nations/               # Similar structure for nations
-│   └── writingSystems/        # Similar structure for writing systems
-├── middleware/                # Custom middleware for origin checks and security
-└── shared/                    # Shared utilities and components
+│   │   ├── components/        # Table, row, filters, status chip, details
+│   │   ├── hooks/             # Composed catalogue state and published statuses
+│   │   ├── server/            # Build-time snapshot reader for generated pages
+│   │   ├── services/          # Snapshot index reader
+│   │   ├── styles/            # Shared language styles
+│   │   ├── types/             # Language and status types
+│   │   └── utils/             # Mapping, enrichment, filtering
+│   ├── nations/               # Same shape
+│   └── writingSystems/        # Same shape
+└── shared/
+    ├── components/            # Layout, loading, error, controlled select
+    ├── config/                # Base path, origin and site identity, declared once
+    ├── providers/             # Theme and query client
+    ├── services/              # Snapshot asset reader
+    ├── styles/                # Theme and fonts
+    ├── types/                 # Airtable record and snapshot contracts
+    └── utils/                 # Guarded browser storage
+
+scripts/
+├── snapshot/                  # Build-only Airtable reader and snapshot builder
+├── fixtures/                  # Synthetic source for credential-free generation
+├── screenshots/               # README capture, documented in the script itself
+├── generate-snapshot.ts       # Real, fixture and scaled generation
+├── generate-social-card.ts    # The 1200x630 social card
+├── measure-derivation.ts      # Derivation benchmark
+└── serve-export.ts            # Static server with GitHub Pages semantics
+
+tests/                         # Playwright acceptance suite
+.github/
+├── workflows/ci.yml           # Validation, acceptance and publication
+└── scripts/                   # Path gating and artifact verification
 ```
 
-## 🔒 Handling CORS Issues
+## 📦 The published snapshot
 
-To bypass CORS restrictions, **Next.js API routes** serve as a proxy. This allows client-side requests to interact with Airtable without browser-based CORS errors.
+The generator writes two sets of files. Only the first is served.
 
-- The current `src/middleware/index.ts` is not a registered Next.js middleware entry point; the strict-origin variables do not currently enforce the advertised policy. The approved Pages migration will remove the runtime proxy/middleware boundary instead of repairing it. Origin checking is not authentication.
-- The current API credentials are server-side configuration. After migration they are build-only; browsers must never receive them or contact Airtable directly.
+| Path | Served | Contents |
+| --- | --- | --- |
+| `public/catalogue/index.json` | ✅ | Every language, with the fields the table renders |
+| `public/catalogue/nations.json` | ✅ | Nation ids and names |
+| `public/catalogue/writing-systems.json` | ✅ | Writing-system ids and names |
+| `.snapshot/manifest.json` | — | Version, generation time, and every published code |
+| `.snapshot/languages/<code>.json` | — | One record per language, embedded into its page at build time |
 
-## 🌐 Environment Variables
+Every file in a generation carries the same `version`, which is a hash of the content: regenerating unchanged data produces the same version, so a browser's cached assets are not invalidated for nothing.
 
-Below is a list of the main environment variables used in this project:
+Records without a usable three-letter code or a name are rejected, as are duplicate codes. The generator reports how many it skipped and by record id — never by content.
 
-| Variable                          | Purpose                                                                                            |
-| --------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `AIRTABLE_API_KEY`                | Private Airtable API key for authenticated requests.                                               |
-| `AIRTABLE_BASE_ID`                | The base identifier for your Airtable workspace.                                                   |
-| `LANGUAGES_TABLE_ID`              | The table ID containing the languages data.                                                        |
-| `WRITING_SYSTEMS_TABLE_ID`        | The table ID containing the writing systems data.                                                  |
-| `NATIONS_TABLE_ID`                | The table ID containing nation-related data.                                                       |
-| `NEXT_PUBLIC_API_STRICT_ORIGIN`   | Legacy strict-origin flag; the current middleware entry is inactive.                                |
-| `NEXT_PUBLIC_API_ALLOWED_ORIGINS` | Legacy comma-separated allowed-origin list; currently inactive with the unregistered middleware.       |
-| `NEXT_PUBLIC_STORAGE_PREFIX`      | A prefix for all keys saved in localStorage                                                        |
-| `NEXT_PUBLIC_STORAGE_VERSION`     | Used for versioning localStorage data, ensuring older data can be handled when the schema changes. |
+## 🔐 Environment variables
 
-## 🔖 Commit Strategy
+| Variable | Where | Purpose |
+| --- | --- | --- |
+| `AIRTABLE_API_KEY` | Build only | Airtable personal access token with read access |
+| `AIRTABLE_BASE_ID` | Build only | The base holding the dataset copy |
+| `LANGUAGES_TABLE_ID` | Build only | Languages table |
+| `WRITING_SYSTEMS_TABLE_ID` | Build only | Writing systems table |
+| `NATIONS_TABLE_ID` | Build only | Nations table |
+| `NEXT_PUBLIC_BASE_PATH` | Build | Sub-path the site is published under. Empty locally. |
+| `NEXT_PUBLIC_SITE_ORIGIN` | Build | Origin used for canonical, Open Graph and sitemap URLs |
+| `NEXT_PUBLIC_STORAGE_PREFIX` | Build | Namespace for the stored filter preferences |
+| `NEXT_PUBLIC_STORAGE_VERSION` | Build | Version suffix for that key |
 
-Each commit follows a clear, consistent naming convention:
+The five Airtable variables are used by the snapshot generator and reach no browser bundle. In CI they are repository secrets, referenced only by the publication job.
 
-| Type       | Description                               | Example                                 |
-| ---------- | ----------------------------------------- | --------------------------------------- |
-| `feat`     | Introduces new features.                  | `feat: add filtering functionality`     |
-| `fix`      | Fixes bugs.                               | `fix: resolve validation issue in form` |
-| `docs`     | Updates documentation.                    | `docs: add setup instructions`          |
-| `refactor` | Refactors code without changing behavior. | `refactor: improve component structure` |
-| `chore`    | Updates build process or tools.           | `chore: update dependencies`            |
+## 🚢 Continuous integration
 
-### Simplified Approach Explanation
+`.github/workflows/ci.yml` has three responsibilities, and they cost very different amounts:
 
-- Not all commit types or extended formats (e.g., `<type>[optional scope]: <description>`) are necessary for a smaller project like this. Overcomplicating the commit process can slow down development without offering significant advantages.
-- In this repository, commits were made **directly to the `main` branch**, which is generally not recommended for larger projects. For more complex applications, feature branches and pull requests ensure a cleaner and more organized commit history.
+| Job | Runs on | Secrets |
+| --- | --- | --- |
+| Lint and types | Every push and pull request, every path | None |
+| Browser acceptance | Only when a path it can observe changed | None; builds the synthetic snapshot |
+| Publish to Pages | Push to `main` or manual dispatch, only when an artifact path changed | The five Airtable secrets, in this job only |
 
-## 🧗 Challenges Faced
+A pull request cannot reach publication, from this repository or a fork. When the base revision of a push cannot be compared, every path is treated as changed rather than as no change, so nothing is skipped on a guess.
 
-1. **Airtable SDK Documentation**: The Airtable SDK documentation was incomplete or confusing, leading to reliance on community forums. Eventually, **Axios** was chosen for more straightforward control over HTTP requests.
+Before uploading, the workflow refuses an export that is missing its entry points, has no generated language pages, or contains any Airtable variable name or the Airtable host.
 
-2. **Pagination Limitations**: Airtable’s pagination does not provide a total record count, necessitating an **infinite scroll** approach rather than a traditional paged solution.
+## 📸 Screenshots
 
-3. **Infinite Scroll Implementation**: Balancing performance and preventing excessive API calls required careful logic to detect when to load more data.
+`scripts/screenshots/capture.sh` produces the images above from a real browser window on a real screen, so they keep the native macOS shadow, rounded corners and material. The method and the reason for each constraint are documented in the script itself; the short version is that an offscreen render loses the window chrome, `screencapture -o` strips the shadow, a 1x display halves the resolution silently, and an inactive window is captured with a grey traffic light.
 
-4. **LocalStorage Data Limit**: Storing all ~8,000 records locally exceeded `localStorage` limits, so persisting the full dataset became impractical.
+```bash
+./scripts/screenshots/capture.sh https://martonpaulo.com/catalogue-of-languages/
+```
 
-5. **Large Data Volume**: Handling thousands of records caused initial navigation to be slow, highlighting the need for efficient data fetching and rendering.
+It launches its own browser instance under a throwaway profile, so it can only capture its own window.
 
-6. **Inconsistent Language Data**: The Airtable table itself contains incomplete or inconsistent fields, requiring careful data checking and fallback UI states.
+## 🔖 Commit strategy
 
-## 📈 Future Improvements to Consider
+One commit per subject, directly on `main`.
 
-1. **GraphQL + BaseQL**: Replace Airtable API with a GraphQL-based approach and integrate Apollo Client for more efficient queries and caching.
+| Type | Description |
+| --- | --- |
+| `feat` | Introduces a capability |
+| `fix` | Corrects behavior |
+| `refactor` | Changes structure, preserves behavior |
+| `test` | Adds or changes tests |
+| `docs` | Documentation |
+| `build` / `chore` / `ci` | Tooling, dependencies, pipeline |
 
-2. **Expanded Routing**: Create dedicated routes for each country or region.
+A commit made for an issue ends with `(#<issue number>)`.
 
-3. **Advanced Filtering**: Use multiple filter chips for more dynamic, multi-criteria search.
+## 🧗 Challenges faced
 
-4. **Additional Data Points**: Enrich the table with more fields for each language, providing a deeper data exploration experience.
+1. **Airtable's SDK documentation** was incomplete, so the reader is written directly against the REST API with `fetch`, following offsets serially per table.
 
-## 🏁 Final Thoughts
+2. **Airtable pagination gives no total count**, which originally forced infinite scroll over remote pages. The static snapshot removed that constraint: the count is known at build time and revealing rows is now local.
 
-This project has been a rewarding challenge, applying modern frontend tech, focusing on code clarity, and creating an application that can grow in complexity. Building it from scratch provided an excellent opportunity to solidify design principles, maintain high code quality, and ensure a clean, maintainable structure.
+3. **The full dataset does not fit in `localStorage`.** Persisting the catalogue was abandoned in favour of persisting only the filter preferences and letting ordinary HTTP caching handle the data.
+
+4. **A 7,554-page static export is 341 MB.** That is comfortably inside the GitHub Pages limit, but it was measured before committing to the approach rather than assumed.
+
+5. **The source data is inconsistent.** Sixteen records carry an unusable language code and are skipped; unrecognised status labels are deliberately mapped to no category at all, because presenting them as a known one would be a fabrication.
+
+## 📈 Possible improvements
+
+1. **A smaller catalogue index.** It is 1.29 MB raw and 227 KB gzipped, which is the largest thing a first visit downloads.
+
+2. **Dedicated routes per nation or writing system**, using relations the snapshot already carries.
+
+3. **Multi-value filters**, so several statuses or nations can be selected at once.
 
 ## 📄 License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+The catalogue data is made available by [Wikitongues](https://wikitongues.org/); the code license does not grant rights over it.

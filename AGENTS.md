@@ -7,7 +7,7 @@
 - Benefit-first description: Interactive table featuring all documented languages from the Wikitongues database, providing an easy way to explore global linguistic diversity 🌎
 - Repository: `martonpaulo/catalogue-of-languages` (public).
 - Public identifiers: npm package `catalogue-of-languages`, private/non-publishable package.
-- Landing page: the application itself; current deployment is `https://catalogue-of-languages.vercel.app/`. Approved target is `https://martonpaulo.com/catalogue-of-languages/` through GitHub Pages. The target is not deployed yet; keep About homepage unchanged until the new Pages deployment and canonical URL are verified.
+- Landing page: the application itself, published at `https://martonpaulo.com/catalogue-of-languages/` through GitHub Pages. The cutover was completed and verified on 2026-09-09, so the About homepage and `package.json` `homepage` now point there. The Vercel deployment and its token still exist and are retired only on an explicit separate request.
 - License: `MIT`.
 - Copyright: 2025 Marton Paulo. Preserve the existing license and Wikitongues attribution.
 - Development language: English.
