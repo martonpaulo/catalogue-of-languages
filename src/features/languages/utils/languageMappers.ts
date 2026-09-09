@@ -71,7 +71,14 @@ function mapFieldsToLanguage({
   };
 }
 
-function mapStringToStatusEnum(status: string): LanguageStatusEnum {
+/**
+ * Maps a source label onto a category. An unrecognised or absent label yields no category:
+ * `Unattested.` is itself a recognised label, so falling back to it would present unknown
+ * data as a known one.
+ */
+function mapStringToStatusEnum(
+  status: string
+): LanguageStatusEnum | undefined {
   const statusMap: Record<string, LanguageStatusEnum> = {
     "1 - National": LanguageStatusEnum.NATIONAL,
     "2 - Provincial": LanguageStatusEnum.PROVINCIAL,
@@ -89,5 +96,5 @@ function mapStringToStatusEnum(status: string): LanguageStatusEnum {
     "Unattested.": LanguageStatusEnum.UNATTESTED,
   };
 
-  return statusMap[status] || LanguageStatusEnum.UNATTESTED;
+  return statusMap[status];
 }

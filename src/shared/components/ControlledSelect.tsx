@@ -30,7 +30,9 @@ export interface ControlledSelectProps {
   sx?: object;
   /** The options are still being loaded, so the control cannot be used yet. */
   isLoading?: boolean;
-  /** The options could not be loaded; explains why instead of looking empty. */
+  /** The options are unavailable, so the control cannot be used. */
+  isDisabled?: boolean;
+  /** Explains the control's state instead of leaving it looking empty or wrong. */
   errorMessage?: string;
 }
 
@@ -43,9 +45,10 @@ export function ControlledSelect({
   renderOption,
   sx,
   isLoading = false,
+  isDisabled = false,
   errorMessage,
 }: ControlledSelectProps) {
-  const unavailable = isLoading || Boolean(errorMessage);
+  const unavailable = isLoading || isDisabled;
   const helperText = errorMessage ?? (isLoading ? `Loading ${label}…` : null);
 
   return (

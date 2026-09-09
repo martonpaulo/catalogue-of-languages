@@ -29,10 +29,13 @@ const MAP_STATUS_TO_COLOR: Record<string, ChipProps["color"]> = {
   [LanguageStatusEnum.UNATTESTED]: "default", // Gray (unknown)
 };
 
+/** Renders nothing when a language has no recognised category, rather than inventing one. */
 export function LanguageStatusChip({
-  status = LanguageStatusEnum.UNATTESTED,
+  status,
   ...props
 }: LanguageStatusChipProps) {
+  if (!status) return null;
+
   return (
     <Chip
       label={status}

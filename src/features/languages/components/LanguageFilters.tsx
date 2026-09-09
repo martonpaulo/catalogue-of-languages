@@ -1,14 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Paper, Stack, TextField } from "@mui/material";
 import { useCallback, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import {
   LanguageFilterFormValues,
   languageFilterSchema,
 } from "@/features/languages/components/languageFilters.schema";
 import { LanguageStatusChip } from "@/features/languages/components/LanguageStatusChip";
-import { LanguageStatusEnum } from "@/features/languages/types/languageStatus.enum";
+import { useLanguageStatuses } from "@/features/languages/hooks/useLanguageStatuses";
 import {
   DEFAULT_LANGUAGE_FILTERS,
   filtersAfterRefresh,
@@ -68,12 +68,22 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
     onFiltersChange(DEFAULT_LANGUAGE_FILTERS);
   }, [onFiltersChange, reset]);
 
+  const publishedStatuses = useLanguageStatuses();
+  const selectedStatus = useWatch({ control, name: "status" });
+
+  // A stored selection the current snapshot no longer publishes stays visible and
+  // selectable, so the person can see why the catalogue looks empty and reset it.
+  const unsupportedStatus =
+    selectedStatus && !(publishedStatuses as string[]).includes(selectedStatus)
+      ? selectedStatus
+      : undefined;
+
   const statusOptions = useMemo(
-    () =>
-      Object.values(LanguageStatusEnum).map((status) => ({
-        value: status,
-      })),
-    []
+    () => [
+      ...publishedStatuses.map((status) => ({ value: status })),
+      ...(unsupportedStatus ? [{ value: unsupportedStatus }] : []),
+    ],
+    [publishedStatuses, unsupportedStatus]
   );
 
   const nationOptions = useMemo(
@@ -132,6 +142,11 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             control={control}
             defaultValue={filtersAfterRefresh().status}
             options={statusOptions}
+            errorMessage={
+              unsupportedStatus
+                ? "This status is not in the current catalogue."
+                : undefined
+            }
             renderOption={(option) => (
               <LanguageStatusChip status={option.value} />
             )}
@@ -144,6 +159,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             defaultValue={filtersAfterRefresh().nationOfOrigin}
             options={nationOptions}
             isLoading={nationsIsLoading}
+            isDisabled={nationsIsError}
             errorMessage={nationsErrorMessage}
           />
 
@@ -154,6 +170,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             defaultValue={filtersAfterRefresh().writingSystem}
             options={writingSystemOptions}
             isLoading={writingSystemsIsLoading}
+            isDisabled={writingSystemsIsError}
             errorMessage={writingSystemsErrorMessage}
           />
 
@@ -164,6 +181,7 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             defaultValue={filtersAfterRefresh().spokenIn}
             options={nationOptions}
             isLoading={nationsIsLoading}
+            isDisabled={nationsIsError}
             errorMessage={nationsErrorMessage}
           />
         </Stack>
