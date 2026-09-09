@@ -1,15 +1,9 @@
 import { expect, test } from "@playwright/test";
 
-import { mockCatalogueApi } from "./support/syntheticCatalogue";
-
 const HEADING_FILL = "rgb(227, 242, 253)";
 
-test.beforeEach(async ({ page }) => {
-  await mockCatalogueApi(page);
-});
-
 test("every table heading cell carries the same fill", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("");
 
   const headings = page.getByRole("columnheader");
   await expect(headings).toHaveCount(6);
@@ -24,7 +18,7 @@ test("every table heading cell carries the same fill", async ({ page }) => {
 test("a heading cell added later inherits the fill without its own declaration", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("");
   await expect(page.getByRole("columnheader").first()).toBeVisible();
 
   const addedFill = await page.evaluate(() => {
@@ -45,7 +39,7 @@ test("a heading cell added later inherits the fill without its own declaration",
 test("the language code renders with the same typography in list and detail", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("");
   const listCodeFont = await page
     .getByRole("row")
     .nth(1)
@@ -53,7 +47,7 @@ test("the language code renders with the same typography in list and detail", as
     .first()
     .evaluate((cell) => getComputedStyle(cell).fontFamily);
 
-  await page.goto("/por");
+  await page.goto("por/");
   const detailCodeFont = await page
     .getByRole("heading", { name: "POR", exact: true })
     .evaluate((heading) => getComputedStyle(heading).fontFamily);

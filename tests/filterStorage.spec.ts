@@ -1,26 +1,20 @@
 import { expect, test } from "@playwright/test";
 
-import { mockCatalogueApi } from "./support/syntheticCatalogue";
-
 const FILTER_KEY = "@catalogue-of-languages:language-filters:test";
 const LEGACY_QUERY_CACHE_KEY = "@catalogue-of-languages:react-query-cache:test";
 const UNRELATED_KEY = "unrelated-origin-key";
 
-test.beforeEach(async ({ page }) => {
-  await mockCatalogueApi(page);
-});
-
 test("writes only the filter preference to application storage", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("");
   await page.getByRole("row").nth(1).waitFor();
 
   await page.getByLabel("Language Name").fill("Portuguese");
   await page.getByRole("button", { name: "Apply Filters" }).click();
   await expect(page.getByRole("row")).toHaveCount(2);
 
-  await page.goto("/por");
+  await page.goto("por/");
   await page.getByRole("heading", { name: "Portuguese" }).waitFor();
 
   const keys = await page.evaluate(() => Object.keys(window.localStorage).sort());
@@ -58,7 +52,7 @@ test("ignores a legacy persisted query cache and keeps unrelated keys", async ({
     [LEGACY_QUERY_CACHE_KEY, UNRELATED_KEY]
   );
 
-  await page.goto("/");
+  await page.goto("");
   await page.getByRole("row").nth(1).waitFor();
 
   await page.getByLabel("Nation of Origin").click();

@@ -1,7 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-import { mockCatalogueApi } from "./support/syntheticCatalogue";
-
 /**
  * React Query is the single owner of fetched reference data. Nothing may copy nations or
  * writing systems into a second persisted owner, because such a copy is never read back
@@ -10,8 +8,7 @@ import { mockCatalogueApi } from "./support/syntheticCatalogue";
 test("does not copy reference data into application storage", async ({
   page,
 }) => {
-  await mockCatalogueApi(page);
-  await page.goto("/");
+  await page.goto("");
 
   // The reference data has arrived once the lookup-backed selects are populated.
   await page.getByRole("row").nth(1).waitFor();

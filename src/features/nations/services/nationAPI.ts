@@ -1,13 +1,8 @@
 import { NationType } from "@/features/nations/types/nation.type";
-import { fetchProxyData } from "@/shared/services/proxyAPI";
-
-interface FetchNationsDataResponse {
-  data: NationType[];
-}
+import { fetchSnapshotAsset } from "@/shared/services/snapshotAPI";
+import { SnapshotNations } from "@/shared/types/snapshot.type";
 
 export async function fetchNationsData(): Promise<NationType[]> {
-  const nationsData = await fetchProxyData<FetchNationsDataResponse>(
-    "/api/nations"
-  );
-  return nationsData.data;
+  const asset = await fetchSnapshotAsset<SnapshotNations>("nations.json");
+  return asset.nations;
 }

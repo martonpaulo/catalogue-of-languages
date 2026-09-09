@@ -1,67 +1,70 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  mockCatalogueApi,
-  PAGE_SIZE,
+  FIXTURE_LANGUAGE_COUNT,
+  NAMED_LANGUAGE,
+  REVEAL_STEP,
 } from "./support/syntheticCatalogue";
 
 test.describe("catalogue smoke journey", () => {
-  test.beforeEach(async ({ page }) => {
-    await mockCatalogueApi(page);
-  });
-
-  test("lists the first page of languages", async ({ page }) => {
-    await page.goto("/");
+  test("lists the first reveal step of languages", async ({ page }) => {
+    await page.goto("");
 
     await expect(
       page.getByRole("heading", { name: "🌎 Catalogue of Languages" })
     ).toBeVisible();
-    await expect(page.getByRole("row").filter({ hasText: "Portuguese" })).toBeVisible();
-    await expect(page.getByRole("row")).toHaveCount(PAGE_SIZE + 1); // + header row
+    await expect(page.getByRole("row")).toHaveCount(REVEAL_STEP + 1); // + header
   });
 
   test("applies and resets a name filter", async ({ page }) => {
-    await page.goto("/");
-    await expect(page.getByRole("row").nth(1)).toBeVisible();
+    await page.goto("");
+    await expect(page.getByRole("row")).toHaveCount(REVEAL_STEP + 1);
 
-    await page.getByLabel("Language Name").fill("Portuguese");
+    await page.getByLabel("Language Name").fill("Lusophone");
     await page.getByRole("button", { name: "Apply Filters" }).click();
 
     await expect(page.getByRole("row")).toHaveCount(2);
-    await expect(page.getByRole("row").nth(1)).toContainText("Portuguese");
+    await expect(page.getByRole("row").nth(1)).toContainText(
+      NAMED_LANGUAGE.name
+    );
 
     await page.getByRole("button", { name: "Reset Filters" }).click();
-    await expect(page.getByRole("row")).toHaveCount(PAGE_SIZE + 1);
+    await expect(page.getByRole("row")).toHaveCount(REVEAL_STEP + 1);
   });
 
-  test("reveals more rows when the sentinel scrolls into view", async ({
+  test("reveals the remaining rows when the sentinel scrolls into view", async ({
     page,
   }) => {
-    await page.goto("/");
-    await expect(page.getByRole("row")).toHaveCount(PAGE_SIZE + 1);
+    await page.goto("");
+    await expect(page.getByRole("row")).toHaveCount(REVEAL_STEP + 1);
 
     await page
       .getByText("Loading more languages...")
       .scrollIntoViewIfNeeded();
-    await expect(page.getByRole("row")).toHaveCount(PAGE_SIZE * 2 + 1);
+
+    await expect(page.getByRole("row")).toHaveCount(
+      FIXTURE_LANGUAGE_COUNT + 1
+    );
   });
 
   test("opens a language detail route", async ({ page }) => {
-    await page.goto("/por");
+    await page.goto(`${NAMED_LANGUAGE.code}/`);
 
-    await expect(page.getByRole("heading", { name: "Portuguese" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "POR", exact: true })).toBeVisible();
-    await expect(page.getByText("A Romance language")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: NAMED_LANGUAGE.name })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "POR", exact: true })
+    ).toBeVisible();
+    await expect(page.getByText(NAMED_LANGUAGE.description)).toBeVisible();
   });
 
-  test("shows the not-found page for an unknown language code", async ({
+  test("shows the not-found page for a code the snapshot does not publish", async ({
     page,
   }) => {
-    await mockCatalogueApi(page, { missingCodes: ["zzz"] });
-    await page.goto("/zzz");
+    const response = await page.goto("zzz/");
 
-    await expect(page.getByText(/not found/i).first()).toBeVisible({
-      timeout: 15_000,
-    });
+    expect(response?.status()).toBe(404);
+    await expect(page.getByText("Page not found")).toBeVisible();
   });
 });

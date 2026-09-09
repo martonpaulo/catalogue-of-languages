@@ -1,183 +1,69 @@
 import type { Page, Route } from "@playwright/test";
 
-import type { LanguageType } from "@/features/languages/types/language.type";
-import { LanguageStatusEnum } from "@/features/languages/types/languageStatus.enum";
-import type { NationType } from "@/features/nations/types/nation.type";
-import type { WritingSystemType } from "@/features/writingSystems/types/writingSystem.type";
-
-export const PAGE_SIZE = 25;
-
-export const syntheticNations: NationType[] = [
-  { id: "nat_br", name: "Brazil" },
-  { id: "nat_pt", name: "Portugal" },
-  { id: "nat_jp", name: "Japan" },
-];
-
-export const syntheticWritingSystems: WritingSystemType[] = [
-  { id: "ws_latn", name: "Latin" },
-  { id: "ws_jpan", name: "Japanese" },
-];
-
 /**
- * Statuses chosen so that one value is a strict substring of another
- * (`extinct` inside `nearly extinct`), which is what the status filter must not confuse.
+ * The specs run against the synthetic fixture snapshot produced by
+ * `npm run snapshot:fixture`, so they exercise the real generation and delivery path
+ * instead of a parallel mock. These constants describe that fixture.
  */
-const STATUS_CYCLE: LanguageStatusEnum[] = [
-  LanguageStatusEnum.NATIONAL,
-  LanguageStatusEnum.EXTINCT,
-  LanguageStatusEnum.NEARLY_EXTINCT,
-  LanguageStatusEnum.VIGOROUS,
-];
+export const REVEAL_STEP = 50;
+export const FIXTURE_LANGUAGE_COUNT = 67;
 
-function buildLanguage(index: number): LanguageType {
-  const code = `x${index.toString().padStart(2, "0")}`;
-  const nation = syntheticNations[index % syntheticNations.length];
-  const writingSystem =
-    syntheticWritingSystems[index % syntheticWritingSystems.length];
-
-  return {
-    id: `rec_${code}`,
-    code,
-    name: `Synthetic Language ${index}`,
-    status: STATUS_CYCLE[index % STATUS_CYCLE.length],
-    alternateNames: `Alt ${index}`,
-    genealogy: "Indo-European, Romance",
-    spokenInId: [nation.id],
-    writingSystemId: [writingSystem.id],
-    nationOfOriginId: [nation.id],
-  };
-}
-
-/** 60 records: enough for three pages of 25, so pagination is exercised for real. */
-export const syntheticLanguages: LanguageType[] = Array.from(
-  { length: 60 },
-  (_, index) => buildLanguage(index)
-);
-
-export const namedLanguage: LanguageType = {
-  ...buildLanguage(0),
-  id: "rec_por",
+export const NAMED_LANGUAGE = {
   code: "por",
-  name: "Portuguese",
-  status: LanguageStatusEnum.NATIONAL,
+  name: 'Portuguese "Lusophone"',
+  status: "national",
   description: "A Romance language of the Indo-European family.",
 };
 
-const ALL_LANGUAGES = [namedLanguage, ...syntheticLanguages];
+export const EXTINCT_LANGUAGE = { code: "xtc", name: "Extinct Sample" };
+export const NEARLY_EXTINCT_LANGUAGE = {
+  code: "xne",
+  name: "Nearly Extinct Sample",
+};
 
-function matchesText(value: string | undefined, query: string | null): boolean {
-  if (!query) return true;
-  return (value ?? "").toLowerCase().includes(query.toLowerCase());
-}
+export const FIXTURE_NATIONS = ["Brazil", "Japan", "Portugal"];
+export const FIXTURE_WRITING_SYSTEMS = ["Japanese", "Latin"];
 
-function matchesList(
-  ids: string[] | undefined,
-  query: string | null,
-  lookup: { id: string; name: string }[]
-): boolean {
-  if (!query) return true;
-  const names = (ids ?? []).map(
-    (id) => lookup.find((entry) => entry.id === id)?.name ?? ""
-  );
-  return names.some((name) => name.toLowerCase().includes(query.toLowerCase()));
-}
+export type SnapshotAsset =
+  | "index"
+  | "nations"
+  | "writing-systems"
+  | "manifest";
 
-/**
- * Mirrors the substring semantics of the server-side Airtable formula so the specs
- * observe the same matching behavior the deployed proxy produces.
- */
-function selectLanguages(params: URLSearchParams): LanguageType[] {
-  return ALL_LANGUAGES.filter(
-    (language) =>
-      matchesText(language.code, params.get("code")) &&
-      matchesText(language.name, params.get("name")) &&
-      matchesText(language.status, params.get("status")) &&
-      matchesList(
-        language.nationOfOriginId,
-        params.get("nationOfOrigin"),
-        syntheticNations
-      ) &&
-      matchesList(
-        language.writingSystemId,
-        params.get("writingSystem"),
-        syntheticWritingSystems
-      ) &&
-      matchesList(language.spokenInId, params.get("spokenIn"), syntheticNations)
-  );
-}
+const ASSET_PATTERNS: Record<SnapshotAsset, string> = {
+  index: "**/catalogue/index.json",
+  nations: "**/catalogue/nations.json",
+  "writing-systems": "**/catalogue/writing-systems.json",
+  manifest: "**/catalogue/manifest.json",
+};
 
-export interface CatalogueMockOptions {
-  /** Endpoints that must answer with a transport failure instead of data. */
-  fail?: ("languages" | "languageDetails" | "nations" | "writingSystems")[];
-  /** Milliseconds to hold each response, to observe pending states deterministically. */
+export interface SnapshotFailureOptions {
+  /** Assets that must answer with a delivery failure. */
+  fail?: SnapshotAsset[];
+  /** Milliseconds to hold the affected responses, to observe pending states. */
   delayMs?: number;
-  /** Language codes the details endpoint must report as missing. */
-  missingCodes?: string[];
-}
-
-async function answer(
-  route: Route,
-  body: unknown,
-  options: CatalogueMockOptions,
-  endpoint: NonNullable<CatalogueMockOptions["fail"]>[number]
-) {
-  if (options.delayMs) {
-    await new Promise((resolve) => setTimeout(resolve, options.delayMs));
-  }
-
-  if (options.fail?.includes(endpoint)) {
-    await route.fulfill({
-      status: 500,
-      contentType: "application/json",
-      body: JSON.stringify({ message: "Synthetic failure" }),
-    });
-    return;
-  }
-
-  await route.fulfill({
-    status: 200,
-    contentType: "application/json",
-    body: JSON.stringify(body),
-  });
 }
 
 /**
- * Intercepts every catalogue endpoint in the browser. No request reaches Airtable,
- * so the specs are reproducible on any machine and need no credentials.
+ * Injects delivery failures or delays into snapshot assets. Assets that are not listed are
+ * served normally by the application, so a spec only overrides what it is testing.
  */
-export async function mockCatalogueApi(
+export async function failSnapshotAssets(
   page: Page,
-  options: CatalogueMockOptions = {}
+  options: SnapshotFailureOptions
 ): Promise<void> {
-  await page.route("**/api/nations", (route) =>
-    answer(route, { data: syntheticNations }, options, "nations")
-  );
+  const handle = async (route: Route) => {
+    if (options.delayMs) {
+      await new Promise((resolve) => setTimeout(resolve, options.delayMs));
+    }
+    await route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ message: "Synthetic delivery failure" }),
+    });
+  };
 
-  await page.route("**/api/writing-systems", (route) =>
-    answer(route, { data: syntheticWritingSystems }, options, "writingSystems")
-  );
-
-  await page.route("**/api/languages/*", (route) => {
-    const code = decodeURIComponent(
-      new URL(route.request().url()).pathname.split("/").pop() ?? ""
-    );
-    const found = options.missingCodes?.includes(code)
-      ? null
-      : (ALL_LANGUAGES.find(
-          (language) => language.code.toLowerCase() === code.toLowerCase()
-        ) ?? null);
-
-    return answer(route, { data: found }, options, "languageDetails");
-  });
-
-  await page.route("**/api/languages?*", (route) => {
-    const params = new URL(route.request().url()).searchParams;
-    const matches = selectLanguages(params);
-    const start = Number(params.get("offset") ?? 0);
-    const slice = matches.slice(start, start + PAGE_SIZE);
-    const nextOffset =
-      start + PAGE_SIZE < matches.length ? String(start + PAGE_SIZE) : null;
-
-    return answer(route, { data: slice, nextOffset }, options, "languages");
-  });
+  for (const asset of options.fail ?? []) {
+    await page.route(ASSET_PATTERNS[asset], handle);
+  }
 }

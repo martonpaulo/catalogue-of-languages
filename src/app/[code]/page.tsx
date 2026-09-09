@@ -1,42 +1,50 @@
-"use client";
-
-import { notFound, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import LanguageDetails from "@/features/languages/components/LanguageDetails";
 import { LanguageHeader } from "@/features/languages/components/LanguageHeader";
-import { useLanguageDetails } from "@/features/languages/hooks/useLanguageDetails";
-import { CenteredPageLayout } from "@/shared/components/CenteredPageLayout";
+import {
+  readEnrichedLanguage,
+  readManifest,
+} from "@/features/languages/server/snapshotSource";
 import { ContentContainer } from "@/shared/components/ContentContainer";
-import { LoadingIndicator } from "@/shared/components/LoadingIndicator";
 
-export default function LanguagePage() {
-  const { code } = useParams<{ code: string }>();
+/** Only codes published by the snapshot have a page; anything else resolves to 404. */
+export const dynamicParams = false;
 
-  if (!code || code.length !== 3) notFound();
+export async function generateStaticParams() {
+  const manifest = await readManifest();
+  return manifest.codes.map((code) => ({ code }));
+}
 
-  const { language } = useLanguageDetails(code);
-  const [loadingTimeoutPassed, setLoadingTimeoutPassed] = useState(false);
+interface LanguagePageProps {
+  params: Promise<{ code: string }>;
+}
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoadingTimeoutPassed(true), 5000);
-    return () => clearTimeout(timer);
-  }, []);
+export async function generateMetadata({
+  params,
+}: LanguagePageProps): Promise<Metadata> {
+  const { code } = await params;
+  const language = await readEnrichedLanguage(code);
 
-  if (!language) {
-    if (loadingTimeoutPassed) notFound();
-    return (
-      <CenteredPageLayout>
-        <LoadingIndicator size="large" message="Loading language details..." />
-      </CenteredPageLayout>
-    );
-  }
+  if (!language) return { title: "Language not found" };
+
+  return {
+    title: `${language.name} | Catalogue of Languages`,
+    description:
+      language.description ??
+      `${language.name} (${code.toUpperCase()}) in the Catalogue of Languages.`,
+  };
+}
+
+export default async function LanguagePage({ params }: LanguagePageProps) {
+  const { code } = await params;
+  const language = await readEnrichedLanguage(code);
+
+  if (!language) notFound();
 
   return (
     <ContentContainer>
-      {language.name && (
-        <title>{`${language.name} | Catalogue of Languages`}</title>
-      )}
       <LanguageHeader
         name={language.name}
         code={code}

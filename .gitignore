@@ -49,3 +49,11 @@ DRAFT.md
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# generated snapshot
+/public/catalogue/
+/public/catalogue.staging/
+
+# build-only snapshot data
+/.snapshot/
+/.snapshot.staging/
