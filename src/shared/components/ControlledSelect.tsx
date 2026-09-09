@@ -1,4 +1,10 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { Control, Controller } from "react-hook-form";
 
 import { LanguageFilterFormValues } from "@/features/languages/components/languageFilters.schema";
@@ -22,6 +28,10 @@ export interface ControlledSelectProps {
   options: Option[];
   renderOption?: (option: Option) => React.ReactNode;
   sx?: object;
+  /** The options are still being loaded, so the control cannot be used yet. */
+  isLoading?: boolean;
+  /** The options could not be loaded; explains why instead of looking empty. */
+  errorMessage?: string;
 }
 
 export function ControlledSelect({
@@ -32,9 +42,19 @@ export function ControlledSelect({
   options,
   renderOption,
   sx,
+  isLoading = false,
+  errorMessage,
 }: ControlledSelectProps) {
+  const unavailable = isLoading || Boolean(errorMessage);
+  const helperText = errorMessage ?? (isLoading ? `Loading ${label}…` : null);
+
   return (
-    <FormControl size="small" sx={{ width: "100%", ...sx }}>
+    <FormControl
+      size="small"
+      sx={{ width: "100%", ...sx }}
+      error={Boolean(errorMessage)}
+      disabled={unavailable}
+    >
       <InputLabel id={`${name}-label`} size="small">
         {label}
       </InputLabel>
@@ -57,6 +77,7 @@ export function ControlledSelect({
           </Select>
         )}
       />
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
 }

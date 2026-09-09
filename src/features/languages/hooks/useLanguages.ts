@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 
 import { LanguageFilterFormValues } from "@/features/languages/components/languageFilters.schema";
 import { fetchLanguageIndex } from "@/features/languages/services/languageAPI";
+import { LanguageType } from "@/features/languages/types/language.type";
 import { enrichLanguagesDataSetListWithNames } from "@/features/languages/utils/languageEnrichers";
 import { filterLanguages } from "@/features/languages/utils/languageFilters";
 import { useNations } from "@/features/nations/hooks/useNations";
@@ -11,18 +12,50 @@ import { useWritingSystems } from "@/features/writingSystems/hooks/useWritingSys
 /** Rows revealed per step, matching the previous remote page size. */
 export const LANGUAGE_PAGE_SIZE = 50;
 
-export function useLanguages(languageFilterParams: LanguageFilterFormValues) {
-  const { nations, nationsIsError } = useNations();
-  const { writingSystems, writingSystemsIsError } = useWritingSystems();
+/**
+ * Every dependency the catalogue needs before it can show a row, so a page can tell a
+ * pending dependency from a failed one, and both from a search that genuinely matched
+ * nothing.
+ */
+export type LanguagesStatus = "pending" | "error" | "ready";
+
+export interface LanguagesResult {
+  languages: LanguageType[];
+  status: LanguagesStatus;
+  /** Describes the failed dependencies and retries exactly those. */
+  errorMessage: string | null;
+  retry: () => void;
+  hasNextPage: boolean;
+  revealMore: () => void;
+}
+
+export function useLanguages(
+  languageFilterParams: LanguageFilterFormValues
+): LanguagesResult {
+  const { nations, nationsIsError, retryNations } = useNations();
+  const {
+    writingSystems,
+    writingSystemsIsError,
+    retryWritingSystems,
+  } = useWritingSystems();
 
   const {
     data: index,
     isError: indexIsError,
-    isLoading: indexIsLoading,
+    refetch: retryIndex,
   } = useQuery({
     queryKey: ["languageIndex"],
     queryFn: fetchLanguageIndex,
   });
+
+  const failed = useMemo(
+    () => ({
+      index: indexIsError,
+      nations: nationsIsError,
+      writingSystems: writingSystemsIsError,
+    }),
+    [indexIsError, nationsIsError, writingSystemsIsError]
+  );
 
   const enrichedLanguages = useMemo(() => {
     if (!index || !nations || !writingSystems) return null;
@@ -48,14 +81,48 @@ export function useLanguages(languageFilterParams: LanguageFilterFormValues) {
     [matchingLanguages, revealedCount]
   );
 
+  const retry = useCallback(() => {
+    if (failed.index) void retryIndex();
+    if (failed.nations) void retryNations();
+    if (failed.writingSystems) void retryWritingSystems();
+  }, [failed, retryIndex, retryNations, retryWritingSystems]);
+
+  const status: LanguagesStatus = hasAnyFailure(failed)
+    ? "error"
+    : matchingLanguages
+      ? "ready"
+      : "pending";
+
   return {
     languages,
-    isLoading: indexIsLoading || !enrichedLanguages,
-    isError: indexIsError || nationsIsError || writingSystemsIsError,
-    isFetchingNextPage: false,
-    hasNextPage: revealedCount < (matchingLanguages?.length ?? 0),
-    fetchNextPage: revealMore,
+    status,
+    errorMessage: hasAnyFailure(failed) ? describeFailure(failed) : null,
+    retry,
+    // A revealed step only advances over data that is already loaded and complete.
+    hasNextPage:
+      status === "ready" && revealedCount < (matchingLanguages?.length ?? 0),
+    revealMore,
   };
+}
+
+type FailedDependencies = Record<
+  "index" | "nations" | "writingSystems",
+  boolean
+>;
+
+function hasAnyFailure(failed: FailedDependencies): boolean {
+  return failed.index || failed.nations || failed.writingSystems;
+}
+
+function describeFailure(failed: FailedDependencies): string {
+  if (failed.index) return "The language catalogue could not be loaded.";
+
+  const missing = [
+    failed.nations && "nations",
+    failed.writingSystems && "writing systems",
+  ].filter(Boolean);
+
+  return `The catalogue needs ${missing.join(" and ")} to show its results, and that data could not be loaded.`;
 }
 
 /**

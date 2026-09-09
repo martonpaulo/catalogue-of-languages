@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchNationsData } from "@/features/nations/services/nationAPI";
 
 export function useNations() {
-  const { data, isError, isLoading, isSuccess } = useQuery({
+  const { data, isError, isLoading, isSuccess, refetch } = useQuery({
     queryKey: ["nations"],
     queryFn: fetchNationsData,
   });
@@ -13,5 +13,6 @@ export function useNations() {
     nationsIsError: isError,
     nationsIsLoading: isLoading,
     nationsIsSuccess: isSuccess,
+    retryNations: refetch,
   };
 }

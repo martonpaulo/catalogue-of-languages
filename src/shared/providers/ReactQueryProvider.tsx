@@ -14,6 +14,9 @@ export function ReactQueryProvider({ children }: ReactQueryProviderProps) {
         defaultOptions: {
           queries: {
             staleTime: Infinity,
+            // The snapshot assets are static; one extra attempt is enough before a
+            // failure becomes a state the person can act on.
+            retry: 1,
             refetchOnMount: false,
             refetchOnWindowFocus: false,
           },

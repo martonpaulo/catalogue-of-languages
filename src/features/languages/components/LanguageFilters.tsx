@@ -29,8 +29,16 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
       defaultValues: filtersAfterRefresh(),
     });
 
-  const { nations } = useNations();
-  const { writingSystems } = useWritingSystems();
+  const { nations, nationsIsLoading, nationsIsError } = useNations();
+  const { writingSystems, writingSystemsIsLoading, writingSystemsIsError } =
+    useWritingSystems();
+
+  const nationsErrorMessage = nationsIsError
+    ? "Nations could not be loaded."
+    : undefined;
+  const writingSystemsErrorMessage = writingSystemsIsError
+    ? "Writing systems could not be loaded."
+    : undefined;
 
   const sortedNations = useMemo(
     () =>
@@ -135,6 +143,8 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             control={control}
             defaultValue={filtersAfterRefresh().nationOfOrigin}
             options={nationOptions}
+            isLoading={nationsIsLoading}
+            errorMessage={nationsErrorMessage}
           />
 
           <ControlledSelect
@@ -143,6 +153,8 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             control={control}
             defaultValue={filtersAfterRefresh().writingSystem}
             options={writingSystemOptions}
+            isLoading={writingSystemsIsLoading}
+            errorMessage={writingSystemsErrorMessage}
           />
 
           <ControlledSelect
@@ -151,6 +163,8 @@ export function LanguageFilters({ onFiltersChange }: LanguageFiltersProps) {
             control={control}
             defaultValue={filtersAfterRefresh().spokenIn}
             options={nationOptions}
+            isLoading={nationsIsLoading}
+            errorMessage={nationsErrorMessage}
           />
         </Stack>
 

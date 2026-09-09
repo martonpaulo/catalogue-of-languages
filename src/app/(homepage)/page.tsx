@@ -21,14 +21,8 @@ export default function Home() {
 
   const { ref, inView } = useInView();
 
-  const {
-    languages,
-    isLoading,
-    isError,
-    fetchNextPage,
-    isFetchingNextPage,
-    hasNextPage,
-  } = useLanguages(filters);
+  const { languages, status, errorMessage, retry, hasNextPage, revealMore } =
+    useLanguages(filters);
 
   const handleFiltersChange = useCallback(
     (newFilters: LanguageFilterFormValues) => {
@@ -38,10 +32,8 @@ export default function Home() {
   );
 
   useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+    if (inView && hasNextPage) revealMore();
+  }, [inView, hasNextPage, revealMore]);
 
   return (
     <ContentContainer>
@@ -52,11 +44,15 @@ export default function Home() {
         <ProjectAttribution />
       </Stack>
 
-      {isLoading ? (
+      {status === "error" && errorMessage && (
+        <ErrorMessage message={errorMessage} onRetry={retry} />
+      )}
+
+      {status === "pending" && (
         <LoadingIndicator size="large" message="Loading languages..." />
-      ) : isError ? (
-        <ErrorMessage message="An error occurred while loading languages." />
-      ) : (
+      )}
+
+      {status === "ready" && (
         <Stack>
           <LanguageTable languages={languages} />
           {hasNextPage && (

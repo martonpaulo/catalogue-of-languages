@@ -4,7 +4,9 @@ import { fetchWritingSystemsData } from "@/features/writingSystems/services/writ
 import { WritingSystemType } from "@/features/writingSystems/types/writingSystem.type";
 
 export function useWritingSystems() {
-  const { data, isError, isLoading, isSuccess } = useQuery<WritingSystemType[]>({
+  const { data, isError, isLoading, isSuccess, refetch } = useQuery<
+    WritingSystemType[]
+  >({
     queryKey: ["writingSystems"],
     queryFn: fetchWritingSystemsData,
   });
@@ -14,5 +16,6 @@ export function useWritingSystems() {
     writingSystemsIsLoading: isLoading,
     writingSystemsIsError: isError,
     writingSystemsIsSuccess: isSuccess,
+    retryWritingSystems: refetch,
   };
 }
