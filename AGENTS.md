@@ -7,7 +7,7 @@
 - Benefit-first description: Interactive table featuring all documented languages from the Wikitongues database, providing an easy way to explore global linguistic diversity 🌎
 - Repository: `martonpaulo/catalogue-of-languages` (public).
 - Public identifiers: npm package `catalogue-of-languages`, private/non-publishable package.
-- Landing page: the application itself, published at `https://martonpaulo.com/catalogue-of-languages/` through GitHub Pages. The cutover was completed and verified on 2026-09-09, so the About homepage and `package.json` `homepage` now point there. The Vercel deployment and its token still exist and are retired only on an explicit separate request.
+- Landing page: the application itself, published at `https://martonpaulo.com/catalogue-of-languages/` through GitHub Pages. The cutover was completed and verified on 2026-09-09, so the About homepage and `package.json` `homepage` now point there. Vercel is retired from this repository; see the release and secret-storage policy below.
 - License: `MIT`.
 - Copyright: 2025 Marton Paulo. Preserve the existing license and Wikitongues attribution.
 - Development language: English.
@@ -21,7 +21,7 @@
 - Commit subject: a commit made for an issue ends with `(#<issue number>)`.
 - Default-branch protection: no required PR review/status gate for main-only delivery; local validation remains mandatory before automatic commit/push. Preserve the current unprotected branch and do not enable auto-merge.
 - Delete branches after merge: disabled; preserve the existing setting for this main-only project.
-- Release, signing, and secret-storage policy: hosted web application, no signed binary or release artifacts. The approved target uses a static public snapshot refreshed on each successful deployment, with manual refresh available; no periodic schedule. Airtable access is build-only after migration, with credentials in GitHub Actions secrets. Do not remove the current Vercel deployment or secrets until the cutover is verified and separately authorized.
+- Release, signing, and secret-storage policy: hosted web application, no signed binary or release artifacts. Publication uses a static public snapshot refreshed on each successful deployment, with manual refresh available; no periodic schedule. Airtable access is build-only, with credentials in GitHub Actions secrets. Vercel is retired from this repository as of 2026-09-09: `VERCEL_TOKEN` is deleted and `vercel.json` disables Git deployments. The Vercel project itself, its stored Airtable environment variables and its last deployment live in the Vercel account and can only be removed there.
 - Browser acceptance targets: Chromium, Gecko and WebKit. Browser tooling owns compatible binaries; do not introduce another browser manager.
 - Remote-data persistence: only filter preferences are application-persisted. Fetched catalogue data uses in-memory query state and normal browser HTTP caching after the approved corrections. No localStorage copies of lists, details, reference tables or query caches; existing copies are tracked for removal, not silently treated as already removed.
 - Status classification: offer only categories with verified source mappings. Hide Dormant until a mapping is verified; unknown values are not asserted to belong to a known category.
