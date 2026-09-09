@@ -4,12 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
+  # A manual run always refreshes the snapshot from the source and republishes.
   workflow_dispatch:
-    inputs:
-      publish:
-        description: "Refresh the published snapshot and deploy it"
-        type: boolean
-        default: false
 
 # Cancel superseded runs on a branch, but never interrupt a publication in flight.
 concurrency:
