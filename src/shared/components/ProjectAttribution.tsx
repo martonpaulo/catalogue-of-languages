@@ -7,7 +7,7 @@ export function ProjectAttribution() {
         This data is made available by Wikitongues. For additional details about
         this project, visit{" "}
         <a
-          href="https://www.martonpaulo.com/?utm_source=catalogue-of-languages"
+          href="https://www.martonpaulo.com/?utm_source=linguae"
           target="_blank"
           rel="noreferrer"
           style={{ color: "inherit" }}

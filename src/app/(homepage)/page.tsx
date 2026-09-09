@@ -38,7 +38,7 @@ export default function Home() {
 
   return (
     <ContentContainer>
-      <Typography variant="h1">🌎 Catalogue of Languages</Typography>
+      <Typography variant="h1">🌎 Linguae</Typography>
 
       <Stack spacing={1}>
         <LanguageFilters

@@ -1,12 +1,12 @@
-# 🌎 Catalogue of Languages
+# 🌎 Linguae
 
-![License](https://img.shields.io/github/license/martonpaulo/catalogue-of-languages) ![Last Commit](https://img.shields.io/github/last-commit/martonpaulo/catalogue-of-languages) ![React Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/catalogue-of-languages/react) ![TypeScript Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/catalogue-of-languages/dev/typescript) ![CI Status](https://github.com/martonpaulo/catalogue-of-languages/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/github/license/martonpaulo/linguae) ![Last Commit](https://img.shields.io/github/last-commit/martonpaulo/linguae) ![React Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/linguae/react) ![TypeScript Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/linguae/dev/typescript) ![CI Status](https://github.com/martonpaulo/linguae/actions/workflows/ci.yml/badge.svg)
 
-**Catalogue of Languages** is an interactive table featuring all documented languages from the Wikitongues database. Built on the [_Every Language in the World_](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world) Airtable dataset, it provides an easy way to explore global linguistic diversity.
+**Linguae** is an interactive table featuring all documented languages from the Wikitongues database. Built on the [_Every Language in the World_](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world) Airtable dataset, it provides an easy way to explore global linguistic diversity.
 
 The published catalogue currently holds **7,554 languages**, **217 nations** and **126 writing systems**, and it is a purely static site: there is no backend, no runtime API and no credential in the browser.
 
-🔗 **[martonpaulo.com/catalogue-of-languages](https://martonpaulo.com/catalogue-of-languages/)**
+🔗 **[linguae.martonpaulo.com](https://linguae.martonpaulo.com/)**
 
 <img alt="The catalogue: a filter panel above a table of languages with their code, name, status, nation of origin, writing system and where they are spoken" src="public/uploads/catalogue.webp" width="900" />
 
@@ -28,11 +28,11 @@ That has three consequences worth knowing before reading the code:
 
 Data refreshes on each deployment, and a manual refresh is available. A failed or partial generation never replaces the published site.
 
-Read [the product definition](docs/product.md) for scope and non-goals, [AGENTS.md](AGENTS.md) for the working agreements, and [the backlog](https://github.com/martonpaulo/catalogue-of-languages/issues) for what is planned.
+Read [the product definition](docs/product.md) for scope and non-goals, [AGENTS.md](AGENTS.md) for the working agreements, and [the backlog](https://github.com/martonpaulo/linguae/issues) for what is planned.
 
 ## Introduction
 
-The **Catalogue of Languages** project was born out of a personal interest in languages and linguistics. As someone who enjoys learning about different writing systems, language structures, and cultural diversity, this project was a natural fit. Beyond being a technical challenge, it was also an opportunity to explore a topic I genuinely enjoy while applying my development skills.
+The **Linguae** project was born out of a personal interest in languages and linguistics. As someone who enjoys learning about different writing systems, language structures, and cultural diversity, this project was a natural fit. Beyond being a technical challenge, it was also an opportunity to explore a topic I genuinely enjoy while applying my development skills.
 
 ## 🔧 Features
 
@@ -81,8 +81,8 @@ Airtable credentials are **not** required to run the project. They are only need
 ### Run it
 
 ```bash
-git clone https://github.com/martonpaulo/catalogue-of-languages.git
-cd catalogue-of-languages
+git clone https://github.com/martonpaulo/linguae.git
+cd linguae
 npm ci
 npm run snapshot:fixture
 npm run dev
@@ -130,7 +130,7 @@ npm test
 A successful run does not verify private Airtable access, screen-reader behavior, or the deployed site. To check a published deployment:
 
 ```bash
-LIVE_URL=https://martonpaulo.com/catalogue-of-languages/ npx playwright test liveDeployment
+LIVE_URL=https://linguae.martonpaulo.com/ npx playwright test liveDeployment
 ```
 
 ## 🗂️ Architecture
@@ -232,7 +232,7 @@ Before uploading, the workflow refuses an export that is missing its entry point
 `scripts/screenshots/capture.sh` produces the images above from a real browser window on a real screen, so they keep the native macOS shadow, rounded corners and material. The method and the reason for each constraint are documented in the script itself; the short version is that an offscreen render loses the window chrome, `screencapture -o` strips the shadow, a 1x display halves the resolution silently, and an inactive window is captured with a grey traffic light.
 
 ```bash
-./scripts/screenshots/capture.sh https://martonpaulo.com/catalogue-of-languages/
+./scripts/screenshots/capture.sh https://linguae.martonpaulo.com/
 ```
 
 It launches its own browser instance under a throwaway profile, so it can only capture its own window.

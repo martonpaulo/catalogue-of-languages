@@ -2,8 +2,8 @@ import { expect, test } from "@playwright/test";
 
 import { applyNameFilter } from "./support/syntheticCatalogue";
 
-const FILTER_KEY = "@catalogue-of-languages:language-filters:test";
-const LEGACY_QUERY_CACHE_KEY = "@catalogue-of-languages:react-query-cache:test";
+const FILTER_KEY = "@linguae:language-filters:test";
+const LEGACY_QUERY_CACHE_KEY = "@linguae:react-query-cache:test";
 const UNRELATED_KEY = "unrelated-origin-key";
 
 test("writes only the filter preference to application storage", async ({

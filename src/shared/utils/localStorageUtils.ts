@@ -1,4 +1,4 @@
-const STORAGE_PREFIX = process.env.NEXT_PUBLIC_STORAGE_PREFIX ?? "";
+const STORAGE_PREFIX = process.env.NEXT_PUBLIC_STORAGE_PREFIX ?? "linguae";
 const STORAGE_VERSION =
   process.env.NEXT_PUBLIC_STORAGE_VERSION ?? "unknown-version";
 

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { BASE_PATH } from "../playwright.config";
 import { NAMED_LANGUAGE } from "./support/syntheticCatalogue";
 
-const ORIGIN = "https://martonpaulo.com";
+const ORIGIN = "https://linguae.martonpaulo.com";
 const SITE = `${ORIGIN}${BASE_PATH}/`;
 const SOCIAL_IMAGE = `${ORIGIN}${BASE_PATH}/opengraph-image.png`;
 
@@ -37,7 +37,7 @@ test.describe("published metadata", () => {
     expect(await meta(page, 'meta[property="og:type"]')).toBe("website");
     expect(await meta(page, 'meta[property="og:url"]')).toBe(SITE);
     expect(await meta(page, 'meta[property="og:site_name"]')).toBe(
-      "Catalogue of Languages"
+      "Linguae"
     );
     expect(await meta(page, 'meta[property="og:image"]')).toBe(SOCIAL_IMAGE);
     expect(await meta(page, 'meta[property="og:image:width"]')).toBe("1200");

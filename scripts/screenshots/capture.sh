@@ -25,7 +25,7 @@
 #     pixels.
 set -euo pipefail
 
-URL="${1:-https://martonpaulo.com/catalogue-of-languages/}"
+URL="${1:-https://linguae.martonpaulo.com/}"
 OUTPUT_DIRECTORY="${2:-public/uploads}"
 
 BROWSER="/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"

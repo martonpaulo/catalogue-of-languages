@@ -1,8 +1,8 @@
 import { SNAPSHOT_DIRECTORY } from "@/shared/types/snapshot.type";
 
 /**
- * Prefix the deployment is served from. Empty during development and tests, and set to the
- * published sub-path by the production build. Declared once so the framework configuration
+ * Prefix the deployment is served from. Empty: the site is served from the root of its own
+ * subdomain. Declared once so the framework configuration
  * and the snapshot asset URLs cannot disagree.
  */
 export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -17,9 +17,9 @@ export function snapshotAssetUrl(assetPath: string): string {
  * sitemap URLs cannot disagree with each other or with the deployment.
  */
 export const SITE_ORIGIN =
-  process.env.NEXT_PUBLIC_SITE_ORIGIN ?? "https://martonpaulo.com";
+  process.env.NEXT_PUBLIC_SITE_ORIGIN ?? "https://linguae.martonpaulo.com";
 
-export const SITE_NAME = "Catalogue of Languages";
+export const SITE_NAME = "Linguae";
 
 export const SITE_DESCRIPTION =
   "Interactive table featuring all documented languages from the Wikitongues database, " +

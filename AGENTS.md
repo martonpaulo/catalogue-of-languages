@@ -2,12 +2,12 @@
 
 ## Project identity and policy
 
-- Project name: `catalogue-of-languages`
-- Public name: `Catalogue of Languages` (preserve the existing globe branding).
+- Project name: `linguae`
+- Public name: `Linguae` (preserve the existing globe branding).
 - Benefit-first description: Interactive table featuring all documented languages from the Wikitongues database, providing an easy way to explore global linguistic diversity 🌎
-- Repository: `martonpaulo/catalogue-of-languages` (public).
-- Public identifiers: npm package `catalogue-of-languages`, private/non-publishable package.
-- Landing page: the application itself, published at `https://martonpaulo.com/catalogue-of-languages/` through GitHub Pages. The cutover was completed and verified on 2026-09-09, so the About homepage and `package.json` `homepage` now point there. Vercel is retired from this repository; see the release and secret-storage policy below.
+- Repository: `martonpaulo/linguae` (public).
+- Public identifiers: npm package `linguae`, private/non-publishable package.
+- Landing page: the application itself, published at `https://linguae.martonpaulo.com/` through GitHub Pages on its own subdomain (no sub-path). The About homepage and `package.json` `homepage` point there. Vercel is retired from this repository; see the release and secret-storage policy below.
 - License: `MIT`.
 - Copyright: 2025 Marton Paulo. Preserve the existing license and Wikitongues attribution.
 - Development language: English.
@@ -86,8 +86,8 @@ No other durable artifact convention is selected. Use uniquely named system temp
 
 ## Validation and completion
 
-- Current commands are `npm ci`, `npm run lint`, `npx tsc --noEmit --incremental false`, `npm run build`, and `npm run dev`. The current app requires the Airtable environment described in README; do not claim dummy values prove live API connectivity.
-- There is currently no committed test runner or test script. The first implementation requiring regression tests must establish one focused compatible harness and record the actual commands; later work reuses it instead of inventing another runner.
+- Current commands are `npm ci`, `npm run lint`, `npx tsc --noEmit --incremental false`, `npm run snapshot:fixture`, `npm run build:export`, `npm test` (or `npm run test:chromium`), and `npm run dev`. Airtable credentials are needed only by `npm run snapshot`; do not claim dummy values prove live API connectivity.
+- The committed test runner is Playwright (`tests/`, `playwright.config.ts`): `npm test` builds the static export from the fixture snapshot and drives it through Chromium, Firefox and WebKit. Reuse it instead of inventing another runner.
 - Test observable behavior at stable seams, with synthetic isolated data/storage. Do not add wrapper-only, source-text, duplicated-constant or pixel-snapshot tests. Use real browser/HTTP/build checks where a mock cannot prove the contract.
 - Run the smallest relevant checks, inspect failures before retrying, and run one broader relevant check once stable. Report exactly what ran, what failed and what remains unverified.
 - Use bounded waits and observable progress. Communicate at least once per minute during long work; inspect state before interrupting or repeating a command. Do not mistake elapsed time alone for a stall.

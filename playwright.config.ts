@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
-export const BASE_PATH = "/catalogue-of-languages";
+export const BASE_PATH = "";
 const BASE_URL = `http://localhost:${PORT}${BASE_PATH}/`;
 
 /**
@@ -9,7 +9,7 @@ const BASE_URL = `http://localhost:${PORT}${BASE_PATH}/`;
  * below maps to one of those engine families.
  *
  * The suite runs against the real static export served the way GitHub Pages serves it,
- * under the published base path. The development server is deliberately not used: its
+ * from the root of the origin. The development server is deliberately not used: its
  * unknown-route behavior differs from the exported artifact, so it cannot prove the
  * deployed 404 contract. The export is built from the synthetic fixture snapshot, so runs
  * need no credentials and never reach Airtable.
@@ -42,7 +42,7 @@ export default defineConfig({
     reuseExistingServer: false,
     timeout: 300_000,
     env: {
-      NEXT_PUBLIC_STORAGE_PREFIX: "catalogue-of-languages",
+      NEXT_PUBLIC_STORAGE_PREFIX: "linguae",
       NEXT_PUBLIC_STORAGE_VERSION: "test",
     },
   },

@@ -142,7 +142,7 @@ jobs:
 
       - name: Build the static export
         env:
-          NEXT_PUBLIC_STORAGE_PREFIX: ${{ secrets.NEXT_PUBLIC_STORAGE_PREFIX }}
+          NEXT_PUBLIC_STORAGE_PREFIX: linguae
           NEXT_PUBLIC_STORAGE_VERSION: ${{ secrets.NEXT_PUBLIC_STORAGE_VERSION }}
         run: npm run build:export
 
