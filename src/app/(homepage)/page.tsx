@@ -13,6 +13,7 @@ import { ContentContainer } from "@/shared/components/ContentContainer";
 import { ErrorMessage } from "@/shared/components/ErrorMessage";
 import { LoadingIndicator } from "@/shared/components/LoadingIndicator";
 import { ProjectAttribution } from "@/shared/components/ProjectAttribution";
+import { BASE_PATH } from "@/shared/config/deployment";
 
 export default function Home() {
   // Restored once, on mount, and owned here so the form and the query cannot disagree.
@@ -38,7 +39,21 @@ export default function Home() {
 
   return (
     <ContentContainer>
-      <Typography variant="h1">🌎 Linguae</Typography>
+      <Typography
+        variant="h1"
+        sx={{ display: "flex", alignItems: "center", gap: "0.3em" }}
+      >
+        {/* The site's own mark (the favicon), decorative: the heading's name is the word. */}
+        {/* eslint-disable-next-line @next/next/no-img-element -- a static export has no image optimizer */}
+        <img
+          src={`${BASE_PATH}/icon.svg`}
+          alt=""
+          width={40}
+          height={40}
+          style={{ width: "0.9em", height: "0.9em" }}
+        />
+        Linguae
+      </Typography>
 
       <Stack spacing={1}>
         <LanguageFilters

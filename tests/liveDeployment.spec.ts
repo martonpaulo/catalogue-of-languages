@@ -28,7 +28,7 @@ test.describe("published deployment", () => {
     await page.goto("");
 
     await expect(
-      page.getByRole("heading", { name: "🌎 Linguae" })
+      page.getByRole("heading", { name: "Linguae" })
     ).toBeVisible();
     await expect(page.getByRole("row").nth(50)).toBeVisible();
     expect(runtimeCalls).toEqual([]);

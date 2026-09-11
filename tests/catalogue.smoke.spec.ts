@@ -13,7 +13,7 @@ test.describe("catalogue smoke journey", () => {
     await page.goto("");
 
     await expect(
-      page.getByRole("heading", { name: "🌎 Linguae" })
+      page.getByRole("heading", { name: "Linguae" })
     ).toBeVisible();
     await expect(page.getByRole("row")).toHaveCount(REVEAL_STEP + 1); // + header
   });
