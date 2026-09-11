@@ -135,50 +135,6 @@ LIVE_URL=https://linguae.martonpaulo.com/ npx playwright test liveDeployment
 
 Each domain owns its types, services, hooks, mapping utilities and UI. Shared code lives in `src/shared` only when its responsibility is genuinely shared.
 
-```plaintext
-src/
-├── app/                       # Next.js App Router
-│   ├── (homepage)/page.tsx    # The catalogue
-│   ├── [code]/page.tsx        # One generated page per published language code
-│   ├── layout.tsx             # Providers, site metadata, structured data
-│   ├── not-found.tsx          # The exported 404
-│   ├── sitemap.ts             # Every generated page, under the deployed prefix
-│   └── icon.svg
-├── features/
-│   ├── languages/
-│   │   ├── components/        # Table, row, filters, status chip, details
-│   │   ├── hooks/             # Composed catalogue state and published statuses
-│   │   ├── server/            # Build-time snapshot reader for generated pages
-│   │   ├── services/          # Snapshot index reader
-│   │   ├── styles/            # Shared language styles
-│   │   ├── types/             # Language and status types
-│   │   └── utils/             # Mapping, enrichment, filtering
-│   ├── nations/               # Same shape
-│   └── writingSystems/        # Same shape
-└── shared/
-    ├── components/            # Layout, loading, error, controlled select
-    ├── config/                # Base path, origin and site identity, declared once
-    ├── providers/             # Theme and query client
-    ├── services/              # Snapshot asset reader
-    ├── styles/                # Theme and fonts
-    ├── types/                 # Airtable record and snapshot contracts
-    └── utils/                 # Guarded browser storage
-
-scripts/
-├── snapshot/                  # Build-only Airtable reader and snapshot builder
-├── fixtures/                  # Synthetic source for credential-free generation
-├── screenshots/               # README capture, documented in the script itself
-├── generate-snapshot.ts       # Real, fixture and scaled generation
-├── generate-social-card.ts    # The 1200x630 social card
-├── measure-derivation.ts      # Derivation benchmark
-└── serve-export.ts            # Static server with GitHub Pages semantics
-
-tests/                         # Playwright acceptance suite
-.github/
-├── workflows/ci.yml           # Validation, acceptance and publication
-└── scripts/                   # Path gating and artifact verification
-```
-
 ## 📦 The published snapshot
 
 The generator writes two sets of files. Only the first is served.
@@ -224,16 +180,6 @@ The five Airtable variables are used by the snapshot generator and reach no brow
 A pull request cannot reach publication, from this repository or a fork. When the base revision of a push cannot be compared, every path is treated as changed rather than as no change, so nothing is skipped on a guess.
 
 Before uploading, the workflow refuses an export that is missing its entry points, has no generated language pages, or contains any Airtable variable name or the Airtable host.
-
-## 📸 Screenshots
-
-`scripts/screenshots/capture.sh` produces the images above from a real browser window on a real screen, so they keep the native macOS shadow, rounded corners and material. The method and the reason for each constraint are documented in the script itself; the short version is that an offscreen render loses the window chrome, `screencapture -o` strips the shadow, a 1x display halves the resolution silently, and an inactive window is captured with a grey traffic light.
-
-```bash
-./scripts/screenshots/capture.sh https://linguae.martonpaulo.com/
-```
-
-It launches its own browser instance under a throwaway profile, so it can only capture its own window.
 
 ## 🔖 Commit strategy
 
