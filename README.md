@@ -33,7 +33,7 @@ flowchart LR
 
 <br />
 
-## 🌱 Quick Start
+## Quick Start
 
 ```bash
 git clone https://github.com/martonpaulo/linguae.git
@@ -59,7 +59,7 @@ Prerequisites: **Node.js 22 or newer** (CI runs 22) and npm.
 
 <br />
 
-## 🛠 Commands
+## Commands
 
 | Command | Description |
 | --- | --- |
@@ -78,7 +78,7 @@ Prerequisites: **Node.js 22 or newer** (CI runs 22) and npm.
 
 <br />
 
-## 🔐 Secrets and variables
+## Secrets and variables
 
 | Variable | Where | Purpose |
 | --- | --- | --- |
