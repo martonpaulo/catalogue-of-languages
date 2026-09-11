@@ -33,8 +33,7 @@ flowchart LR
 
 <br />
 
-## Quick Start
-
+## 🌱 Quick Start
 ```bash
 git clone https://github.com/martonpaulo/linguae.git
 cd linguae
@@ -59,8 +58,7 @@ Prerequisites: **Node.js 22 or newer** (CI runs 22) and npm.
 
 <br />
 
-## Commands
-
+## 🛠 Commands
 | Command | Description |
 | --- | --- |
 | `npm run validate` | The full gate before a commit: `lint`, `tsc --noEmit`, then the acceptance suite. |
@@ -78,8 +76,7 @@ Prerequisites: **Node.js 22 or newer** (CI runs 22) and npm.
 
 <br />
 
-## Secrets and variables
-
+## 🔐 Secrets and variables
 | Variable | Where | Purpose |
 | --- | --- | --- |
 | `AIRTABLE_API_KEY` | Build only | Airtable personal access token with read access |
