@@ -111,6 +111,8 @@ Read [the product definition](docs/product.md) for scope and non-goals, [AGENTS.
 the working agreements, [CONTRIBUTING.md](CONTRIBUTING.md) to report a bug or propose a change, and
 [the backlog](https://github.com/martonpaulo/linguae/issues) for what is planned.
 
+<br />
+
 ## Features
 
 1. **Table display and incremental loading**
@@ -128,6 +130,8 @@ the working agreements, [CONTRIBUTING.md](CONTRIBUTING.md) to report a bug or pr
 
    - A page per language with alternate names, dialects, status notes, genealogy, demographics, use, development, typology, description, writing systems and nations.
    - Reachable by a real link, so it can be opened with the keyboard, in a new tab, or copied.
+
+<br />
 
 ## Tech stack
 
@@ -148,6 +152,8 @@ do not: their content is in the exported HTML.
 There is no HTTP client dependency — the build-time reader and the browser both use `fetch`. There
 is no client state-management library: TanStack Query owns fetched data and React owns the rest.
 Nothing but the filter preferences is written to browser storage.
+
+<br />
 
 ## Validation
 
@@ -170,10 +176,14 @@ site. To check a published deployment, point the live suite at its origin:
 LIVE_URL=<deployed origin> npx playwright test liveDeployment
 ```
 
+<br />
+
 ## Architecture
 
 Each domain owns its types, services, hooks, mapping utilities and UI. Shared code lives in
 `src/shared` only when its responsibility is genuinely shared.
+
+<br />
 
 ## The published snapshot
 
@@ -194,6 +204,8 @@ nothing.
 Records without a usable three-letter code or a name are rejected, as are duplicate codes. The
 generator reports how many it skipped and by record id — never by content.
 
+<br />
+
 ## Continuous integration
 
 `.github/workflows/ci.yml` has three responsibilities, and they cost very different amounts:
@@ -211,6 +223,8 @@ skipped on a guess.
 Before uploading, the workflow refuses an export that is missing its entry points, has no generated
 language pages, or contains any Airtable variable name or the Airtable host.
 
+<br />
+
 ## Commit strategy
 
 One commit per subject, directly on `main`.
@@ -226,6 +240,8 @@ One commit per subject, directly on `main`.
 
 A commit made for an issue ends with `(#<issue number>)`.
 
+<br />
+
 ## Challenges faced
 
 1. **Airtable's SDK documentation** was incomplete, so the reader is written directly against the REST API with `fetch`, following offsets serially per table.
@@ -238,6 +254,8 @@ A commit made for an issue ends with `(#<issue number>)`.
 
 5. **The source data is inconsistent.** Sixteen records carry an unusable language code and are skipped; unrecognised status labels are deliberately mapped to no category at all, because presenting them as a known one would be a fabrication.
 
+<br />
+
 ## Possible improvements
 
 1. **A smaller catalogue index.** It is 1.29 MB raw and 227 KB gzipped, which is the largest thing a first visit downloads.
@@ -246,6 +264,8 @@ A commit made for an issue ends with `(#<issue number>)`.
 
 3. **Multi-value filters**, so several statuses or nations can be selected at once.
 
+<br />
+
 ## Limitations
 
 - The catalogue is a **build-time snapshot**, so a correction in Airtable appears only after the next deployment or a manual refresh.
@@ -253,6 +273,8 @@ A commit made for an issue ends with `(#<issue number>)`.
 - Sixteen source records carry an unusable language code and are not published; unrecognised status labels are shown as no category rather than guessed.
 - Filters accept **one value per category**, and there are no routes per nation or writing system.
 - The catalogue index is 1.29 MB raw (227 KB gzipped) and is downloaded in full on a first visit.
+
+<br />
 
 ## License
 
