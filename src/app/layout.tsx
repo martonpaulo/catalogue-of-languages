@@ -71,6 +71,15 @@ export default async function RootLayout({
     size: `${manifest.languageCount} languages`,
   };
 
+  // Google names the site in its results from this node on the home page:
+  // https://developers.google.com/search/docs/appearance/site-names
+  const website = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    url: canonicalUrl(),
+  };
+
   return (
     <html lang="en">
       <body className={poppins.variable}>
@@ -78,6 +87,10 @@ export default async function RootLayout({
           type="application/ld+json"
           // The content is built here from the snapshot, never from user input.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
         />
         <AppThemeProvider>
           <ReactQueryProvider>
