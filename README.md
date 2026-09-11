@@ -22,6 +22,13 @@ The project was born out of a personal interest in languages and linguistics, an
 Airtable is read **at build time only**, projected onto an explicit list of public fields, and
 written as one versioned snapshot that the exported HTML carries with it.
 
+```mermaid
+flowchart LR
+  airtable[Airtable base] -->|build, with secrets| snapshot[(Versioned snapshot)]
+  snapshot -->|next build| export[Static export]
+  export --> pages[GitHub Pages]
+```
+
 ---
 
 <br />
@@ -97,10 +104,6 @@ credential values out of Git, out of commit messages and out of issues.
 Airtable is read at build time. A generator projects the records onto an explicit list of public
 fields, validates them, and writes one versioned snapshot. The site is then exported as static
 HTML and published to GitHub Pages.
-
-```text
-Airtable  ──(build, with secrets)──►  snapshot  ──(next build)──►  static export  ──►  GitHub Pages
-```
 
 That has three consequences worth knowing before reading the code:
 
