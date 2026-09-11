@@ -6,7 +6,7 @@
 
 Interactive table featuring all documented languages from the Wikitongues database, providing an easy way to explore global linguistic diversity.
 
-[![CI](https://github.com/martonpaulo/linguae/actions/workflows/ci.yml/badge.svg)](https://github.com/martonpaulo/linguae/actions/workflows/ci.yml) [![Next.js 15.5](https://img.shields.io/badge/Next.js-15.5-000000)](https://nextjs.org/) [![React 19](https://img.shields.io/badge/React-19-149eca)](https://react.dev/) [![TypeScript 5.7](https://img.shields.io/badge/TypeScript-5.7-3178c6)](https://www.typescriptlang.org/)
+[![Validate](https://github.com/martonpaulo/linguae/actions/workflows/validate.yml/badge.svg)](https://github.com/martonpaulo/linguae/actions/workflows/validate.yml) [![Next.js 15.5](https://img.shields.io/badge/Next.js-15.5-000000)](https://nextjs.org/) [![React 19](https://img.shields.io/badge/React-19-149eca)](https://react.dev/) [![TypeScript 5.7](https://img.shields.io/badge/TypeScript-5.7-3178c6)](https://www.typescriptlang.org/)
 
 </div>
 
@@ -210,7 +210,7 @@ generator reports how many it skipped and by record id — never by content.
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` has three responsibilities, and they cost very different amounts:
+`.github/workflows/validate.yml` has three responsibilities, and they cost very different amounts:
 
 | Job | Runs on | Secrets |
 | --- | --- | --- |

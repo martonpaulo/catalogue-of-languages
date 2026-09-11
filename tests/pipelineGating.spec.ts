@@ -116,7 +116,7 @@ test.describe("pipeline path gate", () => {
   test("runs everything when the workflow itself changes", async () => {
     const repo = await repository();
     const base = repo.commit(["README.md"]);
-    const head = repo.commit([".github/workflows/ci.yml"]);
+    const head = repo.commit([".github/workflows/validate.yml"]);
 
     expect(await runGate(repo, { EVENT: "push", BASE: base, HEAD: head })).toEqual({
       code: "true",
