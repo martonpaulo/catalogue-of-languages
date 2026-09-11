@@ -114,7 +114,7 @@ npm run dev
 | `npm run test:chromium` | The same suite in one engine, for faster iteration. |
 | `npm run measure:derivation` | Benchmarks enrichment, filtering and revealing at 50 to 8,000 languages. |
 | `npm run snapshot:scaled` | Generates an 8,000-language synthetic snapshot, for feasibility measurement. |
-| `npm run social-card` | Regenerates `public/opengraph-image.png`. |
+| `npm run social-card` | Renders `design/social-card/social-card.html` into `public/social-card.jpg` (on a Mac). |
 
 ## ✅ Validation
 

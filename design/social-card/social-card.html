@@ -1,0 +1,70 @@
+<!doctype html>
+<!-- Linguae social card. Source of truth for public/social-card.jpg, served at
+     https://linguae.martonpaulo.com/social-card.jpg (1200x630). Never edit the JPEG.
+     Render on a Mac (the drawn interface uses the system font): npm run social-card
+     System, grid and contrast rules: the social card standard (skill-deck#261).
+     Fonts: Gabarito and Figtree (OFL, fonts/*-OFL.txt), the typefaces of martonpaulo.com. -->
+<meta charset="utf-8">
+<title>Linguae social card</title>
+<style>
+@font-face { font-family: "Gabarito"; font-weight: 700; src: url(fonts/gabarito-latin-700-normal.woff2); }
+@font-face { font-family: "Figtree"; font-weight: 400; src: url(fonts/figtree-latin-400-normal.woff2); }
+@font-face { font-family: "Figtree"; font-weight: 500; src: url(fonts/figtree-latin-500-normal.woff2); }
+@font-face { font-family: "Figtree"; font-weight: 600; src: url(fonts/figtree-latin-600-normal.woff2); }
+@font-face { font-family: "Figtree"; font-weight: 700; src: url(fonts/figtree-latin-700-normal.woff2); }
+html, body { margin: 0; }
+.card { position: relative; width: 1200px; height: 630px; overflow: hidden; font-family: "Figtree", sans-serif;
+        color: var(--ink); background: var(--gradient); }
+.card::before { content: ""; position: absolute; inset: 0; background: var(--glow, none); }
+/* One grid for every card: the copy block is centred vertically in a 440px column at x=96;
+   the product visual always starts at x=600, a fixed gutter. */
+.copy { position: absolute; left: 96px; top: 50%; transform: translateY(-50%); width: 440px; z-index: 2; }
+.icon { width: 104px; height: 104px; display: block; margin-bottom: 30px; filter: drop-shadow(0 16px 26px rgba(0,0,0,.22)); }
+.eyebrow { display: inline-block; margin: 0 0 20px; padding: 8px 16px; border-radius: 999px;
+           background: var(--pill-bg); border: 1px solid var(--pill-line);
+           font-weight: 700; font-size: 19px; letter-spacing: .1em; text-transform: uppercase; }
+h1 { margin: 0; font: 700 88px/1 "Gabarito", sans-serif; letter-spacing: -0.03em; }
+.promise { margin: 20px 0 0; font-weight: 500; font-size: 38px; line-height: 1.2; letter-spacing: -0.01em;
+           color: var(--ink-soft); text-wrap: balance; }
+.domain { margin: 34px 0 0; font-size: 24px; font-weight: 500; color: var(--ink-soft); }
+/* The drawn interface: the system font, the way the real app renders. */
+.ui { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; color: #1f2937; }
+.win { position: absolute; background: #fff; border-radius: 22px;
+       box-shadow: 0 40px 80px rgba(15,23,42,.30), 0 8px 20px rgba(15,23,42,.12); }
+.bar { height: 11px; border-radius: 6px; background: #e5e7eb; }
+
+.card { --gradient: linear-gradient(135deg,#6a1030 0%,#86193d 38%,#a52a52 68%,#c64b72 100%); --glow: radial-gradient(640px 520px at 94% 55%,rgba(255,200,215,.22),transparent 65%); --ink: #fff; --ink-soft: rgba(255,255,255,.92);
+        --pill-bg: rgba(255,255,255,.14); --pill-line: rgba(255,255,255,.38); }
+.app{left:600px;top:50%;transform:translateY(-50%);width:780px;height:520px;border-radius:16px;background:#fff;overflow:hidden}
+.hd{display:flex;align-items:center;gap:9px;padding:18px 22px 12px;font-size:21px;font-weight:600;color:#111827}
+.hd svg{width:24px;height:24px}
+.filters{margin:0 22px;padding:12px;border:1px solid #e5e7eb;border-radius:8px;display:grid;grid-template-columns:118px 1fr;gap:9px}
+.in{height:30px;border:1px solid #d1d5db;border-radius:5px;font-size:12px;color:#6b7280;display:flex;align-items:center;padding:0 9px;justify-content:space-between}
+.row4{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.btns{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px}
+.btn{font-size:10.5px;font-weight:600;letter-spacing:.04em;padding:7px 11px;border-radius:5px}
+.btn.o{border:1px solid #ce93d8;color:#9c27b0}.btn.f{background:#1976d2;color:#fff}
+table{margin:14px 22px 0;width:calc(100% - 44px);border-collapse:collapse;font-size:12.5px}
+th{background:#e3f0fd;text-align:left;font-weight:500;color:#1f2937;padding:9px 10px}
+td{padding:9px 10px;border-bottom:1px solid #eef0f3;color:#111827;white-space:nowrap}
+td .bar{display:inline-block;height:9px;vertical-align:middle;background:#e5e7eb}
+.nm{display:flex;align-items:center;gap:6px}.nm svg{width:13px;height:13px;flex:0 0 auto}
+.st{display:inline-block;font-size:11px;font-weight:600;color:#fff;padding:2px 8px;border-radius:10px}
+.st.v{background:#2e7d32}.st.t{background:#ef6c00}.st.e{background:#c62828}
+</style>
+<div class="card">
+  <div class="copy">
+    <img class="icon" src="../../src/app/icon.svg" alt="">
+    <p class="eyebrow">Free · 7,500+ languages</p>
+    <h1>Linguae</h1>
+    <p class="promise">Every language, searchable in one table</p>
+    <p class="domain">linguae.martonpaulo.com</p>
+  </div>
+  <div class="win app ui">
+    <div class="hd"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#b3214b"/><path d="M20 12h24a10 10 0 0 1 10 10v14a10 10 0 0 1-10 10H29l-11 8 2-8a10 10 0 0 1-10-10V22a10 10 0 0 1 10-10z" fill="#fff"/><g fill="none" stroke="#b3214b" stroke-width="2.6"><circle cx="32" cy="29" r="11"/><ellipse cx="32" cy="29" rx="4.6" ry="11"/><path d="M21 29h22"/></g></svg>Linguae</div>
+    <div class="filters"><div class="in">Language Code</div><div class="in">Language Name</div>
+      <div class="row4"><div class="in">Status <span>▾</span></div><div class="in">Nation of Origin <span>▾</span></div><div class="in">Writing System <span>▾</span></div><div class="in">Spoken In <span>▾</span></div></div>
+      <div class="btns"><span class="btn o">RESET FILTERS</span><span class="btn f">APPLY FILTERS</span></div></div>
+    <table><tr><th>Code</th><th>Name</th><th>Status</th><th>Nation of Origin</th><th>Writing System</th></tr><tr><td>AAA</td><td><span class="nm"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span class="bar" style="width:62px"></span></span></td><td><span class="st v">vigorous</span></td><td><span class="bar" style="width:58px"></span></td><td><span class="bar" style="width:34px"></span></td></tr><tr><td>AAB</td><td><span class="nm"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span class="bar" style="width:78px"></span></span></td><td><span class="st v">vigorous</span></td><td><span class="bar" style="width:58px"></span></td><td><span class="bar" style="width:34px"></span></td></tr><tr><td>AAC</td><td><span class="nm"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span class="bar" style="width:40px"></span></span></td><td><span class="st t">threatened</span></td><td><span class="bar" style="width:80px"></span></td><td><span class="bar" style="width:34px"></span></td></tr><tr><td>AAD</td><td><span class="nm"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span class="bar" style="width:52px"></span></span></td><td><span class="st v">vigorous</span></td><td><span class="bar" style="width:80px"></span></td><td><span class="bar" style="width:34px"></span></td></tr><tr><td>AAE</td><td><span class="nm"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span class="bar" style="width:92px"></span></span></td><td><span class="st t">threatened</span></td><td><span class="bar" style="width:40px"></span></td><td><span class="bar" style="width:34px"></span></td></tr><tr><td>AAF</td><td><span class="nm"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span class="bar" style="width:66px"></span></span></td><td><span class="st t">threatened</span></td><td><span class="bar" style="width:46px"></span></td><td><span class="bar" style="width:34px"></span></td></tr><tr><td>AAG</td><td><span class="nm"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span class="bar" style="width:60px"></span></span></td><td><span class="st e">endangered</span></td><td><span class="bar" style="width:80px"></span></td><td><span class="bar" style="width:34px"></span></td></tr><tr><td>AAH</td><td><span class="nm"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span class="bar" style="width:86px"></span></span></td><td><span class="st t">threatened</span></td><td><span class="bar" style="width:80px"></span></td><td><span class="bar" style="width:34px"></span></td></tr><tr><td>AAI</td><td><span class="nm"><svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span class="bar" style="width:48px"></span></span></td><td><span class="st v">vigorous</span></td><td><span class="bar" style="width:80px"></span></td><td><span class="bar" style="width:34px"></span></td></tr></table>
+  </div>
+</div>

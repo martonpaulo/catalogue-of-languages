@@ -10,6 +10,7 @@ import {
 import { ContentContainer } from "@/shared/components/ContentContainer";
 import {
   canonicalUrl,
+  languageSubject,
   pageTitle,
   SITE_NAME,
   SOCIAL_IMAGE,
@@ -39,13 +40,13 @@ export async function generateMetadata({
   const description = describe(language.name, code, language.description);
 
   return {
-    title: language.name,
+    title: languageSubject(language.name),
     description,
     alternates: { canonical: url },
     openGraph: {
       type: "article",
       siteName: SITE_NAME,
-      title: pageTitle(language.name),
+      title: pageTitle(languageSubject(language.name)),
       description,
       url,
       locale: "en_US",
@@ -53,7 +54,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: pageTitle(language.name),
+      title: pageTitle(languageSubject(language.name)),
       description,
       images: [SOCIAL_IMAGE],
     },
@@ -67,7 +68,7 @@ function describe(
 ): string {
   return (
     description ??
-    `${name} (${code.toUpperCase()}) on ${SITE_NAME}: status, genealogy, writing systems and where it is spoken.`
+    `${name} (ISO 639-3: ${code}): its status, language family, writing systems and the places where it is spoken, from the Wikitongues database.`
   );
 }
 

@@ -5,7 +5,7 @@ import { NAMED_LANGUAGE } from "./support/syntheticCatalogue";
 
 const ORIGIN = "https://linguae.martonpaulo.com";
 const SITE = `${ORIGIN}${BASE_PATH}/`;
-const SOCIAL_IMAGE = `${ORIGIN}${BASE_PATH}/opengraph-image.jpg`;
+const SOCIAL_IMAGE = `${ORIGIN}${BASE_PATH}/social-card.jpg`;
 
 async function meta(
   page: import("@playwright/test").Page,
@@ -61,7 +61,7 @@ test.describe("published metadata", () => {
     expect(await meta(page, 'meta[name="twitter:image"]')).toBe(SOCIAL_IMAGE);
     await expectTitle(
       page,
-      "Linguae · Every documented language in one searchable table"
+      "Linguae · Search 7,500+ documented languages of the world"
     );
 
     const [catalogue] = await structuredData(page);
@@ -83,7 +83,7 @@ test.describe("published metadata", () => {
     expect(await meta(page, 'meta[property="og:type"]')).toBe("article");
     expect(await meta(page, 'meta[property="og:image"]')).toBe(SOCIAL_IMAGE);
     expect(await meta(page, 'meta[name="twitter:image"]')).toBe(SOCIAL_IMAGE);
-    await expectTitle(page, `${NAMED_LANGUAGE.name} · Linguae`);
+    await expectTitle(page, `${NAMED_LANGUAGE.name} language · Linguae`);
 
     const language = (await structuredData(page)).find(
       (block) => block["@type"] === "Language"
@@ -104,7 +104,7 @@ test.describe("published metadata", () => {
   test("serves the social card at its declared size and type", async ({
     request,
   }) => {
-    const response = await request.get(`${BASE_PATH}/opengraph-image.jpg`);
+    const response = await request.get(`${BASE_PATH}/social-card.jpg`);
 
     expect(response.status()).toBe(200);
     expect(response.headers()["content-type"]).toContain("image/jpeg");

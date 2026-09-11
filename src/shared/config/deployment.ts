@@ -25,7 +25,7 @@ export const SITE_NAME = "Linguae";
  * What the site is, in the words someone would search for. It follows the name in the home
  * page's title, where the bare brand said nothing a search engine could match.
  */
-export const SITE_TAGLINE = "Every documented language in one searchable table";
+export const SITE_TAGLINE = "Search 7,500+ documented languages of the world";
 
 /** Separates a page's own subject from the brand in every title: `{page} · Linguae`. */
 export const TITLE_SEPARATOR = " · ";
@@ -42,8 +42,16 @@ export function pageTitle(subject: string): string {
 }
 
 export const SITE_DESCRIPTION =
-  "Interactive table featuring all documented languages from the Wikitongues database, " +
-  "providing an easy way to explore global linguistic diversity.";
+  "Search more than 7,500 documented languages of the world, with each one's code, family, " +
+  "status, writing systems and where it is spoken.";
+
+/**
+ * A language page's subject in search words: "Quechua language", which is what people type. A
+ * name that already says so ("American Sign Language") is left alone.
+ */
+export function languageSubject(name: string): string {
+  return /\blanguage\b/i.test(name) ? name : `${name} language`;
+}
 
 /**
  * Absolute URL of a page, in the form the deployment actually answers: every path ends in a
@@ -59,9 +67,9 @@ export function canonicalUrl(path = ""): string {
  * because a nested route that sets its own Open Graph metadata does not inherit it.
  */
 export const SOCIAL_IMAGE = {
-  url: `${SITE_ORIGIN}${BASE_PATH}/opengraph-image.jpg`,
+  url: `${SITE_ORIGIN}${BASE_PATH}/social-card.jpg`,
   width: 1200,
   height: 630,
   type: "image/jpeg",
-  alt: `${SITE_NAME}: every documented language from the Wikitongues database, in one searchable table.`,
+  alt: `${SITE_NAME} on a rose card: the language table with its filters, codes and status chips such as vigorous, threatened and endangered.`,
 };
