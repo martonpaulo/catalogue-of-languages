@@ -71,7 +71,7 @@ test.describe("language detail outcomes", () => {
     await page.goto(`${NAMED_LANGUAGE.code}/`);
 
     await expect(page).toHaveTitle(
-      `${NAMED_LANGUAGE.name} | Linguae`
+      `${NAMED_LANGUAGE.name} · Linguae`
     );
   });
 });

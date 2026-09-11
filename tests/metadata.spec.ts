@@ -21,6 +21,16 @@ async function structuredData(page: import("@playwright/test").Page) {
   return blocks.map((block) => JSON.parse(block) as Record<string, unknown>);
 }
 
+/** The page title, and the social titles that must repeat it exactly. */
+async function expectTitle(
+  page: import("@playwright/test").Page,
+  title: string
+): Promise<void> {
+  await expect(page).toHaveTitle(title);
+  expect(await meta(page, 'meta[property="og:title"]')).toBe(title);
+  expect(await meta(page, 'meta[name="twitter:title"]')).toBe(title);
+}
+
 test.describe("published metadata", () => {
   test("the catalogue declares its canonical, social and structured data", async ({
     page,
@@ -49,6 +59,10 @@ test.describe("published metadata", () => {
       "summary_large_image"
     );
     expect(await meta(page, 'meta[name="twitter:image"]')).toBe(SOCIAL_IMAGE);
+    await expectTitle(
+      page,
+      "Linguae · Every documented language in one searchable table"
+    );
 
     const [catalogue] = await structuredData(page);
     expect(catalogue["@type"]).toBe("DataCatalog");
@@ -69,6 +83,7 @@ test.describe("published metadata", () => {
     expect(await meta(page, 'meta[property="og:type"]')).toBe("article");
     expect(await meta(page, 'meta[property="og:image"]')).toBe(SOCIAL_IMAGE);
     expect(await meta(page, 'meta[name="twitter:image"]')).toBe(SOCIAL_IMAGE);
+    await expectTitle(page, `${NAMED_LANGUAGE.name} · Linguae`);
 
     const language = (await structuredData(page)).find(
       (block) => block["@type"] === "Language"
@@ -76,6 +91,14 @@ test.describe("published metadata", () => {
     expect(language?.identifier).toBe(NAMED_LANGUAGE.code);
     expect(language?.name).toBe(NAMED_LANGUAGE.name);
     expect(language?.url).toBe(url);
+  });
+
+  test("titles the not-found page as such, not as the home page", async ({
+    page,
+  }) => {
+    await page.goto("zzz/");
+
+    await expectTitle(page, "Page not found · Linguae");
   });
 
   test("serves the social card at its declared size and type", async ({

@@ -4,11 +4,12 @@ import type { Metadata, Viewport } from "next";
 import { readManifest } from "@/features/languages/server/snapshotSource";
 import {
   canonicalUrl,
+  HOME_TITLE,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_ORIGIN,
-  SITE_TAGLINE,
   SOCIAL_IMAGE,
+  TITLE_SEPARATOR,
 } from "@/shared/config/deployment";
 import { AppThemeProvider } from "@/shared/providers/AppThemeProvider";
 import { ReactQueryProvider } from "@/shared/providers/ReactQueryProvider";
@@ -21,8 +22,8 @@ export const metadata: Metadata = {
     // The home page carries the tagline, because "Linguae" alone tells a search
     // engine nothing. Every other page leads with its own subject and the
     // template trails the brand.
-    default: `${SITE_NAME}: ${SITE_TAGLINE}`,
-    template: `%s | ${SITE_NAME}`,
+    default: HOME_TITLE,
+    template: `%s${TITLE_SEPARATOR}${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: `${SITE_NAME}: ${SITE_TAGLINE}`,
+    title: HOME_TITLE,
     description: SITE_DESCRIPTION,
     url: canonicalUrl(),
     locale: "en_US",
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME}: ${SITE_TAGLINE}`,
+    title: HOME_TITLE,
     description: SITE_DESCRIPTION,
     images: [SOCIAL_IMAGE],
   },

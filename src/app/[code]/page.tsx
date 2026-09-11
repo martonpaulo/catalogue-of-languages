@@ -10,6 +10,7 @@ import {
 import { ContentContainer } from "@/shared/components/ContentContainer";
 import {
   canonicalUrl,
+  pageTitle,
   SITE_NAME,
   SOCIAL_IMAGE,
 } from "@/shared/config/deployment";
@@ -44,7 +45,7 @@ export async function generateMetadata({
     openGraph: {
       type: "article",
       siteName: SITE_NAME,
-      title: language.name,
+      title: pageTitle(language.name),
       description,
       url,
       locale: "en_US",
@@ -52,7 +53,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: language.name,
+      title: pageTitle(language.name),
       description,
       images: [SOCIAL_IMAGE],
     },

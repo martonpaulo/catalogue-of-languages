@@ -25,7 +25,21 @@ export const SITE_NAME = "Linguae";
  * What the site is, in the words someone would search for. It follows the name in the home
  * page's title, where the bare brand said nothing a search engine could match.
  */
-export const SITE_TAGLINE = "every documented language in one searchable table";
+export const SITE_TAGLINE = "Every documented language in one searchable table";
+
+/** Separates a page's own subject from the brand in every title: `{page} · Linguae`. */
+export const TITLE_SEPARATOR = " · ";
+
+/** The home page title: the brand first, then what the site does. */
+export const HOME_TITLE = `${SITE_NAME}${TITLE_SEPARATOR}${SITE_TAGLINE}`;
+
+/**
+ * Full title of any other page, brand last. The root layout's title template produces the same
+ * string for `<title>`; Open Graph and Twitter titles are not templated, so they use this.
+ */
+export function pageTitle(subject: string): string {
+  return `${subject}${TITLE_SEPARATOR}${SITE_NAME}`;
+}
 
 export const SITE_DESCRIPTION =
   "Interactive table featuring all documented languages from the Wikitongues database, " +
