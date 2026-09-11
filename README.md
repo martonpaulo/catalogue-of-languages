@@ -1,5 +1,7 @@
 # 🌎 Linguae
 
+![Linguae: an interactive catalogue of the world's documented languages](public/social-card.jpg)
+
 ![License](https://img.shields.io/github/license/martonpaulo/linguae) ![Last Commit](https://img.shields.io/github/last-commit/martonpaulo/linguae) ![React Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/linguae/react) ![TypeScript Version](https://img.shields.io/github/package-json/dependency-version/martonpaulo/linguae/dev/typescript) ![CI Status](https://github.com/martonpaulo/linguae/actions/workflows/ci.yml/badge.svg)
 
 **Linguae** is an interactive table featuring all documented languages from the Wikitongues database. Built on the [_Every Language in the World_](https://www.airtable.com/universe/exph5qycoKpX7tPwO/every-language-in-the-world) Airtable dataset, it provides an easy way to explore global linguistic diversity.
@@ -7,10 +9,6 @@
 The published catalogue currently holds **7,554 languages**, **217 nations** and **126 writing systems**, and it is a purely static site: there is no backend, no runtime API and no credential in the browser.
 
 🔗 **[linguae.martonpaulo.com](https://linguae.martonpaulo.com/)**
-
-<img alt="The catalogue: a filter panel above a table of languages with their code, name, status, nation of origin, writing system and where they are spoken" src="public/uploads/catalogue.webp" width="900" />
-
-<img alt="A language page for Portuguese, showing alternate names, dialects, genealogy, demographics, language use and development, typology, and where it is spoken" src="public/uploads/language-detail.webp" width="900" />
 
 ## How it works
 
