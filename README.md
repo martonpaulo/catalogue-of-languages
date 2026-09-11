@@ -20,7 +20,6 @@ The project was born out of a personal interest in languages and linguistics, an
 Airtable is read **at build time only**, projected onto an explicit list of public fields, and
 written as one versioned snapshot that the exported HTML carries with it.
 
-<br />
 
 ---
 
@@ -88,7 +87,6 @@ they are **repository secrets, referenced only by the publication job**. Locally
 `.env.local`, which `npm run snapshot` reads if it exists; `.env.example` holds the shape. Keep
 credential values out of Git, out of commit messages and out of issues.
 
-<br />
 
 ---
 
@@ -270,7 +268,6 @@ A commit made for an issue ends with `(#<issue number>)`.
 
 3. **Multi-value filters**, so several statuses or nations can be selected at once.
 
-<br />
 
 ---
 
