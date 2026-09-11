@@ -34,7 +34,7 @@ npm run snapshot:fixture
 npm run dev
 ```
 
-Then open `http://localhost:3000`.
+Then open [http://localhost:3000](http://localhost:3000).
 
 `npm run snapshot:fixture` writes a small synthetic catalogue. Without a snapshot the build has
 nothing to generate pages from and fails with a message saying so. **Airtable credentials are not
