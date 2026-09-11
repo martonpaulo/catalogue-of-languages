@@ -34,6 +34,9 @@ flowchart LR
 <br />
 
 ## 🌱 Quick Start
+
+Requires **Node.js 22 or newer** and npm.
+
 ```bash
 git clone https://github.com/martonpaulo/linguae.git
 cd linguae
@@ -42,56 +45,49 @@ npm run snapshot:fixture
 npm run dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000).
+[http://localhost:3000](http://localhost:3000)
 
-`npm run snapshot:fixture` writes a small synthetic catalogue. Without a snapshot the build has
-nothing to generate pages from and fails with a message saying so. **Airtable credentials are not
-required** to run the project; they are only needed to generate a snapshot from the real dataset:
+`npm run snapshot:fixture` writes a small synthetic catalogue; without a snapshot the build has nothing to generate pages from and fails saying so.
 
-```bash
-cp .env.example .env.local   # then fill in the Airtable values locally
-npm run snapshot
-npm run dev
-```
-
-Prerequisites: **Node.js 22 or newer** (CI runs 22) and npm.
+Airtable credentials are not needed to run the project, only to regenerate the snapshot from the real dataset.
 
 <br />
 
 ## 🛠 Commands
-| Command | Description |
+
+| Command | What it does |
 | --- | --- |
-| `npm run validate` | The full gate before a commit: `lint`, `tsc --noEmit`, then the acceptance suite. |
-| `npm run dev` | Development server. Needs a snapshot to exist. |
-| `npm run snapshot` | Generates the public snapshot from Airtable. Requires the build-only credentials. |
-| `npm run snapshot:fixture` | Generates a synthetic snapshot. No credentials needed. |
-| `npm run build` / `npm run build:export` | Builds the static export into `out/`, under the published base path. |
+| `npm run validate` | Runs the full gate before a commit: lint, types, then the acceptance suite. |
+| `npm run dev` | Starts the development server. Needs a snapshot to exist. |
+| `npm run snapshot:fixture` | Generates a synthetic snapshot. Needs no credentials. |
+| `npm run build` | Builds the static export into `out/`, under the published base path. |
+| `npm run build:export` | Builds the same static export under its release alias. |
 | `npm run serve:export` | Serves `out/` the way GitHub Pages does, for checking the real artifact. |
-| `npm run lint` / `npm run lint:fix` | ESLint over the whole repository. |
-| `npm test` | The acceptance suite, in Chromium, Gecko and WebKit. |
-| `npm run test:chromium` | The same suite in one engine, for faster iteration. |
-| `npm run measure:derivation` | Benchmarks enrichment, filtering and revealing at 50 to 8,000 languages. |
+| `npm run lint` | Runs ESLint over the whole repository. |
+| `npm run lint:fix` | Runs the same lint and applies the fixes it can. |
+| `npm test` | Runs the acceptance suite in Chromium, Gecko and WebKit. |
+| `npm run test:chromium` | Runs the same suite in one engine, for faster iteration. |
+| `npm run snapshot` | Generates the public snapshot from Airtable. Requires the build-only credentials. |
 | `npm run snapshot:scaled` | Generates an 8,000-language synthetic snapshot, for feasibility measurement. |
-| `npm run social-card` | Renders `design/social-card/social-card.html` into `public/social-card.jpg` (on a Mac). |
+| `npm run measure:derivation` | Benchmarks enrichment, filtering and revealing at 50 to 8,000 languages. |
+| `npm run social-card` | Renders `design/social-card/social-card.html` into `public/social-card.jpg`. Mac only. |
 
 <br />
 
 ## 🔐 Secrets and variables
-| Variable | Where | Purpose |
-| --- | --- | --- |
-| `AIRTABLE_API_KEY` | Build only | Airtable personal access token with read access |
-| `AIRTABLE_BASE_ID` | Build only | The base holding the dataset copy |
-| `LANGUAGES_TABLE_ID` | Build only | Languages table |
-| `WRITING_SYSTEMS_TABLE_ID` | Build only | Writing systems table |
-| `NATIONS_TABLE_ID` | Build only | Nations table |
-| `NEXT_PUBLIC_BASE_PATH` | Build | Sub-path the site is published under. Empty locally. |
-| `NEXT_PUBLIC_STORAGE_PREFIX` | Build | Namespace for the stored filter preferences |
-| `NEXT_PUBLIC_STORAGE_VERSION` | Build | Version suffix for that key |
 
-The five Airtable variables are used by the snapshot generator and reach no browser bundle. In CI
-they are **repository secrets, referenced only by the publication job**. Locally they live in
-`.env.local`, which `npm run snapshot` reads if it exists; `.env.example` holds the shape. Keep
-credential values out of Git, out of commit messages and out of issues.
+The five Airtable variables are read only by the snapshot generator and reach no browser bundle: locally they live in `.env.local`, whose shape is `.env.example`, and in CI they are repository secrets referenced only by the publication job.
+
+| Name | Where | What for |
+| --- | --- | --- |
+| `AIRTABLE_API_KEY` | `.env.local`, repository secret | Required by `npm run snapshot`. Airtable personal access token with read access |
+| `AIRTABLE_BASE_ID` | `.env.local`, repository secret | Required by `npm run snapshot`. The base holding the dataset copy |
+| `LANGUAGES_TABLE_ID` | `.env.local`, repository secret | Required by `npm run snapshot`. Languages table |
+| `WRITING_SYSTEMS_TABLE_ID` | `.env.local`, repository secret | Required by `npm run snapshot`. Writing systems table |
+| `NATIONS_TABLE_ID` | `.env.local`, repository secret | Required by `npm run snapshot`. Nations table |
+| `NEXT_PUBLIC_BASE_PATH` | `.env.local`, build environment | Optional. Sub-path the site is published under. Empty locally |
+| `NEXT_PUBLIC_STORAGE_PREFIX` | `.env.local`, build environment | Optional. Namespace for the stored filter preferences |
+| `NEXT_PUBLIC_STORAGE_VERSION` | `.env.local`, build environment | Optional. Version suffix for that storage key |
 
 ---
 
@@ -287,5 +283,6 @@ A commit made for an issue ends with `(#<issue number>)`.
 
 [MIT](LICENSE) © 2026 Marton Paulo.
 
-The catalogue data is made available by [Wikitongues](https://wikitongues.org/); the code license
-does not grant rights over it.
+The catalogue data is made available by [Wikitongues](https://wikitongues.org/).
+
+The licence covers the code only and grants no rights over that data.
