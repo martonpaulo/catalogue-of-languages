@@ -283,7 +283,7 @@ A commit made for an issue ends with `(#<issue number>)`.
 
 <br />
 
-## License
+## License and attribution
 
 [MIT](LICENSE) © 2026 Marton Paulo.
 
