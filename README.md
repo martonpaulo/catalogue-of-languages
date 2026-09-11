@@ -24,6 +24,8 @@ written as one versioned snapshot that the exported HTML carries with it.
 
 ---
 
+<br />
+
 ## 🌱 Quick Start
 
 ```bash
