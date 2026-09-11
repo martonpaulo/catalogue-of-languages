@@ -91,12 +91,31 @@ export default async function LanguagePage({ params }: LanguagePageProps) {
       : {}),
   };
 
+  // The path Google shows above a desktop result: Linguae › {Language} language.
+  const breadcrumbs = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: SITE_NAME, item: canonicalUrl() },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: languageSubject(language.name),
+        item: canonicalUrl(code),
+      },
+    ],
+  };
+
   return (
     <ContentContainer>
       <script
         type="application/ld+json"
         // The content is built here from the snapshot, never from user input.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
       />
       <LanguageHeader
         name={language.name}
