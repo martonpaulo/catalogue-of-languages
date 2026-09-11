@@ -63,6 +63,7 @@ Prerequisites: **Node.js 22 or newer** (CI runs 22) and npm.
 
 | Command | Description |
 | --- | --- |
+| `npm run validate` | The full gate before a commit: `lint`, `tsc --noEmit`, then the acceptance suite. |
 | `npm run dev` | Development server. Needs a snapshot to exist. |
 | `npm run snapshot` | Generates the public snapshot from Airtable. Requires the build-only credentials. |
 | `npm run snapshot:fixture` | Generates a synthetic snapshot. No credentials needed. |
@@ -165,11 +166,11 @@ Nothing but the filter preferences is written to browser storage.
 ## Validation
 
 ```bash
-npm run lint
-npx tsc --noEmit --incremental false
-npm run build:export
-npm test
+npm run validate
 ```
+
+That is `npm run lint`, `npx tsc --noEmit --incremental false` and `npm test`, in that order — the
+same set CI runs. `npm run test:chromium` is the faster loop while iterating.
 
 `npm test` builds the real static export from the synthetic fixture snapshot and drives it through
 the three accepted browser engines. It deliberately does not use the development server: the

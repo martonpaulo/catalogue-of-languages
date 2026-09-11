@@ -86,7 +86,7 @@ No other durable artifact convention is selected. Use uniquely named system temp
 
 ## Validation and completion
 
-- Current commands are `npm ci`, `npm run lint`, `npx tsc --noEmit --incremental false`, `npm run snapshot:fixture`, `npm run build:export`, `npm test` (or `npm run test:chromium`), and `npm run dev`. Airtable credentials are needed only by `npm run snapshot`; do not claim dummy values prove live API connectivity.
+- The full local gate is `npm run validate` (`npm run lint`, `npx tsc --noEmit --incremental false`, `npm test`). Current commands are `npm ci`, `npm run lint`, `npx tsc --noEmit --incremental false`, `npm run snapshot:fixture`, `npm run build:export`, `npm test` (or `npm run test:chromium`), and `npm run dev`. Airtable credentials are needed only by `npm run snapshot`; do not claim dummy values prove live API connectivity.
 - The committed test runner is Playwright (`tests/`, `playwright.config.ts`): `npm test` builds the static export from the fixture snapshot and drives it through Chromium, Firefox and WebKit. Reuse it instead of inventing another runner.
 - Test observable behavior at stable seams, with synthetic isolated data/storage. Do not add wrapper-only, source-text, duplicated-constant or pixel-snapshot tests. Use real browser/HTTP/build checks where a mock cannot prove the contract.
 - Run the smallest relevant checks, inspect failures before retrying, and run one broader relevant check once stable. Report exactly what ran, what failed and what remains unverified.

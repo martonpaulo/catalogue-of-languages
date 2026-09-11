@@ -29,6 +29,7 @@
     "build": "next build",
     "lint": "eslint .",
     "test": "playwright test",
+    "validate": "npm run lint && npx tsc --noEmit --incremental false && npm test",
     "test:chromium": "playwright test --project=chromium",
     "snapshot": "tsx --env-file-if-exists=.env.local scripts/generate-snapshot.ts",
     "snapshot:fixture": "tsx scripts/generate-snapshot.ts --fixture",

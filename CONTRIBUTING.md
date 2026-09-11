@@ -33,16 +33,16 @@ repository follows.
 
 ## Run the validation gate
 
-Everything CI runs, in order:
+One command, running everything CI runs, in order:
 
 ```bash
 npm ci
-npm run snapshot:fixture
-npm run lint
-npx tsc --noEmit --incremental false
-npm run build:export
-npm test
+npm run validate
 ```
+
+That is `npm run lint`, `npx tsc --noEmit --incremental false` and `npm test`. The acceptance suite
+generates the fixture snapshot and builds the static export itself, through Playwright's web
+server.
 
 `npm test` drives the real static export in Chromium, Gecko and WebKit; `npm run test:chromium` is
 the faster loop while iterating. No Airtable credentials are needed — the fixture snapshot stands in
