@@ -1,0 +1,57 @@
+name: Bug report
+description: Report something in Linguae that does not work the way it should.
+title: "bug: "
+labels: ["type: bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The catalogue is a build-time copy of the Wikitongues dataset. Linguae can fix how a record
+        is projected or displayed; it cannot fix the source data. Never paste an Airtable token, or
+        any other credential, into an issue.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: A language code or a filter combination that reproduces it is the fastest thing you can give.
+      placeholder: |
+        1. Open the table…
+        2. Filter by…
+        3. Observe…
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Firefox 141 on macOS 26
+    validations:
+      required: true
+
+  - type: dropdown
+    id: private-window
+    attributes:
+      label: Does it still happen in a private window?
+      description: A private window rules out an extension or stale stored state.
+      options:
+        - "Yes"
+        - "No"
+        - Not checked
+    validations:
+      required: true
