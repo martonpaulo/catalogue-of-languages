@@ -29,7 +29,7 @@
     "build": "next build",
     "lint": "eslint .",
     "test": "playwright test",
-    "validate": "npm run lint && npx tsc --noEmit --incremental false && npm test",
+    "validate": "pnpm lint && pnpm exec tsc --noEmit --incremental false && pnpm test",
     "test:chromium": "playwright test --project=chromium",
     "snapshot": "tsx --env-file-if-exists=.env.local scripts/generate-snapshot.ts",
     "snapshot:fixture": "tsx scripts/generate-snapshot.ts --fixture",
@@ -68,8 +68,5 @@
     "tsx": "^4.23.13",
     "typescript": "^5"
   },
-  "overrides": {
-    "postcss": "^8.5.23",
-    "brace-expansion@1": "^1.1.18"
-  }
+  "packageManager": "pnpm@11.7.0"
 }

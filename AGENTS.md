@@ -86,8 +86,8 @@ No other durable artifact convention is selected. Use uniquely named system temp
 
 ## Validation and completion
 
-- The full local gate is `npm run validate` (`npm run lint`, `npx tsc --noEmit --incremental false`, `npm test`). Current commands are `npm ci`, `npm run lint`, `npx tsc --noEmit --incremental false`, `npm run snapshot:fixture`, `npm run build:export`, `npm test` (or `npm run test:chromium`), and `npm run dev`. Airtable credentials are needed only by `npm run snapshot`; do not claim dummy values prove live API connectivity.
-- The committed test runner is Playwright (`tests/`, `playwright.config.ts`): `npm test` builds the static export from the fixture snapshot and drives it through Chromium, Firefox and WebKit. Reuse it instead of inventing another runner.
+- The full local gate is `pnpm validate` (`pnpm lint`, `pnpm exec tsc --noEmit --incremental false`, `pnpm test`). Current commands are `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm exec tsc --noEmit --incremental false`, `pnpm snapshot:fixture`, `pnpm build:export`, `pnpm test` (or `pnpm test:chromium`), and `pnpm dev`. Airtable credentials are needed only by `pnpm snapshot`; do not claim dummy values prove live API connectivity.
+- The committed test runner is Playwright (`tests/`, `playwright.config.ts`): `pnpm test` builds the static export from the fixture snapshot and drives it through Chromium, Firefox and WebKit. Reuse it instead of inventing another runner.
 - Test observable behavior at stable seams, with synthetic isolated data/storage. Do not add wrapper-only, source-text, duplicated-constant or pixel-snapshot tests. Use real browser/HTTP/build checks where a mock cannot prove the contract.
 - Run the smallest relevant checks, inspect failures before retrying, and run one broader relevant check once stable. Report exactly what ran, what failed and what remains unverified.
 - Use bounded waits and observable progress. Communicate at least once per minute during long work; inspect state before interrupting or repeating a command. Do not mistake elapsed time alone for a stall.

@@ -46,20 +46,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
       - name: Set up Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: npm run lint
+        run: pnpm lint
 
       - name: Type check
-        run: npx tsc --noEmit --incremental false
+        run: pnpm exec tsc --noEmit --incremental false
 
   # Expensive: a real export plus three browser engines. Only when code it can observe
   # actually changed. It receives no secret and builds only the synthetic fixture snapshot.
@@ -72,20 +75,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
       - name: Set up Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Install browsers
-        run: npx playwright install --with-deps chromium firefox webkit
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
 
       - name: Run the acceptance suite
-        run: npm test
+        run: pnpm test
 
       - name: Upload the report when it fails
         if: failure()
@@ -119,14 +125,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
       - name: Set up Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
@@ -138,13 +147,13 @@ jobs:
           LANGUAGES_TABLE_ID: ${{ secrets.LANGUAGES_TABLE_ID }}
           WRITING_SYSTEMS_TABLE_ID: ${{ secrets.WRITING_SYSTEMS_TABLE_ID }}
           NATIONS_TABLE_ID: ${{ secrets.NATIONS_TABLE_ID }}
-        run: npm run snapshot
+        run: pnpm snapshot
 
       - name: Build the static export
         env:
           NEXT_PUBLIC_STORAGE_PREFIX: linguae
           NEXT_PUBLIC_STORAGE_VERSION: ${{ secrets.NEXT_PUBLIC_STORAGE_VERSION }}
-        run: npm run build:export
+        run: pnpm build:export
 
       - name: Verify the artifact
         run: bash .github/scripts/verify-export.sh

@@ -2,7 +2,7 @@ import { expect, type Page, type Route } from "@playwright/test";
 
 /**
  * The specs run against the synthetic fixture snapshot produced by
- * `npm run snapshot:fixture`, so they exercise the real generation and delivery path
+ * `pnpm snapshot:fixture`, so they exercise the real generation and delivery path
  * instead of a parallel mock. These constants describe that fixture.
  */
 export const REVEAL_STEP = 50;

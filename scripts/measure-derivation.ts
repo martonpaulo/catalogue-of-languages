@@ -11,7 +11,7 @@ import { WritingSystemType } from "@/features/writingSystems/types/writingSystem
  * filtering, and the slice that reveals the next rows. It exists so a performance claim
  * about this path can cite a number rather than an impression.
  *
- * Run with `npm run measure:derivation`.
+ * Run with `pnpm measure:derivation`.
  */
 const SIZES = [50, 500, 2_000, 8_000];
 const REVEAL_STEP = 50;

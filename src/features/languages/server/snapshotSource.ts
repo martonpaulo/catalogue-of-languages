@@ -56,8 +56,8 @@ function readAsset<T>(root: string, assetPath: string): Promise<T> {
     .then((content) => JSON.parse(content) as T)
     .catch(() => {
       throw new Error(
-        `Missing snapshot asset "${assetPath}". Run "npm run snapshot" for the published ` +
-          `catalogue or "npm run snapshot:fixture" for the synthetic one.`
+        `Missing snapshot asset "${assetPath}". Run "pnpm snapshot" for the published ` +
+          `catalogue or "pnpm snapshot:fixture" for the synthetic one.`
       );
     });
 

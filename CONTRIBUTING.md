@@ -36,15 +36,15 @@ repository follows.
 One command, running everything CI runs, in order:
 
 ```bash
-npm ci
-npm run validate
+pnpm install --frozen-lockfile
+pnpm validate
 ```
 
-That is `npm run lint`, `npx tsc --noEmit --incremental false` and `npm test`. The acceptance suite
+That is `pnpm lint`, `pnpm exec tsc --noEmit --incremental false` and `pnpm test`. The acceptance suite
 generates the fixture snapshot and builds the static export itself, through Playwright's web
 server.
 
-`npm test` drives the real static export in Chromium, Gecko and WebKit; `npm run test:chromium` is
+`pnpm test` drives the real static export in Chromium, Gecko and WebKit; `pnpm test:chromium` is
 the faster loop while iterating. No Airtable credentials are needed — the fixture snapshot stands in
 for the real dataset.
 

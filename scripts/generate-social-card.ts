@@ -13,7 +13,7 @@ import { chromium } from "@playwright/test";
  * The card is a committed asset in `public/` rather than a generated route or a file-based
  * metadata convention. A static host serves an extensionless route file with the wrong
  * content type, and the file convention appends a cache-busting query on some routes but not
- * others, so the same image would be advertised under two URLs. Run `npm run social-card`
+ * others, so the same image would be advertised under two URLs. Run `pnpm social-card`
  * after changing the design.
  *
  * JPEG q92 with 4:4:4 chroma: a lossless screenshot spends most of its bytes on the gradient,

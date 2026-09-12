@@ -13,4 +13,4 @@ Closes #
 
 <!-- Replace this with what you ran and what it reported. -->
 
-- [ ] `npm run validate` passes (lint, `tsc --noEmit`, and the acceptance suite)
+- [ ] `pnpm validate` passes (lint, `tsc --noEmit`, and the acceptance suite)

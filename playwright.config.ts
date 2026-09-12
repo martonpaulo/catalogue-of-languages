@@ -34,9 +34,9 @@ export default defineConfig({
   ],
   webServer: {
     command: [
-      "npm run snapshot:fixture",
-      "npm run build:export",
-      `npm run serve:export -- --port=${PORT} --base-path=${BASE_PATH}`,
+      "pnpm snapshot:fixture",
+      "pnpm build:export",
+      `pnpm serve:export -- --port=${PORT} --base-path=${BASE_PATH}`,
     ].join(" && "),
     url: BASE_URL,
     reuseExistingServer: false,

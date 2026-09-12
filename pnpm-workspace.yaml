@@ -1,0 +1,12 @@
+# esbuild (through tsx) and unrs-resolver (through the Next ESLint config) ship
+# prebuilt binaries; their install scripts must run or neither tool starts.
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true
+
+# Carried over from the npm "overrides" block. postcss is pulled in transitively
+# by Next below the patched range; brace-expansion@1 below its ReDoS fix. Drop
+# each entry once the dependency that pulls it ships the range itself.
+overrides:
+  postcss: ^8.5.23
+  brace-expansion@1: ^1.1.18

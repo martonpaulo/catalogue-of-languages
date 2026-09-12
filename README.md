@@ -40,14 +40,14 @@ Requires **Node.js 22 or newer** and npm.
 ```bash
 git clone https://github.com/martonpaulo/linguae.git
 cd linguae
-npm ci
-npm run snapshot:fixture
-npm run dev
+pnpm install --frozen-lockfile
+pnpm snapshot:fixture
+pnpm dev
 ```
 
 [http://localhost:3000](http://localhost:3000)
 
-`npm run snapshot:fixture` writes a small synthetic catalogue; without a snapshot the build has nothing to generate pages from and fails saying so.
+`pnpm snapshot:fixture` writes a small synthetic catalogue; without a snapshot the build has nothing to generate pages from and fails saying so.
 
 Airtable credentials are not needed to run the project, only to regenerate the snapshot from the real dataset.
 
@@ -57,20 +57,20 @@ Airtable credentials are not needed to run the project, only to regenerate the s
 
 | Command | What it does |
 | --- | --- |
-| `npm run validate` | Runs the full gate before a commit: lint, types, then the acceptance suite. |
-| `npm run dev` | Starts the development server. Needs a snapshot to exist. |
-| `npm run snapshot:fixture` | Generates a synthetic snapshot. Needs no credentials. |
-| `npm run build` | Builds the static export into `out/`, under the published base path. |
-| `npm run build:export` | Builds the same static export under its release alias. |
-| `npm run serve:export` | Serves `out/` the way GitHub Pages does, for checking the real artifact. |
-| `npm run lint` | Runs ESLint over the whole repository. |
-| `npm run lint:fix` | Runs the same lint and applies the fixes it can. |
-| `npm test` | Runs the acceptance suite in Chromium, Gecko and WebKit. |
-| `npm run test:chromium` | Runs the same suite in one engine, for faster iteration. |
-| `npm run snapshot` | Generates the public snapshot from Airtable. Requires the build-only credentials. |
-| `npm run snapshot:scaled` | Generates an 8,000-language synthetic snapshot, for feasibility measurement. |
-| `npm run measure:derivation` | Benchmarks enrichment, filtering and revealing at 50 to 8,000 languages. |
-| `npm run social-card` | Renders `design/social-card/social-card.html` into `public/social-card.jpg`. Mac only. |
+| `pnpm validate` | Runs the full gate before a commit: lint, types, then the acceptance suite. |
+| `pnpm dev` | Starts the development server. Needs a snapshot to exist. |
+| `pnpm snapshot:fixture` | Generates a synthetic snapshot. Needs no credentials. |
+| `pnpm build` | Builds the static export into `out/`, under the published base path. |
+| `pnpm build:export` | Builds the same static export under its release alias. |
+| `pnpm serve:export` | Serves `out/` the way GitHub Pages does, for checking the real artifact. |
+| `pnpm lint` | Runs ESLint over the whole repository. |
+| `pnpm lint:fix` | Runs the same lint and applies the fixes it can. |
+| `pnpm test` | Runs the acceptance suite in Chromium, Gecko and WebKit. |
+| `pnpm test:chromium` | Runs the same suite in one engine, for faster iteration. |
+| `pnpm snapshot` | Generates the public snapshot from Airtable. Requires the build-only credentials. |
+| `pnpm snapshot:scaled` | Generates an 8,000-language synthetic snapshot, for feasibility measurement. |
+| `pnpm measure:derivation` | Benchmarks enrichment, filtering and revealing at 50 to 8,000 languages. |
+| `pnpm social-card` | Renders `design/social-card/social-card.html` into `public/social-card.jpg`. Mac only. |
 
 <br />
 
@@ -80,11 +80,11 @@ The five Airtable variables are read only by the snapshot generator and reach no
 
 | Name | Where | What for |
 | --- | --- | --- |
-| `AIRTABLE_API_KEY` | `.env.local`, repository secret | Required by `npm run snapshot`. Airtable personal access token with read access |
-| `AIRTABLE_BASE_ID` | `.env.local`, repository secret | Required by `npm run snapshot`. The base holding the dataset copy |
-| `LANGUAGES_TABLE_ID` | `.env.local`, repository secret | Required by `npm run snapshot`. Languages table |
-| `WRITING_SYSTEMS_TABLE_ID` | `.env.local`, repository secret | Required by `npm run snapshot`. Writing systems table |
-| `NATIONS_TABLE_ID` | `.env.local`, repository secret | Required by `npm run snapshot`. Nations table |
+| `AIRTABLE_API_KEY` | `.env.local`, repository secret | Required by `pnpm snapshot`. Airtable personal access token with read access |
+| `AIRTABLE_BASE_ID` | `.env.local`, repository secret | Required by `pnpm snapshot`. The base holding the dataset copy |
+| `LANGUAGES_TABLE_ID` | `.env.local`, repository secret | Required by `pnpm snapshot`. Languages table |
+| `WRITING_SYSTEMS_TABLE_ID` | `.env.local`, repository secret | Required by `pnpm snapshot`. Writing systems table |
+| `NATIONS_TABLE_ID` | `.env.local`, repository secret | Required by `pnpm snapshot`. Nations table |
 | `NEXT_PUBLIC_BASE_PATH` | `.env.local`, build environment | Optional. Sub-path the site is published under. Empty locally |
 | `NEXT_PUBLIC_STORAGE_PREFIX` | `.env.local`, build environment | Optional. Namespace for the stored filter preferences |
 | `NEXT_PUBLIC_STORAGE_VERSION` | `.env.local`, build environment | Optional. Version suffix for that storage key |
@@ -159,13 +159,13 @@ Nothing but the filter preferences is written to browser storage.
 ## Validation
 
 ```bash
-npm run validate
+pnpm validate
 ```
 
-That is `npm run lint`, `npx tsc --noEmit --incremental false` and `npm test`, in that order — the
-same set CI runs. `npm run test:chromium` is the faster loop while iterating.
+That is `pnpm lint`, `pnpm exec tsc --noEmit --incremental false` and `pnpm test`, in that order — the
+same set CI runs. `pnpm test:chromium` is the faster loop while iterating.
 
-`npm test` builds the real static export from the synthetic fixture snapshot and drives it through
+`pnpm test` builds the real static export from the synthetic fixture snapshot and drives it through
 the three accepted browser engines. It deliberately does not use the development server: the
 development server answers an unknown route differently from the deployed artifact, so it cannot
 prove the 404 contract.
@@ -174,7 +174,7 @@ A successful run does not verify private Airtable access, screen-reader behavior
 site. To check a published deployment, point the live suite at its origin:
 
 ```bash
-LIVE_URL=<deployed origin> npx playwright test liveDeployment
+LIVE_URL=<deployed origin> pnpm exec playwright test liveDeployment
 ```
 
 <br />

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 /**
  * Post-deployment verification against a published site. Skipped unless a URL is given:
  *
- *   LIVE_URL=https://linguae.martonpaulo.com/ npx playwright test liveDeployment
+ *   LIVE_URL=https://linguae.martonpaulo.com/ pnpm exec playwright test liveDeployment
  *
  * It asserts only what must hold for any real snapshot, so it does not depend on the
  * fixture data the rest of the suite uses.
