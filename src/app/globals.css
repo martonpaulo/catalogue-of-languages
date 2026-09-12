@@ -1,0 +1,11 @@
+/* The page ground, shared with the other browser tools in the family
+   (issues.martonpaulo.com, countrybadge.martonpaulo.com): a cool near-white
+   that the white surfaces sit on without disappearing into. */
+:root {
+  --page: #f3f5f8;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+}

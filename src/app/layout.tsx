@@ -1,3 +1,5 @@
+import "./globals.css";
+
 import { Container } from "@mui/material";
 import type { Metadata, Viewport } from "next";
 
