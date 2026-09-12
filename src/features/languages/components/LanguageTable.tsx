@@ -10,7 +10,10 @@ import {
 } from "@mui/material";
 
 import { LanguageTableRow } from "@/features/languages/components/LanguageTableRow";
-import { languageTableHeadSx } from "@/features/languages/styles/languageStyles";
+import {
+  languageTableHeadSx,
+  languageTableSx,
+} from "@/features/languages/styles/languageStyles";
 import { LanguageType } from "@/features/languages/types/language.type";
 
 interface LanguageTableProps {
@@ -24,7 +27,7 @@ export function LanguageTable({ languages }: LanguageTableProps) {
       sx={{ overflowX: "auto" }}
       variant="outlined"
     >
-      <Table>
+      <Table sx={languageTableSx}>
         <TableHead sx={languageTableHeadSx}>
           <TableRow>
             <TableCell>Code</TableCell>

@@ -10,6 +10,20 @@ export const languageTableHeadSx: SxProps<Theme> = {
 };
 
 /**
+ * Single owner of the catalogue's figures. Every cell in the table lines its digits up in a
+ * column — codes, counts and years are read down the page against the rows above and below —
+ * and the interface face is a geometric sans, whose proportional digits are the least alignable
+ * kind. Rule 4 of the fleet typography standard
+ * (skill-deck/docs/typography-standard.md): tabular figures wherever digits stack.
+ *
+ * This is the only part of that standard linguae takes. Its scale, leadings and weights are
+ * MUI's, deliberately: see the standard's exception list.
+ */
+export const languageTableSx: SxProps<Theme> = {
+  fontVariantNumeric: "tabular-nums",
+};
+
+/**
  * Single owner of the language-code typography, shared by the list cell and the detail
  * header so both surfaces present a code the same way.
  */
